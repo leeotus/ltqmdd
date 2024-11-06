@@ -1,0 +1,11 @@
+# Function: demo
+# This is demo file written by leejxian.
+.version  1.0
+# date: 2024/10/22
+.numvars 2
+.variables x1 x2
+.inputs x1 x2
+.outputs x1 x2
+.begin
+t2 x1 x2
+.end

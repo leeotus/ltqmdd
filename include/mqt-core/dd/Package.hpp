@@ -57,12 +57,17 @@ template <class Config> class Package {
   /// Construction, destruction, information and reset
   ///
 public:
+  bool hasSkipped{false};
+
   static constexpr std::size_t MAX_POSSIBLE_QUBITS =
       static_cast<std::size_t>(std::numeric_limits<Qubit>::max()) + 1U;
   static constexpr std::size_t DEFAULT_QUBITS = 32U;
   explicit Package(std::size_t nq = DEFAULT_QUBITS) : nqubits(nq) {
     resize(nq);
   };
+
+  std::array<int, MAX_POSSIBLE_QUBITS> active{};
+
   ~Package() = default;
   Package(const Package& package) = delete;
 
@@ -200,6 +205,10 @@ public:
     cn.incRef(e.w);
     const auto& p = e.p;
     const auto inc = getUniqueTable<Node>().incRef(p);
+    if(e.p != nullptr)
+    {
+      active[e.p->v] += 1;
+    }
     if (inc && p->ref == 1U) {
       for (const auto& child : p->e) {
         incRef(child);
@@ -221,6 +230,10 @@ public:
     cn.decRef(e.w);
     const auto& p = e.p;
     const auto dec = getUniqueTable<Node>().decRef(p);
+    if(e.p!=nullptr)
+    {
+      active[e.p->v] -= 1;
+    }
     if (dec && p->ref == 0U) {
       for (const auto& child : p->e) {
         decRef(child);
@@ -813,7 +826,9 @@ public:
       }
     }
 
+    // memoryManager用于管理节点的内存,cn则用于管理边的权重(即复数)的内存分配
     auto e = EdgeType<Node>::normalize(p, edges, memoryManager, cn);
+
     if constexpr (std::is_same_v<Node, mNode> || std::is_same_v<Node, dNode>) {
       if (!e.isTerminal()) {
         const auto& es = e.p->e;
@@ -821,6 +836,7 @@ public:
         if ((es[0].p == es[3].p) &&
             (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
              es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
+          hasSkipped = true;
           auto* ptr = es[0].p;
           memoryManager.returnEntry(e.p);
           return EdgeType<Node>{ptr, e.w};

@@ -356,7 +356,7 @@ private:
 
   /**
   Searches for a node in the hash table with the given key.
-  @param e The node to search for.
+  @param p The node to search for.
   @param key The hashed value used to search the table.
   @return The Edge<Node> found in the hash table or Edge<Node>::zero if not
   found.
@@ -367,7 +367,10 @@ private:
     while (bucket != nullptr) {
       if (nodesAreEqual(p, bucket)) {
         // Match found
+        // ! 如果可以找到相同的节点(复用节点),那么这个被分配出来的p节点就应该返还给memoryManager.
         if (p != bucket) {
+          // 将节点的出边都清空
+          // memset(&(p->e), 0, sizeof(p->e));
           // put node pointed to by p on available chain
           memoryManager->returnEntry(p);
         }
@@ -381,6 +384,100 @@ private:
     // Node not found in bucket
     return Node::getTerminal();
   }
+
+public:
+
+  /**
+   * @brief 更新哈希表
+   * @param p 指向节点的指针
+   * @param keyBefore 在更新之前p所指向节点所在的哈希桶位置
+   * @note 目前这个函数是用于在补全skipped nodes之后对其父节点在哈希表上的更新
+   * 也就是说目前仅支持mNode系列的哈希表,目前没有考虑vNode,dNode系列的哈希表修改
+   * 不过即使是dNode或vNode对应的哈希表应该也是一样的更新方法
+   * @warning 1.该函数还需要做出改进,考虑这样一种情况: 在一个DD中有两个同构的节点(其key值和v值
+   * 都相同,且子节点中都包含有skipped node),那么如果我们对其中一个节点进行alterUniqueTable()处理之后
+   * 另一个节点在进入alterUniqueTable时发现该其实已经被处理了(从uniqueTable)中被去除了. (已解决)
+   * 2.该函数目前无法正常运行!!! (已解决)
+   */
+  void alterUniqueTable(Node *p, int keyBefore)
+  {
+    assert(keyBefore <= NBUCKET);
+    // 获取节点的index值：
+    const auto v = p->v;
+    // TODO: 这里有误!!!
+
+    if(tables[v][keyBefore] == nullptr) 
+    {
+      return;
+    }
+    assert(tables[v][keyBefore] != nullptr);
+
+    Node **head = &tables[v][keyBefore];
+    // 找到节点原本的桶位置
+    Node** node = &tables[v][keyBefore];
+    Node** pre = nullptr;
+
+    // 需要在单链表中找到p节点指针的位置:
+    while(node != nullptr && *node != nullptr)
+    {
+      assert(node != nullptr && *node != nullptr);
+      if(*node == p)
+      {
+        if(*node == *head)
+        {
+          *head = (*head)->next;
+          break;
+        }
+        (*pre)->next = (*node)->next;
+        break;
+      }
+      pre = node;
+      node = &((*node)->next);
+    }
+    // !之后只需要用lookup函数将该节点重新放回哈希表即可
+
+    //? 因为这里仅为了移动节点在哈希表的位置,因此我个人认为统计这次移动的lookup次数没有意义???
+    --stats[v].lookups;
+  }
+
+
+  /**
+   * @brief 取出tables[index][*]中所有的哈希冲突链并返回,以便之后修改节点的哈希值
+   * @note 本质上也就是取出第index层的所有节点所在的内存位置,以供之后做各种sifting变换
+   */
+  std::vector<Node*> getTableColumn(Qubit index)
+  {
+    assert(index >= 0);
+    std::vector<Node*> res;
+    for(auto i=0;i<NBUCKET;++i)
+    {
+      res.push_back(tables[index][i]);
+      // 将对应列的哈希冲突链取出,并将对应列的哈希冲突链清空
+      tables[index][i] = nullptr;
+    }    
+    // clearNextIndexTable(index-1);
+    return res;
+  }
+
+  /**
+   * @brief 将第index层的所有节点在哈希表的指针都清空
+   */
+  void clearNextIndexTable(Qubit index)
+  {
+    Node **p{nullptr};
+    Node **pnext{nullptr};
+    for(auto i=0;i<NBUCKET;++i)
+    {
+      p = &tables[index][i];
+      while(p!=nullptr && (*p)!=nullptr)
+      {
+        pnext = &((*p)->next);
+        *p = nullptr;
+        p = pnext;
+      }
+    }
+  }
+
 };
 
 } // namespace dd

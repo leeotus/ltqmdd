@@ -1,0 +1,13 @@
+.version 1.0
+.numvars 3
+.variables x1 x2 x3
+.inputs x1 x2 x3
+.outputs x1 x2 x3
+.begin
+h1 x1
+s2 x2 x3
+t2 x1 x3
+h1 x2
+s2 x1 x2
+h1 x1
+.end

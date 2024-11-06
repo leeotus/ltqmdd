@@ -52,6 +52,11 @@ struct mNode {                        // NOLINT(readability-identifier-naming)
   [[nodiscard]] static constexpr mNode* getTerminal() noexcept {
     return nullptr;
   }
+  [[nodiscard]] static constexpr bool isIdentity(const mNode* p) noexcept {
+    // 补全dd之后进行的判断:
+    return p->e[0].w.exactlyOne() && p->e[1].w.exactlyZero() && p->e[2].w.exactlyZero() && p->e[3].w.exactlyOne()
+      && p->e[0].p == p->e[3].p;
+  }
 };
 using mEdge = Edge<mNode>;
 using mCachedEdge = CachedEdge<mNode>;

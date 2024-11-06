@@ -245,7 +245,16 @@ public:
    * @return whether the matrix is the identity
    */
   template <typename T = Node, isMatrixVariant<T> = true>
-  [[nodiscard]] bool isIdentity(const bool upToGlobalPhase = true) const {
+  [[nodiscard]] bool isIdentity(const bool upToGlobalPhase = true, const bool isCompleted = false) const {
+    if(isCompleted)
+    {
+      // TODO:
+      // 我们对decision diagram补全之后,isIdentity的判定条件显然和之前的不一样,需要做出一些修改,
+      // 同时也不能破坏其他位置代码的可执行性,所以采用默认参数的形式来选择该函数的执行阶段,即dd补全前isCompleted为false
+      // dd补全后isCompleted应为true
+      return false;
+    }
+
     if (!isTerminal()) {
       return false;
     }

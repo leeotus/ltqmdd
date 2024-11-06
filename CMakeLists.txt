@@ -6,6 +6,9 @@ project(
   LANGUAGES CXX
   DESCRIPTION "MQT Core - The Backbone of the Munich Quantum Toolkit")
 
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Add path for custom modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -82,6 +85,11 @@ endif()
 option(BUILD_MQT_CORE_BENCHMARKS "Also build benchmarks for the MQT Core project" OFF)
 if(BUILD_MQT_CORE_BENCHMARKS)
   add_subdirectory(eval)
+endif()
+
+option(BUILD_LTQMDDV2_APP "Also build ltqmddv2's test executable file" ON)
+if(BUILD_LTQMDDV2_APP)
+  add_subdirectory(apps)
 endif()
 
 if(MQT_CORE_MASTER_PROJECT)
