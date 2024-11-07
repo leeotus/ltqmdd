@@ -583,12 +583,18 @@ namespace dd {
             {
                 linearTrans(level, dd, qtc, SCHEME_LTRANS_LOWER, true);
                 cancelRecord(vo);
+            } else if(osddSize <= std::min(state->minddSize, lwddSize))
+            {
+                // 如果是层交换过程得到的dd更好:
+                linearTrans(level, dd, qtc, SCHEME_LTRANS_LOWER, true);
+                cancelRecord(vo);
 
                 state->minddSize = osddSize;
                 state->optimalLevel = level;
                 state->scheme = SCHEME_SIFTING;
                 state->up = true;
             } else {
+                // 否则说明是lower算法更好
                 state->minddSize = lwddSize;
                 state->optimalLevel = level;
                 state->scheme = SCHEME_LTRANS_LOWER;
@@ -1266,6 +1272,8 @@ namespace dd {
                 } else if(optimalState.optimalLevel == startLevel && optimalState.scheme == SCHEME_NONE)
                 {
                     // 如果一开始没经过筛选的dd更好,那么直接按照voUp恢复即可
+                    resetVorder(dd, qtc, &voUp, true);
+                } else {
                     resetVorder(dd, qtc, &voUp, true);
 
                     int k = 0;

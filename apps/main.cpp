@@ -47,22 +47,6 @@ int main(int argc, char** argv) {
 
   // 补全dd决策图
   dd::levelCompleteSkipped(functionality, ddpackPtr.get());
-  // if(dd::isSkippedNodeExist(functionality))
-  // {
-  //   std::cout << "there are skipped nodes!\r\n";
-  //   dd::levelCompleteSkipped(functionality, ddpackPtr.get());
-  //   if(dd::isSkippedNodeExist(functionality))
-  //   {
-  //     std::cout << "error! there are still skipped nodes!\r\n";
-  //   } else {
-  //     std::cout << "ok! there are not skipped nodes!\r\n";
-  //   }
-  // } else {
-  //   std::cout << "there is not skipped node!\r\n";
-  // }
-
-  // 检测是否出现ref overflow:
-  // dd::checkRefValue(functionality);
 
   auto afterDDsize = functionality.size();
   std::cout << "initial dd size :" << initailDDsize << "\r\n";
