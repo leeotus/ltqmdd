@@ -53,17 +53,17 @@ int main(int argc, char** argv) {
   std::cout << "after completing, dd size :" << afterDDsize << "\r\n";
 
   auto *vo = new dd::VarOrder(functionality, &qc);
-  dd::reorderSelect(functionality, ddpackPtr.get(), &qc, dd::SCHEME_LTRANS_LOWER, vo);
+  dd::reorderSelect(functionality, ddpackPtr.get(), &qc, dd::SCHEME_LTRANS_MIXED, vo);
   std::cout << "dd's size after original sifting:" << functionality.size() << "\r\n";
   // dd::checkRefValue(functionality);
 
   // 第一次筛选后的dd大小:
   auto curddSize = functionality.size();
   size_t cycleddSize{};
-  int cnt = 12;
+  int cnt = 10;   // 原本是12,现在尝试将该值改得更大
   for(int i=0,j=0;i<100;++i)
   {
-    dd::reorderSelect(functionality, ddpackPtr.get(), &qc, dd::SCHEME_LTRANS_LOWER, vo);
+    dd::reorderSelect(functionality, ddpackPtr.get(), &qc, dd::SCHEME_LTRANS_MIXED, vo);
     cycleddSize = functionality.size();
     if(std::abs(cycleddSize - curddSize <= 10))
     {
