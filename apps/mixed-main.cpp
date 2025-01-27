@@ -28,6 +28,8 @@
 #include <string>
 #include <utility>
 
+#include <ctime>
+
 #include "dd/DDCompletement.hpp"
 #include "dd/DDLinear.hpp"
 #include "dd/DDReorder.hpp"
@@ -49,18 +51,23 @@ int main(int argc, char** argv) {
   dd::levelCompleteSkipped(functionality, ddpackPtr.get());
 
   auto afterDDsize = functionality.size();
-  std::cout << "initial dd size :" << initailDDsize << "\r\n";
-  std::cout << "after completing, dd size :" << afterDDsize << "\r\n";
+//   std::cout << "initial dd size :" << afterDDsize << "\r\n";
 
   auto *vo = new dd::VarOrder(functionality, &qc);
-  dd::reorderSelect(functionality, ddpackPtr.get(), &qc, dd::SCHEME_LTRANS_MIXED, vo);
-  std::cout << "dd's size after original sifting:" << functionality.size() << "\r\n";
-  // dd::checkRefValue(functionality);
 
+  // 计算时间:
+  clock_t start, finish;
+  double totalTime;
+
+  start = clock();
+  dd::reorderSelect(functionality, ddpackPtr.get(), &qc, dd::SCHEME_LTRANS_MIXED, vo);
+//   std::cout << "dd's size after original sifting:" << functionality.size() << "\r\n";
+  // dd::checkRefValue(functionality);
   // 第一次筛选后的dd大小:
   auto curddSize = functionality.size();
   size_t cycleddSize{};
-  int cnt = 10;   // 原本是12,现在尝试将该值改得更大
+  int cnt = 10;   
+  std::cout << "Mixed Algorithm: \t";
   for(int i=0,j=0;i<100;++i)
   {
     dd::reorderSelect(functionality, ddpackPtr.get(), &qc, dd::SCHEME_LTRANS_MIXED, vo);
@@ -72,19 +79,27 @@ int main(int argc, char** argv) {
       {
         break;
       }
+    } else {
+        cnt = 10;
     }
     if(cycleddSize < curddSize)
     {
       curddSize = cycleddSize;
     }
   }
+  finish = clock();
+
+  totalTime = (double)(finish-start) / CLOCKS_PER_SEC;
+
+  std::cout << "total time: " << totalTime << "s, \t";
   std::cout << "final dd's size:" << cycleddSize << "\r\n";
   // dd::checkRefValue(functionality);
 
-  const std::string qubitName = "x";
-  vo->printOrder(qubitName);
+//   const std::string qubitName = "x";
+//   vo->printOrder(qubitName);
 
   return 0;
 }
+
 
 
