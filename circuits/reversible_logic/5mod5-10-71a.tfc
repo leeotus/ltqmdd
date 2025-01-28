@@ -1,0 +1,22 @@
+.v a,b,c,d,e,f
+.i a,b,c,d,e
+.o f
+.c 0
+BEGIN
+T1 c
+T1 d
+T2 d,b
+T3 a,c,b
+T2 a,c
+T2 c,e
+T3 b,e,f
+T2 c,e
+T2 a,c
+T6 a,b,c,d,e,f
+END
+# restore input values:
+#T2 d,b
+#T1 d
+#T3 a,c,b
+#T1 c
+# size = 14 cost = 79*

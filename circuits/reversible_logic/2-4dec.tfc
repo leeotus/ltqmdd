@@ -1,0 +1,14 @@
+# Design for 2-to-4 decoder with Enable bit
+# Model Used: GT & GF
+# a & b are the decoder inputs
+# E is the enable bit
+# e, c , d & E are the decoded output bits
+.v a,b,E,c,d,e,
+.i a,b,E,
+.o e,c,d,E,
+.c 0,0,0,
+BEGIN
+F3 a,E,c
+F3 b,d,E
+F3 b,e,c
+END

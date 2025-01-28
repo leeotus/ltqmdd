@@ -1,0 +1,21 @@
+.v a,b,c,d,e,f
+.i a,b,c,d,e
+.o f
+.c 0
+BEGIN
+T1 c
+T3 a,c,b
+T1 d
+T2 d,b
+T3 a,b,f
+T3 b,c,f
+T3 b,e,f
+T6 a,b,c,d,e,f
+END
+# restore input values:
+#T2 d,b
+#T1 d
+#T3 a,c,b
+#T1 c
+# size = 12 cost = 12
+# CHECK: local optimum for resynthesize

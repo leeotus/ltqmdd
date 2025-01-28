@@ -1,0 +1,11 @@
+# (c) Copyright 2004-2009 Dmitri Maslov
+# Distributing this file without an express written permission or erasing this note is prohibited.
+.v a,b,c
+.i a,b,c
+.o a,b,c
+BEGIN
+t2 a,c
+t2 c,b
+t3 a,b,c
+t2 b,a
+END

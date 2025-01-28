@@ -1,0 +1,19 @@
+.v a,b,c,d
+.i a,b,c,d
+.o a,b,c,d
+BEGIN
+t1 d
+t2 a,d
+t2 c,d
+t3 b,d,c
+f3 d,b,c
+f4 a,d,b,c
+t2 d,b
+t4 a,b,c,d
+f3 d,a,c
+f3 a,b,d
+t2 b,c
+t2 c,a
+f2 b,d
+END
+
