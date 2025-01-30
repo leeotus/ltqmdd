@@ -1,0 +1,111 @@
+./circuits/need2run/dist_223.real:
+Original Sifting: 	total time: 4.88947s, 	final dd's size:151
+Mixed Algorithm: 	total time: 13.9945s, 	final dd's size:150
+Upper Algorithm: 	total time: 9.14996s, 	final dd's size:157
+Lower Algorithm: 	total time: 9.90862s, 	final dd's size:151
+./circuits/need2run/dk17_224.real:
+Original Sifting: 	total time: 11.3849s, 	final dd's size:214
+Mixed Algorithm: 	total time: 37.9864s, 	final dd's size:207
+Upper Algorithm: 	total time: 24.4023s, 	final dd's size:209
+Lower Algorithm: 	total time: 24.6844s, 	final dd's size:207
+./circuits/need2run/dk27_225.real:
+Original Sifting: 	total time: 8.30286s, 	final dd's size:75
+Mixed Algorithm: 	total time: 25.4257s, 	final dd's size:71
+Upper Algorithm: 	total time: 17.8166s, 	final dd's size:71
+Lower Algorithm: 	total time: 17.9136s, 	final dd's size:71
+./circuits/need2run/e64-bdd_295.real:
+./circuits/need2run/ex-1_166.real:
+Original Sifting: 	total time: 0.106614s, 	final dd's size:9
+Mixed Algorithm: 	total time: 0.320625s, 	final dd's size:6
+Upper Algorithm: 	total time: 0.211119s, 	final dd's size:6
+Lower Algorithm: 	total time: 0.210093s, 	final dd's size:6
+./circuits/need2run/ex1_226.real:
+Original Sifting: 	total time: 0.657707s, 	final dd's size:12
+Mixed Algorithm: 	total time: 2.15223s, 	final dd's size:8
+Upper Algorithm: 	total time: 1.31681s, 	final dd's size:12
+Lower Algorithm: 	total time: 1.44609s, 	final dd's size:8
+./circuits/need2run/ex2_227.real:
+Original Sifting: 	total time: 0.672315s, 	final dd's size:18
+Mixed Algorithm: 	total time: 2.00584s, 	final dd's size:16
+Upper Algorithm: 	total time: 1.32648s, 	final dd's size:17
+Lower Algorithm: 	total time: 1.32668s, 	final dd's size:16
+./circuits/need2run/ex3_228.real:
+Original Sifting: 	total time: 0.666924s, 	final dd's size:18
+Mixed Algorithm: 	total time: 2.00325s, 	final dd's size:16
+Upper Algorithm: 	total time: 1.32612s, 	final dd's size:17
+Lower Algorithm: 	total time: 1.32402s, 	final dd's size:16
+./circuits/need2run/ex3_229.real:
+Original Sifting: 	total time: 0.663866s, 	final dd's size:18
+Mixed Algorithm: 	total time: 2.27363s, 	final dd's size:17
+Upper Algorithm: 	total time: 1.4604s, 	final dd's size:17
+Lower Algorithm: 	total time: 1.32155s, 	final dd's size:17
+./circuits/need2run/ex5p_296.real:
+./circuits/need2run/ham15_107.real:
+Original Sifting: 	total time: 13.1046s, 	final dd's size:1238
+Mixed Algorithm: 	total time: 46.7432s, 	final dd's size:1610
+Upper Algorithm: 	total time: 37.0126s, 	final dd's size:1330
+Lower Algorithm: 	total time: 31.0397s, 	final dd's size:1570
+./circuits/need2run/ham15_108.real:
+Original Sifting: 	total time: 13.0854s, 	final dd's size:1238
+Mixed Algorithm: 	total time: 46.6332s, 	final dd's size:1610
+Upper Algorithm: 	total time: 36.9781s, 	final dd's size:1330
+Lower Algorithm: 	total time: 31.2562s, 	final dd's size:1570
+./circuits/need2run/ham15_109.real:
+Original Sifting: 	total time: 13.1228s, 	final dd's size:1238
+Mixed Algorithm: 	total time: 46.6848s, 	final dd's size:1610
+Upper Algorithm: 	total time: 36.9523s, 	final dd's size:1330
+Lower Algorithm: 	total time: 30.9822s, 	final dd's size:1570
+./circuits/need2run/ham15_298.real:
+./circuits/need2run/ham3_102.real:
+Original Sifting: 	total time: 0.107195s, 	final dd's size:10
+Mixed Algorithm: 	total time: 0.324768s, 	final dd's size:8
+Upper Algorithm: 	total time: 0.215372s, 	final dd's size:8
+Lower Algorithm: 	total time: 0.214272s, 	final dd's size:10
+./circuits/need2run/ham3_103.real:
+Original Sifting: 	total time: 0.107213s, 	final dd's size:10
+Mixed Algorithm: 	total time: 0.324789s, 	final dd's size:8
+Upper Algorithm: 	total time: 0.21519s, 	final dd's size:8
+Lower Algorithm: 	total time: 0.21382s, 	final dd's size:10
+./circuits/need2run/ham7_104.real:
+Original Sifting: 	total time: 1.06495s, 	final dd's size:126
+Mixed Algorithm: 	total time: 3.16056s, 	final dd's size:80
+Upper Algorithm: 	total time: 2.03297s, 	final dd's size:80
+Lower Algorithm: 	total time: 2.11634s, 	final dd's size:118
+./circuits/need2run/ham7_105.real:
+Original Sifting: 	total time: 1.06241s, 	final dd's size:126
+Mixed Algorithm: 	total time: 3.12017s, 	final dd's size:80
+Upper Algorithm: 	total time: 2.04056s, 	final dd's size:80
+Lower Algorithm: 	total time: 2.11885s, 	final dd's size:118
+./circuits/need2run/ham7_106.real:
+Original Sifting: 	total time: 1.07254s, 	final dd's size:126
+Mixed Algorithm: 	total time: 3.12193s, 	final dd's size:80
+Upper Algorithm: 	total time: 2.04003s, 	final dd's size:80
+Lower Algorithm: 	total time: 2.12611s, 	final dd's size:118
+./circuits/need2run/ham7_299.real:
+Original Sifting: 	total time: 18.7579s, 	final dd's size:420
+Mixed Algorithm: 	total time: 48.5656s, 	final dd's size:308
+Upper Algorithm: 	total time: 33.5891s, 	final dd's size:219
+Lower Algorithm: 	total time: 34.0093s, 	final dd's size:376
+./circuits/need2run/hwb4_49.real:
+Original Sifting: 	total time: 0.240141s, 	final dd's size:20
+Mixed Algorithm: 	total time: 0.72321s, 	final dd's size:14
+Upper Algorithm: 	total time: 0.467623s, 	final dd's size:14
+Lower Algorithm: 	total time: 0.480691s, 	final dd's size:20
+./circuits/need2run/hwb4_50.real:
+Original Sifting: 	total time: 0.240962s, 	final dd's size:20
+Mixed Algorithm: 	total time: 0.718378s, 	final dd's size:14
+Upper Algorithm: 	total time: 0.470073s, 	final dd's size:14
+Lower Algorithm: 	total time: 0.478882s, 	final dd's size:20
+./circuits/need2run/hwb4_51.real:
+Original Sifting: 	total time: 0.240859s, 	final dd's size:14
+Mixed Algorithm: 	total time: 0.726296s, 	final dd's size:14
+Upper Algorithm: 	total time: 0.484075s, 	final dd's size:14
+Lower Algorithm: 	total time: 0.481213s, 	final dd's size:14
+./circuits/need2run/hwb4_52.real:
+Original Sifting: 	total time: 0.241354s, 	final dd's size:20
+Mixed Algorithm: 	total time: 0.722759s, 	final dd's size:14
+Upper Algorithm: 	total time: 0.467405s, 	final dd's size:14
+Lower Algorithm: 	total time: 0.500528s, 	final dd's size:20
+./circuits/need2run/hwb5_300.real:
+Original Sifting: 	total time: 319.295s, 	final dd's size:4980
+Mixed Algorithm: 	total time: 2720.06s, 	final dd's size:12158

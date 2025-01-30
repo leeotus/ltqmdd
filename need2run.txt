@@ -1,0 +1,5 @@
+./circuits/need2run/2of5d2.tfc:
+Original Sifting: 	total time: 1.34132s, 	final dd's size:26
+Mixed Algorithm: 	total time: 3.94657s, 	final dd's size:26
+Upper Algorithm: 	total time: 2.61366s, 	final dd's size:26
+Lower Algorithm: 	total time: 2.60838s, 	final dd's size:26

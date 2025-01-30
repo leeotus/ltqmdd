@@ -51,7 +51,8 @@ int main(int argc, char** argv) {
   dd::levelCompleteSkipped(functionality, ddpackPtr.get());
 
   auto afterDDsize = functionality.size();
-//   std::cout << "initial dd size :" << afterDDsize << "\r\n";
+  std::cout << "nqubits:" << qc.getNqubits() << ",";
+  std::cout << "initial dd size :" << afterDDsize << "\r\n";
 
   auto *vo = new dd::VarOrder(functionality, &qc);
 

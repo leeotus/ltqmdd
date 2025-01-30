@@ -1,0 +1,486 @@
+./circuits/revLib//0410184_169.real:
+Original Sifting: 	total time: 4.44127s, 	final dd's size:33
+Mixed Algorithm: 	total time: 13.808s, 	final dd's size:44
+Upper Algorithm: 	total time: 9.12686s, 	final dd's size:44
+Lower Algorithm: 	total time: 9.14313s, 	final dd's size:44
+./circuits/revLib//0410184_170.real:
+Original Sifting: 	total time: 4.4362s, 	final dd's size:34
+Mixed Algorithm: 	total time: 13.8638s, 	final dd's size:46
+Upper Algorithm: 	total time: 9.17862s, 	final dd's size:46
+Lower Algorithm: 	total time: 9.28621s, 	final dd's size:46
+./circuits/revLib//3_17_13.real:
+Original Sifting: 	total time: 0.10698s, 	final dd's size:10
+Mixed Algorithm: 	total time: 0.322133s, 	final dd's size:10
+Upper Algorithm: 	total time: 0.212232s, 	final dd's size:10
+Lower Algorithm: 	total time: 0.212263s, 	final dd's size:10
+./circuits/revLib//3_17_14.real:
+Original Sifting: 	total time: 0.10652s, 	final dd's size:10
+Mixed Algorithm: 	total time: 0.32193s, 	final dd's size:10
+Upper Algorithm: 	total time: 0.212514s, 	final dd's size:10
+Lower Algorithm: 	total time: 0.212407s, 	final dd's size:10
+./circuits/revLib//3_17_15.real:
+Original Sifting: 	total time: 0.106976s, 	final dd's size:10
+Mixed Algorithm: 	total time: 0.321274s, 	final dd's size:10
+Upper Algorithm: 	total time: 0.212823s, 	final dd's size:10
+Lower Algorithm: 	total time: 0.213016s, 	final dd's size:10
+./circuits/revLib//4_49_16.real:
+Original Sifting: 	total time: 0.240383s, 	final dd's size:20
+Mixed Algorithm: 	total time: 0.800034s, 	final dd's size:20
+Upper Algorithm: 	total time: 0.52952s, 	final dd's size:20
+Lower Algorithm: 	total time: 0.530994s, 	final dd's size:21
+./circuits/revLib//4_49_17.real:
+Original Sifting: 	total time: 0.239603s, 	final dd's size:20
+Mixed Algorithm: 	total time: 0.798887s, 	final dd's size:20
+Upper Algorithm: 	total time: 0.532631s, 	final dd's size:20
+Lower Algorithm: 	total time: 0.529339s, 	final dd's size:21
+./circuits/revLib//4gt10-v1_81.real:
+Original Sifting: 	total time: 0.427088s, 	final dd's size:22
+Mixed Algorithm: 	total time: 1.30035s, 	final dd's size:22
+Upper Algorithm: 	total time: 0.851425s, 	final dd's size:22
+Lower Algorithm: 	total time: 0.856153s, 	final dd's size:22
+./circuits/revLib//4gt11_82.real:
+Original Sifting: 	total time: 0.426978s, 	final dd's size:18
+Mixed Algorithm: 	total time: 1.30277s, 	final dd's size:18
+Upper Algorithm: 	total time: 0.856551s, 	final dd's size:18
+Lower Algorithm: 	total time: 0.858441s, 	final dd's size:18
+./circuits/revLib//4gt11_83.real:
+Original Sifting: 	total time: 0.433384s, 	final dd's size:22
+Mixed Algorithm: 	total time: 1.30078s, 	final dd's size:20
+Upper Algorithm: 	total time: 0.854599s, 	final dd's size:20
+Lower Algorithm: 	total time: 0.932073s, 	final dd's size:20
+./circuits/revLib//4gt11_84.real:
+Original Sifting: 	total time: 0.421465s, 	final dd's size:12
+Mixed Algorithm: 	total time: 1.28838s, 	final dd's size:12
+Upper Algorithm: 	total time: 0.847808s, 	final dd's size:12
+Lower Algorithm: 	total time: 0.845879s, 	final dd's size:12
+./circuits/revLib//4gt11-v1_85.real:
+Original Sifting: 	total time: 0.42148s, 	final dd's size:12
+Mixed Algorithm: 	total time: 1.28126s, 	final dd's size:12
+Upper Algorithm: 	total time: 0.851999s, 	final dd's size:12
+Lower Algorithm: 	total time: 0.846154s, 	final dd's size:12
+./circuits/revLib//4gt12-v0_86.real:
+Original Sifting: 	total time: 0.4302s, 	final dd's size:22
+Mixed Algorithm: 	total time: 1.30801s, 	final dd's size:22
+Upper Algorithm: 	total time: 0.86363s, 	final dd's size:22
+Lower Algorithm: 	total time: 0.862111s, 	final dd's size:22
+./circuits/revLib//4gt12-v0_87.real:
+Original Sifting: 	total time: 0.425648s, 	final dd's size:23
+Mixed Algorithm: 	total time: 1.30626s, 	final dd's size:21
+Upper Algorithm: 	total time: 0.856823s, 	final dd's size:21
+Lower Algorithm: 	total time: 0.932005s, 	final dd's size:22
+./circuits/revLib//4gt12-v0_88.real:
+Original Sifting: 	total time: 0.420262s, 	final dd's size:15
+Mixed Algorithm: 	total time: 1.2843s, 	final dd's size:15
+Upper Algorithm: 	total time: 0.852119s, 	final dd's size:15
+Lower Algorithm: 	total time: 0.849917s, 	final dd's size:15
+./circuits/revLib//4gt12-v1_89.real:
+Original Sifting: 	total time: 0.42177s, 	final dd's size:16
+Mixed Algorithm: 	total time: 1.29119s, 	final dd's size:16
+Upper Algorithm: 	total time: 0.852714s, 	final dd's size:16
+Lower Algorithm: 	total time: 0.852762s, 	final dd's size:16
+./circuits/revLib//4gt13_90.real:
+Original Sifting: 	total time: 0.423796s, 	final dd's size:19
+Mixed Algorithm: 	total time: 1.29298s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.853271s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.852879s, 	final dd's size:19
+./circuits/revLib//4gt13_91.real:
+Original Sifting: 	total time: 0.427994s, 	final dd's size:21
+Mixed Algorithm: 	total time: 1.30559s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.85517s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.858522s, 	final dd's size:21
+./circuits/revLib//4gt13_92.real:
+Original Sifting: 	total time: 0.423407s, 	final dd's size:14
+Mixed Algorithm: 	total time: 1.28176s, 	final dd's size:15
+Upper Algorithm: 	total time: 0.850586s, 	final dd's size:15
+Lower Algorithm: 	total time: 0.845146s, 	final dd's size:14
+./circuits/revLib//4gt13-v1_93.real:
+Original Sifting: 	total time: 0.420338s, 	final dd's size:14
+Mixed Algorithm: 	total time: 1.28055s, 	final dd's size:14
+Upper Algorithm: 	total time: 0.845482s, 	final dd's size:14
+Lower Algorithm: 	total time: 0.844031s, 	final dd's size:14
+./circuits/revLib//4gt4-v0_72.real:
+Original Sifting: 	total time: 0.423779s, 	final dd's size:23
+Mixed Algorithm: 	total time: 1.30207s, 	final dd's size:23
+Upper Algorithm: 	total time: 0.856127s, 	final dd's size:23
+Lower Algorithm: 	total time: 0.855011s, 	final dd's size:23
+./circuits/revLib//4gt4-v0_73.real:
+Original Sifting: 	total time: 0.429162s, 	final dd's size:22
+Mixed Algorithm: 	total time: 1.30225s, 	final dd's size:22
+Upper Algorithm: 	total time: 0.865765s, 	final dd's size:22
+Lower Algorithm: 	total time: 0.862983s, 	final dd's size:22
+./circuits/revLib//4gt4-v0_78.real:
+Original Sifting: 	total time: 0.430823s, 	final dd's size:22
+Mixed Algorithm: 	total time: 1.30379s, 	final dd's size:22
+Upper Algorithm: 	total time: 0.860846s, 	final dd's size:22
+Lower Algorithm: 	total time: 0.863639s, 	final dd's size:22
+./circuits/revLib//4gt4-v0_79.real:
+Original Sifting: 	total time: 0.426133s, 	final dd's size:23
+Mixed Algorithm: 	total time: 1.30785s, 	final dd's size:21
+Upper Algorithm: 	total time: 0.859355s, 	final dd's size:21
+Lower Algorithm: 	total time: 0.932476s, 	final dd's size:22
+./circuits/revLib//4gt4-v0_80.real:
+Original Sifting: 	total time: 0.420879s, 	final dd's size:17
+Mixed Algorithm: 	total time: 1.28755s, 	final dd's size:17
+Upper Algorithm: 	total time: 0.849132s, 	final dd's size:17
+Lower Algorithm: 	total time: 0.856221s, 	final dd's size:17
+./circuits/revLib//4gt4-v1_74.real:
+Original Sifting: 	total time: 0.467093s, 	final dd's size:20
+Mixed Algorithm: 	total time: 1.41594s, 	final dd's size:20
+Upper Algorithm: 	total time: 0.937489s, 	final dd's size:20
+Lower Algorithm: 	total time: 0.937342s, 	final dd's size:20
+./circuits/revLib//4gt5_75.real:
+Original Sifting: 	total time: 0.425574s, 	final dd's size:21
+Mixed Algorithm: 	total time: 1.29371s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.846362s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.856883s, 	final dd's size:21
+./circuits/revLib//4gt5_76.real:
+Original Sifting: 	total time: 0.427586s, 	final dd's size:19
+Mixed Algorithm: 	total time: 1.29946s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.854417s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.854708s, 	final dd's size:19
+./circuits/revLib//4gt5_77.real:
+Original Sifting: 	total time: 0.421432s, 	final dd's size:16
+Mixed Algorithm: 	total time: 1.28584s, 	final dd's size:16
+Upper Algorithm: 	total time: 0.859299s, 	final dd's size:16
+Lower Algorithm: 	total time: 0.849614s, 	final dd's size:16
+./circuits/revLib//4mod5-bdd_287.real:
+Original Sifting: 	total time: 0.958974s, 	final dd's size:19
+Mixed Algorithm: 	total time: 3.1757s, 	final dd's size:19
+Upper Algorithm: 	total time: 2.09051s, 	final dd's size:19
+Lower Algorithm: 	total time: 1.99011s, 	final dd's size:28
+./circuits/revLib//4mod5-v0_18.real:
+Original Sifting: 	total time: 0.423897s, 	final dd's size:18
+Mixed Algorithm: 	total time: 1.29254s, 	final dd's size:16
+Upper Algorithm: 	total time: 0.845309s, 	final dd's size:16
+Lower Algorithm: 	total time: 0.852415s, 	final dd's size:18
+./circuits/revLib//4mod5-v0_19.real:
+Original Sifting: 	total time: 0.423162s, 	final dd's size:14
+Mixed Algorithm: 	total time: 1.28407s, 	final dd's size:12
+Upper Algorithm: 	total time: 0.843715s, 	final dd's size:12
+Lower Algorithm: 	total time: 0.848883s, 	final dd's size:14
+./circuits/revLib//4mod5-v0_20.real:
+Original Sifting: 	total time: 0.423464s, 	final dd's size:12
+Mixed Algorithm: 	total time: 1.40499s, 	final dd's size:12
+Upper Algorithm: 	total time: 0.924553s, 	final dd's size:12
+Lower Algorithm: 	total time: 0.923805s, 	final dd's size:12
+./circuits/revLib//4mod5-v0_21.real:
+Original Sifting: 	total time: 0.421754s, 	final dd's size:18
+Mixed Algorithm: 	total time: 1.28611s, 	final dd's size:16
+Upper Algorithm: 	total time: 0.846598s, 	final dd's size:16
+Lower Algorithm: 	total time: 0.849241s, 	final dd's size:18
+./circuits/revLib//4mod5-v1_22.real:
+Original Sifting: 	total time: 0.423236s, 	final dd's size:12
+Mixed Algorithm: 	total time: 1.28688s, 	final dd's size:12
+Upper Algorithm: 	total time: 0.849233s, 	final dd's size:12
+Lower Algorithm: 	total time: 0.847941s, 	final dd's size:12
+./circuits/revLib//4mod5-v1_23.real:
+Original Sifting: 	total time: 0.422585s, 	final dd's size:14
+Mixed Algorithm: 	total time: 1.27461s, 	final dd's size:9
+Upper Algorithm: 	total time: 0.833809s, 	final dd's size:9
+Lower Algorithm: 	total time: 0.907676s, 	final dd's size:8
+./circuits/revLib//4mod5-v1_24.real:
+Original Sifting: 	total time: 0.456554s, 	final dd's size:13
+Mixed Algorithm: 	total time: 1.2938s, 	final dd's size:13
+Upper Algorithm: 	total time: 0.879245s, 	final dd's size:13
+Lower Algorithm: 	total time: 0.87704s, 	final dd's size:13
+./circuits/revLib//4mod5-v1_25.real:
+Original Sifting: 	total time: 0.421144s, 	final dd's size:12
+Mixed Algorithm: 	total time: 1.27564s, 	final dd's size:12
+Upper Algorithm: 	total time: 0.847874s, 	final dd's size:12
+Lower Algorithm: 	total time: 0.851325s, 	final dd's size:12
+./circuits/revLib//4mod7-v0_94.real:
+Original Sifting: 	total time: 0.421874s, 	final dd's size:19
+Mixed Algorithm: 	total time: 1.28909s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.852832s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.851742s, 	final dd's size:19
+./circuits/revLib//4mod7-v0_95.real:
+Original Sifting: 	total time: 0.421214s, 	final dd's size:19
+Mixed Algorithm: 	total time: 1.29024s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.852339s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.856663s, 	final dd's size:19
+./circuits/revLib//4mod7-v1_96.real:
+Original Sifting: 	total time: 0.421939s, 	final dd's size:19
+Mixed Algorithm: 	total time: 1.29173s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.852278s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.850678s, 	final dd's size:19
+./circuits/revLib//5xp1_194.real:
+Original Sifting: 	total time: 7.21644s, 	final dd's size:97
+Mixed Algorithm: 	total time: 25.2869s, 	final dd's size:170
+Upper Algorithm: 	total time: 18.489s, 	final dd's size:76
+Lower Algorithm: 	total time: 21.2608s, 	final dd's size:189
+./circuits/revLib//9symml_195.real:
+Original Sifting: 	total time: 2.16099s, 	final dd's size:41
+Mixed Algorithm: 	total time: 6.59568s, 	final dd's size:41
+Upper Algorithm: 	total time: 4.36873s, 	final dd's size:41
+Lower Algorithm: 	total time: 4.36146s, 	final dd's size:41
+./circuits/revLib//add16_174.real:
+./circuits/revLib//add16_175.real:
+./circuits/revLib//add32_183.real:
+./circuits/revLib//add32_185.real:
+./circuits/revLib//add6_196.real:
+Original Sifting: 	total time: 7.79364s, 	final dd's size:53
+Mixed Algorithm: 	total time: 23.8834s, 	final dd's size:51
+Upper Algorithm: 	total time: 15.5452s, 	final dd's size:51
+Lower Algorithm: 	total time: 15.6578s, 	final dd's size:53
+./circuits/revLib//add64_184.real:
+./circuits/revLib//add64_186.real:
+./circuits/revLib//add8_172.real:
+Original Sifting: 	total time: 14.0661s, 	final dd's size:71
+Mixed Algorithm: 	total time: 44.0626s, 	final dd's size:97
+Upper Algorithm: 	total time: 28.6333s, 	final dd's size:97
+Lower Algorithm: 	total time: 28.6651s, 	final dd's size:97
+./circuits/revLib//adr4_197.real:
+Original Sifting: 	total time: 3.80551s, 	final dd's size:35
+Mixed Algorithm: 	total time: 11.7284s, 	final dd's size:35
+Upper Algorithm: 	total time: 7.70993s, 	final dd's size:35
+Lower Algorithm: 	total time: 7.74606s, 	final dd's size:35
+./circuits/revLib//aj-e11_165.real:
+Original Sifting: 	total time: 0.23984s, 	final dd's size:18
+Mixed Algorithm: 	total time: 0.728435s, 	final dd's size:18
+Upper Algorithm: 	total time: 0.48268s, 	final dd's size:18
+Lower Algorithm: 	total time: 0.489011s, 	final dd's size:18
+./circuits/revLib//aj-e11_168.real:
+Original Sifting: 	total time: 0.24033s, 	final dd's size:18
+Mixed Algorithm: 	total time: 0.727315s, 	final dd's size:18
+Upper Algorithm: 	total time: 0.482164s, 	final dd's size:18
+Lower Algorithm: 	total time: 0.482882s, 	final dd's size:18
+./circuits/revLib//alu1_198.real:
+Original Sifting: 	total time: 12.1792s, 	final dd's size:325
+Mixed Algorithm: 	total time: 51.519s, 	final dd's size:381
+Upper Algorithm: 	total time: 31.7112s, 	final dd's size:382
+Lower Algorithm: 	total time: 28.5631s, 	final dd's size:325
+./circuits/revLib//alu2_199.real:
+Original Sifting: 	total time: 6.90568s, 	final dd's size:267
+Mixed Algorithm: 	total time: 24.0716s, 	final dd's size:317
+Upper Algorithm: 	total time: 19.0504s, 	final dd's size:243
+Lower Algorithm: 	total time: 16.6012s, 	final dd's size:267
+./circuits/revLib//alu_318.real:
+./circuits/revLib//alu_319.real:
+./circuits/revLib//alu3_200.real:
+Original Sifting: 	total time: 9.20503s, 	final dd's size:214
+Mixed Algorithm: 	total time: 28.6071s, 	final dd's size:213
+Upper Algorithm: 	total time: 19.6076s, 	final dd's size:214
+Lower Algorithm: 	total time: 19.7492s, 	final dd's size:213
+./circuits/revLib//alu4_201.real:
+Original Sifting: 	total time: 21.1625s, 	final dd's size:932
+Mixed Algorithm: 	total time: 72.0111s, 	final dd's size:760
+Upper Algorithm: 	total time: 42.4706s, 	final dd's size:913
+Lower Algorithm: 	total time: 44.0273s, 	final dd's size:949
+./circuits/revLib//alu-bdd_288.real:
+Original Sifting: 	total time: 0.965436s, 	final dd's size:25
+Mixed Algorithm: 	total time: 3.21518s, 	final dd's size:22
+Upper Algorithm: 	total time: 1.94629s, 	final dd's size:24
+Lower Algorithm: 	total time: 1.93845s, 	final dd's size:25
+./circuits/revLib//alu-v0_26.real:
+Original Sifting: 	total time: 0.424552s, 	final dd's size:17
+Mixed Algorithm: 	total time: 1.28295s, 	final dd's size:14
+Upper Algorithm: 	total time: 0.848167s, 	final dd's size:14
+Lower Algorithm: 	total time: 0.847086s, 	final dd's size:14
+./circuits/revLib//alu-v0_27.real:
+Original Sifting: 	total time: 0.425238s, 	final dd's size:20
+Mixed Algorithm: 	total time: 1.29326s, 	final dd's size:20
+Upper Algorithm: 	total time: 0.854891s, 	final dd's size:20
+Lower Algorithm: 	total time: 0.853599s, 	final dd's size:20
+./circuits/revLib//alu-v1_28.real:
+Original Sifting: 	total time: 0.427542s, 	final dd's size:24
+Mixed Algorithm: 	total time: 1.30147s, 	final dd's size:20
+Upper Algorithm: 	total time: 0.85931s, 	final dd's size:20
+Lower Algorithm: 	total time: 0.86342s, 	final dd's size:24
+./circuits/revLib//alu-v1_29.real:
+Original Sifting: 	total time: 0.430053s, 	final dd's size:20
+Mixed Algorithm: 	total time: 1.35048s, 	final dd's size:22
+Upper Algorithm: 	total time: 0.885805s, 	final dd's size:22
+Lower Algorithm: 	total time: 0.867382s, 	final dd's size:20
+./circuits/revLib//alu-v2_30.real:
+Original Sifting: 	total time: 0.434706s, 	final dd's size:29
+Mixed Algorithm: 	total time: 1.31076s, 	final dd's size:29
+Upper Algorithm: 	total time: 0.867738s, 	final dd's size:29
+Lower Algorithm: 	total time: 0.870827s, 	final dd's size:29
+./circuits/revLib//alu-v2_31.real:
+Original Sifting: 	total time: 0.425121s, 	final dd's size:18
+Mixed Algorithm: 	total time: 1.29181s, 	final dd's size:18
+Upper Algorithm: 	total time: 0.856894s, 	final dd's size:18
+Lower Algorithm: 	total time: 0.853559s, 	final dd's size:18
+./circuits/revLib//alu-v2_32.real:
+Original Sifting: 	total time: 0.429247s, 	final dd's size:22
+Mixed Algorithm: 	total time: 1.30362s, 	final dd's size:22
+Upper Algorithm: 	total time: 0.861764s, 	final dd's size:22
+Lower Algorithm: 	total time: 0.860912s, 	final dd's size:22
+./circuits/revLib//alu-v2_33.real:
+Original Sifting: 	total time: 0.427502s, 	final dd's size:20
+Mixed Algorithm: 	total time: 1.42414s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.938205s, 	final dd's size:19
+Lower Algorithm: 	total time: 0.939785s, 	final dd's size:20
+./circuits/revLib//alu-v3_34.real:
+Original Sifting: 	total time: 0.426516s, 	final dd's size:24
+Mixed Algorithm: 	total time: 1.30358s, 	final dd's size:24
+Upper Algorithm: 	total time: 0.860187s, 	final dd's size:24
+Lower Algorithm: 	total time: 0.856407s, 	final dd's size:24
+./circuits/revLib//alu-v3_35.real:
+Original Sifting: 	total time: 0.426004s, 	final dd's size:24
+Mixed Algorithm: 	total time: 1.30395s, 	final dd's size:24
+Upper Algorithm: 	total time: 0.860712s, 	final dd's size:24
+Lower Algorithm: 	total time: 0.856925s, 	final dd's size:24
+./circuits/revLib//alu-v4_36.real:
+Original Sifting: 	total time: 0.466335s, 	final dd's size:21
+Mixed Algorithm: 	total time: 1.41852s, 	final dd's size:21
+Upper Algorithm: 	total time: 0.936041s, 	final dd's size:21
+Lower Algorithm: 	total time: 0.936119s, 	final dd's size:21
+./circuits/revLib//alu-v4_37.real:
+Original Sifting: 	total time: 0.426974s, 	final dd's size:24
+Mixed Algorithm: 	total time: 1.41187s, 	final dd's size:19
+Upper Algorithm: 	total time: 0.857694s, 	final dd's size:24
+Lower Algorithm: 	total time: 0.929595s, 	final dd's size:19
+./circuits/revLib//apex2_289.real:
+./circuits/revLib//apex4_202.real:
+Original Sifting: 	total time: 43.2779s, 	final dd's size:2096
+Mixed Algorithm: 	total time: 170.898s, 	final dd's size:2033
+Upper Algorithm: 	total time: 105.867s, 	final dd's size:2078
+Lower Algorithm: 	total time: 110.007s, 	final dd's size:2027
+./circuits/revLib//apex5_290.real:
+./circuits/revLib//apla_203.real:
+Original Sifting: 	total time: 13.7329s, 	final dd's size:266
+Mixed Algorithm: 	total time: 43.7614s, 	final dd's size:251
+Upper Algorithm: 	total time: 28.2729s, 	final dd's size:267
+Lower Algorithm: 	total time: 30.3988s, 	final dd's size:251
+./circuits/revLib//arb8_322.real:
+./circuits/revLib//arb8_323.real:
+Original Sifting: 	total time: 16.8614s, 	final dd's size:103
+Mixed Algorithm: 	total time: 52.0696s, 	final dd's size:103
+Upper Algorithm: 	total time: 33.7954s, 	final dd's size:103
+Lower Algorithm: 	total time: 33.7978s, 	final dd's size:103
+./circuits/revLib//avg16_324.real:
+./circuits/revLib//avg8_325.real:
+./circuits/revLib//bw_291.real:
+./circuits/revLib//C17_204.real:
+Original Sifting: 	total time: 0.95312s, 	final dd's size:20
+Mixed Algorithm: 	total time: 3.18312s, 	final dd's size:22
+Upper Algorithm: 	total time: 2.1003s, 	final dd's size:22
+Lower Algorithm: 	total time: 2.09888s, 	final dd's size:22
+./circuits/revLib//c2_181.real:
+./circuits/revLib//c2_182.real:
+./circuits/revLib//C7552_205.real:
+Original Sifting: 	total time: 9.52585s, 	final dd's size:95
+Mixed Algorithm: 	total time: 29.3926s, 	final dd's size:95
+Upper Algorithm: 	total time: 19.1915s, 	final dd's size:95
+Lower Algorithm: 	total time: 19.1663s, 	final dd's size:95
+./circuits/revLib//clip_206.real:
+Original Sifting: 	total time: 4.98257s, 	final dd's size:163
+Mixed Algorithm: 	total time: 19.212s, 	final dd's size:122
+Upper Algorithm: 	total time: 9.98292s, 	final dd's size:163
+Lower Algorithm: 	total time: 12.5095s, 	final dd's size:118
+./circuits/revLib//cm150a_210.real:
+Original Sifting: 	total time: 13.4858s, 	final dd's size:135
+Mixed Algorithm: 	total time: 42.6342s, 	final dd's size:135
+Upper Algorithm: 	total time: 26.9567s, 	final dd's size:135
+Lower Algorithm: 	total time: 26.9034s, 	final dd's size:135
+./circuits/revLib//cm151a_211.real:
+Original Sifting: 	total time: 22.3887s, 	final dd's size:117
+Mixed Algorithm: 	total time: 74.5797s, 	final dd's size:116
+Upper Algorithm: 	total time: 48.3939s, 	final dd's size:116
+Lower Algorithm: 	total time: 48.3149s, 	final dd's size:116
+./circuits/revLib//cm152a_212.real:
+Original Sifting: 	total time: 3.25862s, 	final dd's size:51
+Mixed Algorithm: 	total time: 10.8523s, 	final dd's size:49
+Upper Algorithm: 	total time: 6.52691s, 	final dd's size:52
+Lower Algorithm: 	total time: 7.13995s, 	final dd's size:52
+./circuits/revLib//cm163a_213.real:
+Original Sifting: 	total time: 22.8006s, 	final dd's size:126
+Mixed Algorithm: 	total time: 610.165s, 	final dd's size:207
+Upper Algorithm: 	total time: 45.8105s, 	final dd's size:138
+Lower Algorithm: 	total time: 395.922s, 	final dd's size:207
+./circuits/revLib//cm42a_207.real:
+Original Sifting: 	total time: 4.49185s, 	final dd's size:49
+Mixed Algorithm: 	total time: 15.2544s, 	final dd's size:49
+Upper Algorithm: 	total time: 9.92262s, 	final dd's size:49
+Lower Algorithm: 	total time: 9.99465s, 	final dd's size:49
+./circuits/revLib//cm82a_208.real:
+Original Sifting: 	total time: 1.29223s, 	final dd's size:21
+Mixed Algorithm: 	total time: 3.97366s, 	final dd's size:21
+Upper Algorithm: 	total time: 2.61669s, 	final dd's size:21
+Lower Algorithm: 	total time: 2.61945s, 	final dd's size:21
+./circuits/revLib//cm85a_209.real:
+Original Sifting: 	total time: 5.48504s, 	final dd's size:72
+Mixed Algorithm: 	total time: 14.3793s, 	final dd's size:72
+Upper Algorithm: 	total time: 9.39722s, 	final dd's size:72
+Lower Algorithm: 	total time: 10.1925s, 	final dd's size:72
+./circuits/revLib//cmb_214.real:
+Original Sifting: 	total time: 8.56616s, 	final dd's size:60
+Mixed Algorithm: 	total time: 26.0007s, 	final dd's size:59
+Upper Algorithm: 	total time: 17.0592s, 	final dd's size:60
+Lower Algorithm: 	total time: 17.1243s, 	final dd's size:59
+./circuits/revLib//cnt3-5_179.real:
+Original Sifting: 	total time: 5.44011s, 	final dd's size:47
+Mixed Algorithm: 	total time: 16.5968s, 	final dd's size:47
+Upper Algorithm: 	total time: 11.706s, 	final dd's size:47
+Lower Algorithm: 	total time: 11.7149s, 	final dd's size:47
+./circuits/revLib//cnt3-5_180.real:
+Original Sifting: 	total time: 5.44551s, 	final dd's size:47
+Mixed Algorithm: 	total time: 16.6584s, 	final dd's size:47
+Upper Algorithm: 	total time: 11.749s, 	final dd's size:47
+Lower Algorithm: 	total time: 11.75s, 	final dd's size:47
+./circuits/revLib//co14_215.real:
+Original Sifting: 	total time: 5.15183s, 	final dd's size:42
+Mixed Algorithm: 	total time: 15.8486s, 	final dd's size:42
+Upper Algorithm: 	total time: 10.4548s, 	final dd's size:42
+Lower Algorithm: 	total time: 10.4795s, 	final dd's size:42
+./circuits/revLib//con1_216.real:
+Original Sifting: 	total time: 1.70957s, 	final dd's size:35
+Mixed Algorithm: 	total time: 5.71047s, 	final dd's size:35
+Upper Algorithm: 	total time: 3.76271s, 	final dd's size:35
+Lower Algorithm: 	total time: 3.76695s, 	final dd's size:35
+./circuits/revLib//cordic_218.real:
+Original Sifting: 	total time: 14.1904s, 	final dd's size:112
+Mixed Algorithm: 	total time: 45.7833s, 	final dd's size:67
+Upper Algorithm: 	total time: 30.0505s, 	final dd's size:72
+Lower Algorithm: 	total time: 27.4832s, 	final dd's size:68
+./circuits/revLib//cps_292.real:
+./circuits/revLib//cu_219.real:
+Original Sifting: 	total time: 15.7336s, 	final dd's size:158
+Mixed Algorithm: 	total time: 52.1663s, 	final dd's size:129
+Upper Algorithm: 	total time: 33.9677s, 	final dd's size:148
+Lower Algorithm: 	total time: 31.3171s, 	final dd's size:133
+./circuits/revLib//cycle10_2_110.real:
+Original Sifting: 	total time: 3.77481s, 	final dd's size:27
+Mixed Algorithm: 	total time: 11.6052s, 	final dd's size:27
+Upper Algorithm: 	total time: 7.64055s, 	final dd's size:27
+Lower Algorithm: 	total time: 7.6238s, 	final dd's size:27
+./circuits/revLib//cycle10_293.real:
+./circuits/revLib//cycle17_3_112.real:
+Original Sifting: 	total time: 10.8511s, 	final dd's size:50
+Mixed Algorithm: 	total time: 33.3285s, 	final dd's size:50
+Upper Algorithm: 	total time: 21.7352s, 	final dd's size:50
+Lower Algorithm: 	total time: 21.8461s, 	final dd's size:50
+./circuits/revLib//dc1_220.real:
+Original Sifting: 	total time: 2.70783s, 	final dd's size:52
+Mixed Algorithm: 	total time: 8.22951s, 	final dd's size:49
+Upper Algorithm: 	total time: 5.91161s, 	final dd's size:50
+Lower Algorithm: 	total time: 5.44363s, 	final dd's size:54
+./circuits/revLib//dc1_221.real:
+Original Sifting: 	total time: 2.70375s, 	final dd's size:52
+Mixed Algorithm: 	total time: 8.24373s, 	final dd's size:49
+Upper Algorithm: 	total time: 6.00589s, 	final dd's size:50
+Lower Algorithm: 	total time: 5.46007s, 	final dd's size:54
+./circuits/revLib//dc2_222.real:
+Original Sifting: 	total time: 5.45211s, 	final dd's size:101
+Mixed Algorithm: 	total time: 16.9541s, 	final dd's size:101
+Upper Algorithm: 	total time: 11.1709s, 	final dd's size:101
+Lower Algorithm: 	total time: 11.183s, 	final dd's size:101
+./circuits/revLib//decod_217.real:
+Original Sifting: 	total time: 9.52142s, 	final dd's size:95
+Mixed Algorithm: 	total time: 29.4666s, 	final dd's size:95
+Upper Algorithm: 	total time: 19.1764s, 	final dd's size:95
+Lower Algorithm: 	total time: 19.2255s, 	final dd's size:95
+./circuits/revLib//decod24-bdd_294.real:
+Original Sifting: 	total time: 0.655929s, 	final dd's size:15
+Mixed Algorithm: 	total time: 2.00828s, 	final dd's size:14
+Upper Algorithm: 	total time: 1.32772s, 	final dd's size:15
+Lower Algorithm: 	total time: 1.33018s, 	final dd's size:14
+./circuits/revLib//decod24-enable_124.real:
+Original Sifting: 	total time: 0.670111s, 	final dd's size:16
+Mixed Algorithm: 	total time: 2.028s, 	final dd's size:14
+Upper Algorithm: 	total time: 1.3392s, 	final dd's size:14
+Lower Algorithm: 	total time: 1.33732s, 	final dd's size:14
+./circuits/revLib//decod24-enable_125.real:
+Original Sifting: 	total time: 0.728658s, 	final dd's size:32
+Mixed Algorithm: 	total time: 2.22522s, 	final dd's size:21
