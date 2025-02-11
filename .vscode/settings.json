@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "**/.demo/*.json": "jsonc",
+        "tuple": "cpp"
+    }
+}
