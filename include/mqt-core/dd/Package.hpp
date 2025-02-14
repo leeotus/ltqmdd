@@ -568,7 +568,7 @@ public:
     auto edges = std::array{mCachedEdge::zero(), mCachedEdge::zero(),
                             mCachedEdge::zero(), mCachedEdge::zero()};
 
-    // process lines below target
+    // process lines below target: 出现逆序的情况,即由前一个qubit控制后一个qubit
     for (; it != controls.end() && it->qubit < target; ++it) {
       for (auto i1 = 0U; i1 < RADIX; ++i1) {
         for (auto i2 = 0U; i2 < RADIX; ++i2) {
@@ -829,6 +829,7 @@ public:
     // memoryManager用于管理节点的内存,cn则用于管理边的权重(即复数)的内存分配
     auto e = EdgeType<Node>::normalize(p, edges, memoryManager, cn);
 
+    // BUG : 经测试,不加修改的删除下面的这个if语句会导致bug:, 错误提示为:`entry->ref == 0 failed`, 说明有节点出现ref错误
     if constexpr (std::is_same_v<Node, mNode> || std::is_same_v<Node, dNode>) {
       if (!e.isTerminal()) {
         const auto& es = e.p->e;
@@ -836,7 +837,7 @@ public:
         if ((es[0].p == es[3].p) &&
             (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
              es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
-          hasSkipped = true;
+          hasSkipped = true;    // check whether `Skipped nodes` exist
           auto* ptr = es[0].p;
           memoryManager.returnEntry(e.p);
           return EdgeType<Node>{ptr, e.w};

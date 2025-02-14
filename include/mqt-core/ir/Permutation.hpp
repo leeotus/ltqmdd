@@ -5,18 +5,38 @@
 
 #include <cstddef>
 #include <functional>
+#include <array>
 #include <map>
 
+#define MAX_QUBITS_NUMBER  32
 namespace qc {
 class Permutation : public std::map<Qubit, Qubit> {
 public:
+
   [[nodiscard]] auto apply(const Controls& controls) const -> Controls;
   [[nodiscard]] auto apply(const Targets& targets) const -> Targets;
   [[nodiscard]] auto apply(Qubit qubit) const -> Qubit;
   [[nodiscard]] auto maxKey() const -> Qubit;
   [[nodiscard]] auto maxValue() const -> Qubit;
+
+  /**
+   * @brief Given a QubitName (named in the input circuit files)'s index
+   * and search (and return if successful) its level index in the QMDDs.
+   * @return int -1 for errors.
+   * @author leeotus
+   */
+  [[nodiscard]] int findQubitName(Qubit q);
+
+  /**
+   * @brief generate "previous index" of this permutation, the index indicates
+   * the upper level of each qubit
+   * @return std::vector<int> : -1 for none
+   * @author leeotus
+   */
+  [[nodiscard]] std::array<int, MAX_QUBITS_NUMBER> generatePreIndex();
+
 };
-} // namespace qc
+}  // namespace qc
 
 // define hash function for Permutation
 namespace std {

@@ -4,6 +4,6 @@
 .inputs x1 x2 x3
 .outputs x1 x2 x3
 .begin
-t2 x3 x2
+t2 x2 x3
 t2 x2 x1
 .end

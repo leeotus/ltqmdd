@@ -4,6 +4,7 @@
 #include "ir/operations/Control.hpp"
 
 #include <algorithm>
+#include <cassert>
 
 namespace qc {
 [[nodiscard]] auto Permutation::apply(const Controls& controls) const
@@ -51,4 +52,25 @@ namespace qc {
              [](const auto& a, const auto& b) { return a.second < b.second; })
       ->second;
 }
+
+[[nodiscard]] int Permutation::findQubitName(Qubit q) {
+  for(auto &it: *this) {
+    if(it.second == q) {
+      return static_cast<int>(it.first);
+    }
+  }
+  return -1;
+}
+
+[[nodiscard]] std::array<int, MAX_QUBITS_NUMBER> Permutation::generatePreIndex() {
+  std::array<int, MAX_QUBITS_NUMBER> res{};
+  int prev = -1;
+  for(auto &it: *this) {
+    assert(it.first >= 0 && it.first < MAX_QUBITS_NUMBER);
+    res.at(it.first) = prev;
+    prev = static_cast<int>(it.first);
+  }
+  return res;
+}
+
 } // namespace qc
