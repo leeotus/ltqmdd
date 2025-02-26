@@ -121,7 +121,7 @@ inline void cancelRecord(VarOrder* vo) {
  * @param up
  * 当该值为true时表示将index层的节点和index+1层的节点进行交换,否则与index-1层的节点交换(默认为false)
  * @return 成功返回0,失败返回-1
- * @copyright Leejxian
+ * @copyright leeotus
  */
 template <typename Config>
 void levelExchange(Qubit index, Package<Config>* dd,
@@ -132,7 +132,7 @@ void levelExchange(Qubit index, Package<Config>* dd,
   assert(index > 0 && index < qtc->getNqubits());
 
   // 获取对应index的哈希冲突链
-  auto table = dd->mUniqueTable.getTableColumn(index);
+  auto table = dd->mUniqueTable.getTableColumnAndClear(index);
 
   // 与下层做交换
   auto tmp = qtc->outputPermutation[index];
@@ -177,7 +177,7 @@ void linearExchange(Qubit index, Package<Config>* dd,
   assert(index > 0 && index < qtc->getNqubits());
 
   // 获取对应的index的哈希冲突链
-  auto table = dd->mUniqueTable.getTableColumn(index);
+  auto table = dd->mUniqueTable.getTableColumnAndClear(index);
 
   // upper和lower筛选算法不需要修改permutation
 

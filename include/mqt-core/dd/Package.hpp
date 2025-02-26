@@ -216,6 +216,22 @@ public:
     }
   }
 
+  // Decrease the reference of node only.
+  template <class Node> void decRefOnly(const Edge<Node>& e) noexcept {
+    // cn.decRef(e.w);
+    const auto& p = e.p;
+    const auto dec = getUniqueTable<Node>().decRef(p);
+    if(e.p!=nullptr)
+    {
+      active[e.p->v] -= 1;
+    }
+    if (dec && p->ref == 0U) {
+      for (const auto& child : p->e) {
+        decRef(child);
+      }
+    }
+  }
+
   /**
    * @brief Decrement the reference count of an edge
    * @details This is the main function for decreasing reference counts within

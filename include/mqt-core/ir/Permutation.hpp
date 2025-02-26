@@ -9,6 +9,17 @@
 #include <map>
 
 #define MAX_QUBITS_NUMBER  32
+
+/**------------------------------------------------------------------------
+ *                  Definition of LTQMDD's Permutation
+ * Permutation: std::map<index/level, qubitName>
+ * | registerName | qubitIndex |  index in Permutation  | index in UniqueTable
+ *    "name1"          0                       ?                       0
+ *    "name2"          1                       ?                       1
+ *    "name3"          2                       ?                       2
+ *  ... (i.e., indices are changeable)
+ *------------------------------------------------------------------------**/
+
 namespace qc {
 class Permutation : public std::map<Qubit, Qubit> {
 public:
@@ -20,20 +31,28 @@ public:
   [[nodiscard]] auto maxValue() const -> Qubit;
 
   /**
-   * @brief Given a QubitName (named in the input circuit files)'s index
+   * @brief Given a qubit's index (named in the input circuit files)
    * and search (and return if successful) its level index in the QMDDs.
    * @return int -1 for errors.
    * @author leeotus
    */
-  [[nodiscard]] int findQubitName(Qubit q);
+  [[nodiscard]] int findPmtLevel(Qubit q) const;
 
   /**
-   * @brief generate "previous index" of this permutation, the index indicates
+   * @brief Generate "previous index" of this permutation, the index indicates
    * the upper level of each qubit
    * @return std::vector<int> : -1 for none
    * @author leeotus
    */
   [[nodiscard]] std::array<int, MAX_QUBITS_NUMBER> generatePreIndex();
+
+  /**
+   * @todo
+   * @brief Get all the names of each qubits which are named in the input
+   * circuits' file.
+   * @return std::vector<std::string>
+   */
+  [[nodiscard]] std::vector<std::string> getQubitName();
 
 };
 }  // namespace qc

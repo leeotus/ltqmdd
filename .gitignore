@@ -176,3 +176,5 @@ node_modules/
 wheelhouse/
 
 *.drawio
+/test/myTest
+/.vscode/settings.json

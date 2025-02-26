@@ -5,6 +5,36 @@
     "version": "0.2.0",
     "configurations": [
       {
+        "type": "lldb",
+        "request": "launch",
+        "name": "(lldb)new sifting algo",
+        "program": "${workspaceFolder}/build/apps/main",
+        "args": [
+          "${workspaceFolder}/circuits/demo_cnot.real"
+        ],
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "(gdb)new sifting algo",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/apps/main",
+        "args": [
+          "${workspaceFolder}/circuits/demo_cnot.real"
+        ],
+        "stopAtEntry": true,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "MIMode": "gdb",
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ]
+      },
+      {
         "name": "gdb",
         "type": "cppdbg",
         "request": "launch",

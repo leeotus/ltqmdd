@@ -47,7 +47,7 @@ ReorderStep* ReorderStepManager::get()
         reallocChunk();
     }
     auto *curChunk = stepool.back();
-    ReorderStep *p = &(curChunk->at(cursor)); 
+    ReorderStep *p = &(curChunk->at(cursor));
     cursor += 1;
     return p;
 }
@@ -63,7 +63,7 @@ void VarOrder::printOrder(const std::string &qubitName) const
 {
     std::vector<std::string> ordering;
     for(Qubit i=0;i<nqubits;++i)
-    {  
+    {
         auto index = qtc->outputPermutation[i];
         ordering.push_back(qubitName + std::to_string(index));
     }

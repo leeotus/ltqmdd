@@ -406,7 +406,7 @@ public:
     const auto v = p->v;
     // TODO: 这里有误!!!
 
-    if(tables[v][keyBefore] == nullptr) 
+    if(tables[v][keyBefore] == nullptr)
     {
       return;
     }
@@ -445,7 +445,7 @@ public:
    * @brief 取出tables[index][*]中所有的哈希冲突链并返回,以便之后修改节点的哈希值
    * @note 本质上也就是取出第index层的所有节点所在的内存位置,以供之后做各种sifting变换
    */
-  std::vector<Node*> getTableColumn(Qubit index)
+  std::vector<Node*> getTableColumnAndClear(Qubit index)
   {
     assert(index >= 0);
     std::vector<Node*> res;
@@ -454,8 +454,18 @@ public:
       res.push_back(tables[index][i]);
       // 将对应列的哈希冲突链取出,并将对应列的哈希冲突链清空
       tables[index][i] = nullptr;
-    }    
+    }
     // clearNextIndexTable(index-1);
+    return res;
+  }
+
+  std::vector<Node*> getTableColumn(Qubit index) {
+    assert(index >= 0);
+    std::vector<Node*> res;
+    // no need to clear the bucket
+    for(auto i=0;i<NBUCKET;++i) {
+      res.push_back(tables[index][i]);
+    }
     return res;
   }
 
