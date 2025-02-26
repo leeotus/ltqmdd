@@ -19,6 +19,7 @@ MatrixDD buildFunctionality(const QuantumComputation* qc, Package<Config>& dd) {
   auto e = dd.createInitialMatrix(qc->ancillary);
 
   for (const auto& op : *qc) {
+    // TODO: 经过dynamic reordering之后op指向的targets和controls内的数值需要修改
     auto tmp = dd.multiply(getDD(op.get(), dd, permutation), e);
 
     dd.incRef(tmp);

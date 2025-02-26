@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 
   start = clock();
   // 进行sifting算法:
-  dd::sifting(1, ddpackPtr.get(), &qc);
+  dd::sifting(9, ddpackPtr.get(), &qc);
 
   finish = clock();
 
@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
   std::cout << "total time: " << totalTime << "s, \t";
   std::cout << "final dd's size:" << finalSize << "\r\n";
 
-  dd::sifting(1, ddpackPtr.get(), &qc);
+  dd::sifting(0, ddpackPtr.get(), &qc);
   std::cout << "Sifting again: dd's size:" << functionality.size() << "\r\n";
 
   return 0;

@@ -1,7 +1,7 @@
 if(NOT TARGET ${MQT_CORE_TARGET_NAME}-dd)
   # collect headers and source files
   file(GLOB_RECURSE DD_HEADERS ${MQT_CORE_INCLUDE_BUILD_DIR}/dd/*.hpp)
-  file(GLOB_RECURSE DD_SOURCES **.cpp)
+  file(GLOB_RECURSE DD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/**.cpp)
 
   # add DD Package library
   add_library(${MQT_CORE_TARGET_NAME}-dd ${DD_HEADERS} ${DD_SOURCES})

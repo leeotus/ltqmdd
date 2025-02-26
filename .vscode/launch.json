@@ -10,7 +10,8 @@
         "name": "(lldb)new sifting algo",
         "program": "${workspaceFolder}/build/apps/main",
         "args": [
-          "${workspaceFolder}/circuits/demo_cnot.real"
+          // "${workspaceFolder}/circuits/demo_cnot.real"
+          "${workspaceFolder}/circuits/revLib/apex4_202.real"
         ],
         "cwd": "${workspaceFolder}"
       },
@@ -20,7 +21,8 @@
         "request": "launch",
         "program": "${workspaceFolder}/build/apps/main",
         "args": [
-          "${workspaceFolder}/circuits/demo_cnot.real"
+          // "${workspaceFolder}/circuits/demo_cnot.real"
+          "${workspaceFolder}/circuits/revLib/apex4_202.real"
         ],
         "stopAtEntry": true,
         "cwd": "${workspaceFolder}",

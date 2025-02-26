@@ -19,11 +19,10 @@ static mNode* __single_skipped_sifting(Package<> *dd, const std::array<Edge<mNod
 // TODO: We need to figure out those nodes that point to the level "adj" and
 // then apply "sifting" algorithms on them.
 static void __check_and_sifting_bf(Package<>* dd, int adj, const Permutation& pmt) {
-  auto index = pmt.findPmtLevel(adj);
-  for(auto &it : pmt) {
-    if(it.first < index - 1) {
-      // Find all the upper level's nodes
-      auto nodes = dd->mUniqueTable.getTableColumn(it.second);
+  auto pmtlvl = pmt.findPmtLevel(adj);
+  for(auto itm = pmt.rend(); itm!=pmt.rbegin(); --itm) {
+    if(itm->first > pmtlvl+1) {
+      auto nodes = dd->mUniqueTable.getTableColumn(itm->second);
       for(auto &ptr : nodes) {
         if(ptr->ref == 0) {
           continue;
@@ -33,7 +32,7 @@ static void __check_and_sifting_bf(Package<>* dd, int adj, const Permutation& pm
           if(es[i].p->v == adj) {
             dd->decRefOnly(es[i]);
             // TODO: Do single sifting algorithm
-            es[i].p = __single_skipped_sifting(dd, es[i].p->e, index-1);
+            es[i].p = __single_skipped_sifting(dd, es[i].p->e, pmtlvl-1);
             dd->incRef(es[i]);
           }
         }
@@ -49,21 +48,30 @@ static void __check_and_sifting_bf(Package<>* dd, int adj, const Permutation& pm
  * @param adj expected adjacent varibles' index, -1 means the current nodes
  * are placed in the lowest level, then it's no need to apply sifting algorithm
  */
-static void __lvl_sifting(mNode *node, Package<>* dd, int adj, const Permutation* pmt) {
-  if(adj == -1) {
-    DEBUG_WARNING("sifting with the lowest level varibles!");
+static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Permutation* pmt) {
+  if(curPmtIndex == 0) {
+    DEBUG_ERROR("sifting with the lowest level varibles!");
     return;
   }
-  adj = pmt->findPmtLevel(adj);
   // FIXME: "adj" is qubitIndex type, sentences like "node->e[i].p->v ==(!=) adj" is wrong
   // NOTE: sifting procedure, basically the same as "lvlswap" function in "dd/DDLinear.hpp"
   std::array<std::array<Edge<mNode>, NEDGE>, NEDGE> rearrangeEdges{};
   for(size_t i=0;i<NEDGE;++i) {
     auto eiw = node->e[i].w;    // Get the weight of this edge
-    if(node->e[i].isTerminal() || node->e[i].p->v != adj) {
+    if(node->e[i].isTerminal()) {
       for (size_t j = 0; j < NEDGE; ++j) {
         rearrangeEdges[i][j] = (j == 0 || j == 3) ?
           (Edge<mNode>::one()) : (Edge<mNode>::zero());
+        rearrangeEdges[i][j].w = dd->cn.lookup(rearrangeEdges[i][j].w * eiw);
+      }
+    }else if(node->e[i].p->v != curPmtIndex-1) {
+      for (size_t j = 0; j < NEDGE; ++j) {
+        if(j == 0 || j == 3) {
+          rearrangeEdges[i][j] = Edge<mNode>::one();
+          rearrangeEdges[i][j].p = node->e[i].p;
+        } else {
+          rearrangeEdges[i][j] = Edge<mNode>::zero();
+        }
         rearrangeEdges[i][j].w = dd->cn.lookup(rearrangeEdges[i][j].w * eiw);
       }
     } else {
@@ -72,13 +80,14 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int adj, const Permutation
         rearrangeEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
       }
     }
-    node->e[i].w = dd->cn.lookup(Complex::one());
+    node->e[i].w = (!node->e[i].w.exactlyZero()) ? dd->cn.lookup(Complex::one())
+                                               : dd->cn.lookup(Complex::zero());
   }
 
   for(size_t i = 0; i<NEDGE; ++i) {
     auto *__node = dd->mMemoryManager.get();
     assert(__node->ref == 0);
-    __node->v = static_cast<Qubit>(adj);
+    __node->v = static_cast<Qubit>(curPmtIndex-1);
     __node->flags = 0;
 
     for(size_t j=0; j < NEDGE; ++j) {
@@ -114,6 +123,9 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int adj, const Permutation
     }
   }
 
+  // FIXME: It may successfully find out the node which has already been in "mUniqueTable"
+  // Then, it needs to return this node back to the corresponding memory manager but with
+  // "node->ref" not equals to zero!
   node = dd->mUniqueTable.lookup(node);
 }
 
@@ -132,13 +144,6 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
   // get all the variables in the current index
   auto table = dd->mUniqueTable.getTableColumnAndClear(pmtlvl);
 
-  int adj{0};
-  if(pmtlvl == 0) {
-    adj = -1;
-  } else {
-    adj = qc->initialLayout.at(pmtlvl-1);
-  }
-
   // TODO: After each step of dynamic reordering, the permutation "initialLayout"
   // should stores the new permutation.
   // NOTE: TODO: the final permutation after dynamic reordering
@@ -149,7 +154,7 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
     while(node != nullptr) {
       auto *next = node->next;
       if(node->ref != 0) {
-        __lvl_sifting(node, dd, adj, &qc->initialLayout);
+        __lvl_sifting(node, dd, pmtlvl, &qc->initialLayout);
       }
       node = next;
     }
