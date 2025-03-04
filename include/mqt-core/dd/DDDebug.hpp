@@ -110,3 +110,7 @@ static void __debug_printf(void *msg, DebugType type, COLOR c)
     break;
   }
 }
+
+int debug_info_printf(const char *format, ...);
+
+int debug_error_printf(const char *format, ...);

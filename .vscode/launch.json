@@ -7,6 +7,16 @@
       {
         "type": "lldb",
         "request": "launch",
+        "name": "(lldb)demo_cnot",
+        "program": "${workspaceFolder}/build/apps/orgnl",
+        "args": [
+              "./circuits/demo_cnot.real"
+        ],
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "type": "lldb",
+        "request": "launch",
         "name": "(lldb)new sifting algo",
         "program": "${workspaceFolder}/build/apps/main",
         "args": [
@@ -36,8 +46,18 @@
           }
         ]
       },
+
       {
-        "name": "gdb",
+        "type": "lldb",
+        "request": "launch",
+        "name": "gtest",
+        "program": "${workspaceFolder}/build/test/dynmic/mnodepar-test",
+        "args": [],
+        "cwd": "${workspaceFolder}"
+      },
+
+      {
+        "name": "demo2",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/apps/orgnl",
@@ -60,7 +80,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug",
+            "name": "demo2(lldb)",
             "program": "${workspaceFolder}/build/apps/orgnl",
             "args": [
               "./circuits/demo2.real"

@@ -8,6 +8,8 @@
 
 namespace dd {
 
+size_t id_cnt = 0;
+
 void dNode::setDensityMatrixNodeFlag(const bool densityMatrix) noexcept {
   if (densityMatrix) {
     flags = (flags | static_cast<std::uint8_t>(8U));
