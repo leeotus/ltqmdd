@@ -3,7 +3,6 @@
 #include "dd/CachedEdge.hpp"
 #include "dd/DDDefinitions.hpp"
 #include "dd/Edge.hpp"
-#include "datastructures/AvlTree.hpp"
 
 #include <array>
 #include <cassert>

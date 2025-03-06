@@ -10,6 +10,7 @@
 #include "gtest/gtest.h"
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Package.hpp"
+#include "dd/DDDebug.hpp"
 #include "ir/QuantumComputation.hpp"
 #include <array>
 #include <cmath>
@@ -20,7 +21,7 @@
 #include <string>
 
 bool checkNodeParents(const char *fileName) {
-  if(fileName == nullptr) {
+  if(strlen(fileName) == 0) {
     DEBUG_ERROR("fileName empty!");
     return false;
   }

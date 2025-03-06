@@ -37,11 +37,18 @@ typedef enum __colors {
 #define COLOR_L_BLUE  "\e[1;34m"
 #define COLOR_CLOSE_TAG "\033[0m"
 
-#define MSG_BUFFER_LENGHT 1024
-extern char msgBuffer[MSG_BUFFER_LENGHT];
+#define MSG_BUFFER_LENGHTH 1024
+extern char msgBuffer[MSG_BUFFER_LENGHTH];
+
+#define __normal_msg(buffer, msg)                                              \
+  do {                                                                         \
+    bzero(&(buffer), MSG_BUFFER_LENGHTH);                                      \
+    sprintf((buffer), "%s", (char*)(msg));                                     \
+  } while (0)
+
 #define __formatted_msg(buffer, msg)                                           \
   do {                                                                         \
-    bzero(&(buffer), MSG_BUFFER_LENGHT);                                       \
+    bzero(&(buffer), MSG_BUFFER_LENGHTH);                                       \
     sprintf(buffer, "In file %s, line %d, `%s`", (char*)__FILE__,              \
             (int)__LINE__, (char*)(msg));                                      \
   } while (0)
@@ -51,20 +58,20 @@ extern char msgBuffer[MSG_BUFFER_LENGHT];
 
 #define DEBUG_WARNING(msg)                                                     \
   do {                                                                         \
-    __formatted_msg(msgBuffer, msg);                                           \
+    __normal_msg(msgBuffer, msg);                                              \
     __debug_printf(msgBuffer, WARNING, GREEN);                                 \
   } while (0)
 
 #define DEBUG_ERROR(msg)                                                       \
   do {                                                                         \
-    __formatted_msg(msgBuffer, msg);                                           \
-    __debug_printf(msgBuffer, ERROR, RED);                                      \
+    __normal_msg(msgBuffer, msg);                                              \
+    __debug_printf(msgBuffer, ERROR, RED);                                     \
   } while (0)
 
 #define DEBUG_INFO(msg)                                                        \
   do {                                                                         \
-    __formatted_msg(msgBuffer, msg);                                           \
-    __debug_printf(msgBuffer, INFO, BLUE);                                      \
+    __normal_msg(msgBuffer, msg);                                              \
+    __debug_printf(msgBuffer, INFO, BLUE);                                     \
   } while (0)
 
 #else

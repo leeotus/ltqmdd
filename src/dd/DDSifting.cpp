@@ -1,8 +1,39 @@
+#include <vector>
 #include "dd/DDSifting.hpp"
 #include "dd/DDDebug.hpp"
 #include "dd/DDLinear.hpp"
 
 namespace dd {
+
+std::queue<Edge<mNode>> __is_parent(mNode* par, mNode *child) {
+  std::queue<Edge<mNode>> res{};
+  if(par == nullptr || par->ref == 0 || par->v <= child->v) {
+    return res;
+  }
+  const auto &es = par->e;
+  for(int i=0;i<NEDGE;++i) {
+    if(es[i].p == child) {
+      res.push(es[i]);
+    }
+  }
+  return res;
+}
+
+static void __reduce_from_parents(mNode* nodeptr) {
+  auto& es = nodeptr->e;
+  while ((es[0].p == es[3].p) && (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
+                               es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
+    // TODO: Find out the parents of this node, then reduce this node
+    for (auto parptr : nodeptr->parents) {
+      auto res = __is_parent(parptr.second, nodeptr);
+      if(res.empty()) {
+        continue;
+      }
+
+      __reduce_from_parents(parptr.second);
+    }
+  }
+}
 
 static mNode* __single_skipped_sifting(Package<> *dd, const std::array<Edge<mNode>, NEDGE> es, int index) {
   auto *__node = dd->mMemoryManager.get();
@@ -16,25 +47,60 @@ static mNode* __single_skipped_sifting(Package<> *dd, const std::array<Edge<mNod
   return __node;
 }
 
-// TODO: We need to figure out those nodes that point to the level "adj" and
-// then apply "sifting" algorithms on them.
-static void __check_and_sifting_bf(Package<>* dd, int adj, const Permutation& pmt) {
-  auto pmtlvl = pmt.findPmtLevel(adj);
-  for(auto itm = pmt.rend(); itm!=pmt.rbegin(); --itm) {
-    if(itm->first > pmtlvl+1) {
-      auto nodes = dd->mUniqueTable.getTableColumn(itm->second);
-      for(auto &ptr : nodes) {
-        if(ptr->ref == 0) {
-          continue;
-        }
-        auto es = ptr->e;
-        for(auto i=0;i<NEDGE;++i) {
-          if(es[i].p->v == adj) {
-            dd->decRefOnly(es[i]);
-            // TODO: Do single sifting algorithm
-            es[i].p = __single_skipped_sifting(dd, es[i].p->e, pmtlvl-1);
-            dd->incRef(es[i]);
+/**
+ * FIXME: TODO: For those reduced nodes, it's necessary to find out thier "parents" and do the sifting algo on them.
+ * @param pmtlvl The subsequent permutation level of the adjacent variables.
+ */
+static void __checkpar_and_sifting(Package<>* dd, int adjPmtlvl, const Permutation& pmt) {
+  // Take out all of the nodes from UniqueTable:
+  auto nodes = dd->mUniqueTable.getTableColumn(adjPmtlvl);
+  for(auto* node : nodes) {
+    if((node != nullptr) && node->ref != 0) {
+      for(auto &par : node->parents) {
+        auto res = __is_parent(par.second, node);
+        while(!res.empty()) {    // Successfully find out the parents which point to a reduced node
+          // RESEARCH: Do the sifting algo.
+          auto r = res.front();
+
+          std::array<Edge<mNode>, NEDGE> es{};
+          for(int i=0;i<NEDGE;++i) {
+            es[i] = Edge<mNode>();
           }
+          for(int j=0;j<NEDGE;++j) {
+            if(node->e[j].w.exactlyOne()) {
+              // Directly reassign es[j].p to the child node.
+              es[j].p = node->e[j].p;
+              es[j].w = Complex::one();
+            } else {
+              // Allocate a new node first
+              auto *newNode = dd->mMemoryManager.get();
+              assert(newNode->ref == 0);
+              newNode->v = adjPmtlvl;
+              for(int k=0;k<NEDGE;++k) {
+                if(k == 0 || k == 3) {
+                  newNode->e[k].p = node->e[j].p;
+                  newNode->e[k].w = node->e[j].w;
+                } else {
+                  newNode->e[k].p = nullptr;
+                  newNode->e[k].w = Complex::zero();
+                }
+              }
+              es[j] = Edge<mNode>::normalize(newNode, newNode->e, dd->mMemoryManager, dd->cn);
+              es[j].p = dd->mUniqueTable.lookup(es[j].p);
+            }
+          }
+          auto *newpar = dd->mMemoryManager.get();
+          assert(newpar->ref == 0);
+          newpar->v = adjPmtlvl + 1;
+          for(int i=0;i<NEDGE;++i) {
+            newpar->e[i] = es[i];
+            if(es[i].p != nullptr) {
+              es[i].p->parents[newpar->id] = newpar;
+            }
+          }
+          r.p = newpar;
+
+          res.pop();
         }
       }
     }
@@ -47,37 +113,36 @@ static void __check_and_sifting_bf(Package<>* dd, int adj, const Permutation& pm
  * @param dd dd manager
  * @param adj expected adjacent varibles' index, -1 means the current nodes
  * are placed in the lowest level, then it's no need to apply sifting algorithm
+ * @todo Need to change the parents filed of mNode.
  */
 static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Permutation* pmt) {
   if(curPmtIndex == 0) {
-    DEBUG_ERROR("sifting with the lowest level varibles!");
     return;
   }
-  // FIXME: "adj" is qubitIndex type, sentences like "node->e[i].p->v ==(!=) adj" is wrong
   // NOTE: sifting procedure, basically the same as "lvlswap" function in "dd/DDLinear.hpp"
-  std::array<std::array<Edge<mNode>, NEDGE>, NEDGE> rearrangeEdges{};
+  std::array<std::array<Edge<mNode>, NEDGE>, NEDGE> rarEdges{};
   for(size_t i=0;i<NEDGE;++i) {
     auto eiw = node->e[i].w;    // Get the weight of this edge
     if(node->e[i].isTerminal()) {
       for (size_t j = 0; j < NEDGE; ++j) {
-        rearrangeEdges[i][j] = (j == 0 || j == 3) ?
+        rarEdges[i][j] = (j == 0 || j == 3) ?
           (Edge<mNode>::one()) : (Edge<mNode>::zero());
-        rearrangeEdges[i][j].w = dd->cn.lookup(rearrangeEdges[i][j].w * eiw);
+        rarEdges[i][j].w = dd->cn.lookup(rarEdges[i][j].w * eiw);
       }
     }else if(node->e[i].p->v != curPmtIndex-1) {
       for (size_t j = 0; j < NEDGE; ++j) {
         if(j == 0 || j == 3) {
-          rearrangeEdges[i][j] = Edge<mNode>::one();
-          rearrangeEdges[i][j].p = node->e[i].p;
+          rarEdges[i][j] = Edge<mNode>::one();
+          rarEdges[i][j].p = node->e[i].p;
         } else {
-          rearrangeEdges[i][j] = Edge<mNode>::zero();
+          rarEdges[i][j] = Edge<mNode>::zero();
         }
-        rearrangeEdges[i][j].w = dd->cn.lookup(rearrangeEdges[i][j].w * eiw);
+        rarEdges[i][j].w = dd->cn.lookup(rarEdges[i][j].w * eiw);
       }
     } else {
       for (size_t j = 0; j < NEDGE; ++j) {
-        rearrangeEdges[i][j] = node->e[i].p->e[j];
-        rearrangeEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
+        rarEdges[i][j] = node->e[i].p->e[j];
+        rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
       }
     }
     node->e[i].w = (!node->e[i].w.exactlyZero()) ? dd->cn.lookup(Complex::one())
@@ -85,37 +150,42 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
   }
 
   for(size_t i = 0; i<NEDGE; ++i) {
-    auto *__node = dd->mMemoryManager.get();
-    assert(__node->ref == 0);
-    __node->v = static_cast<Qubit>(curPmtIndex-1);
-    __node->flags = 0;
+    auto *nodeptr = dd->mMemoryManager.get();
+    assert(nodeptr->ref == 0);
+    nodeptr->v = static_cast<Qubit>(curPmtIndex-1);
+    nodeptr->flags = 0;
 
     for(size_t j=0; j < NEDGE; ++j) {
-      __node->e[j] = rearrangeEdges[j][i];
+      nodeptr->e[j] = rarEdges[j][i];
     }
 
-    auto __edge = Edge<mNode>::normalize(__node, __node->e, dd->mMemoryManager, dd->cn);
+    auto eptr = Edge<mNode>::normalize(nodeptr, nodeptr->e, dd->mMemoryManager, dd->cn);
     // NOTE: May need to apply reduction rules on this edge
-    if(!__edge.isTerminal()) {
-      const auto &es = __edge.p->e;
+    if(!eptr.isTerminal()) {
+      const auto &es = eptr.p->e;
       if ((es[0].p == es[3].p) &&
           (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
            es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
         auto* ptr = es[0].p;
-        dd->mMemoryManager.returnEntry(__edge.p);
+        dd->mMemoryManager.returnEntry(eptr.p);
         node->e[i].p = ptr;
-        node->e[i].w = __edge.w;
+        node->e[i].w = eptr.w;
         continue;
       }
     }
-    __edge.p = dd->mUniqueTable.lookup(__edge.p);
+    eptr.p = dd->mUniqueTable.lookup(eptr.p);
 
     // TODO: Need to verify if the following code works successfully?
     if(node->e[i].isTerminal()) {
-      node->e[i] = __edge;
+      node->e[i] = eptr;
     } else {
       dd->decRef(node->e[i]);
-      node->e[i] = __edge;
+      node->e[i] = eptr;
+    }
+
+    // Add *node to the parents of eptr.p
+    if (eptr.p != nullptr) {
+      eptr.p->parents[node->id] = node;
     }
 
     if(!node->e[i].isTerminal()) {
@@ -131,7 +201,7 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
 
 void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori)
 {
-  auto pmtlvl = qc->initialLayout.findPmtLevel(qubitIndex);
+  auto pmtlvl = qc->initialLayout.findPmtIndex(qubitIndex);
   assert(pmtlvl >= 0 && pmtlvl < qc->getNqubits());
   if(ori) {
     pmtlvl = pmtlvl + 1;
@@ -156,11 +226,15 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
       if(node->ref != 0) {
         __lvl_sifting(node, dd, pmtlvl, &qc->initialLayout);
       }
+      // TODO: Need to check whether *node should be reduced?
       node = next;
     }
   }
 
-  // __check_and_sifting_bf(dd, adj, qc->initialLayout); // FIXME: Bad function
+  if(pmtlvl != qc->getNqubits()-1) {
+    int adjlvl = pmtlvl - 1;
+    __checkpar_and_sifting(dd, adjlvl, qc->initialLayout); // FIXME: Bad function
+  }
 
   if(ori) {
     auto tmp = qc->initialLayout.at(pmtlvl);

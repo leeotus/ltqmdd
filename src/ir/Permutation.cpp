@@ -53,7 +53,7 @@ namespace qc {
       ->second;
 }
 
-[[nodiscard]] int Permutation::findPmtLevel(Qubit q) const {
+[[nodiscard]] int Permutation::findPmtIndex(Qubit q) const {
   for(auto &it: *this) {
     if(it.second == q) {
       return static_cast<int>(it.first);

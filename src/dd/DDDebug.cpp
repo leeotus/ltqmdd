@@ -1,9 +1,7 @@
 #include "dd/DDDebug.hpp"
 #include <cstdarg>
 
-#define MAX_BUFFER_LENGTH 1024
-
-char msgBuffer[MSG_BUFFER_LENGHT];
+char msgBuffer[MSG_BUFFER_LENGHTH];
 
 static void putInt(int n) {
   if(n > 9) {
@@ -13,7 +11,7 @@ static void putInt(int n) {
 }
 
 int debug_info_printf(const char *format, ...) {
-  char buffer[MAX_BUFFER_LENGTH];
+  char buffer[MSG_BUFFER_LENGHTH];
   char *cursor = buffer;
 
   if(strlen(format) == 0) {
@@ -58,7 +56,7 @@ int debug_info_printf(const char *format, ...) {
 }
 
 int debug_error_printf(const char *format, ...) {
-  char buffer[MAX_BUFFER_LENGTH];
+  char buffer[MSG_BUFFER_LENGHTH];
   char *cursor = buffer;
 
   if(strlen(format) == 0) {

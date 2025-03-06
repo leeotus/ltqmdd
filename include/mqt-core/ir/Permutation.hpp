@@ -18,6 +18,7 @@
  *    "name2"          1                       ?                       1
  *    "name3"          2                       ?                       2
  *  ... (i.e., indices are changeable)
+ * @note The index of the lowest nodes in a QMDD is 0.
  *------------------------------------------------------------------------**/
 
 namespace qc {
@@ -36,7 +37,7 @@ public:
    * @return int -1 for errors.
    * @author leeotus
    */
-  [[nodiscard]] int findPmtLevel(Qubit q) const;
+  [[nodiscard]] int findPmtIndex(Qubit q) const;
 
   /**
    * @brief Generate "previous index" of this permutation, the index indicates
