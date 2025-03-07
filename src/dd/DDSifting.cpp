@@ -132,7 +132,7 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
     }else if(node->e[i].p->v != curPmtIndex-1) {
       for (size_t j = 0; j < NEDGE; ++j) {
         if(j == 0 || j == 3) {
-          rarEdges[i][j] = Edge<mNode>::one();
+          rarEdges[i][j].w = Complex::one();
           rarEdges[i][j].p = node->e[i].p;
         } else {
           rarEdges[i][j] = Edge<mNode>::zero();
@@ -157,6 +157,9 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
 
     for(size_t j=0; j < NEDGE; ++j) {
       nodeptr->e[j] = rarEdges[j][i];
+      if(!nodeptr->e[j].isTerminal()) {
+        nodeptr->e[j].p->parents[nodeptr->id] = nodeptr;
+      }
     }
 
     auto eptr = Edge<mNode>::normalize(nodeptr, nodeptr->e, dd->mMemoryManager, dd->cn);
@@ -170,32 +173,33 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
         dd->mMemoryManager.returnEntry(eptr.p);
         node->e[i].p = ptr;
         node->e[i].w = eptr.w;
+        if(ptr != nullptr) {
+          ptr->parents[node->id] = node;
+        }
         continue;
       }
     }
     eptr.p = dd->mUniqueTable.lookup(eptr.p);
 
-    // TODO: Need to verify if the following code works successfully?
     if(node->e[i].isTerminal()) {
       node->e[i] = eptr;
     } else {
-      dd->decRef(node->e[i]);
+      auto tmp = node->e[i];
       node->e[i] = eptr;
+      dd->decRef(tmp);
     }
 
-    // Add *node to the parents of eptr.p
-    if (eptr.p != nullptr) {
-      eptr.p->parents[node->id] = node;
-    }
+    // // Add *node to the parents of eptr.p
+    // if (eptr.p != nullptr) {
+    //   eptr.p->parents[node->id] = node;
+    // }
 
     if(!node->e[i].isTerminal()) {
+      node->e[i].p->parents[node->id] = node;
       dd->incRef(node->e[i]);
     }
   }
 
-  // FIXME: It may successfully find out the node which has already been in "mUniqueTable"
-  // Then, it needs to return this node back to the corresponding memory manager but with
-  // "node->ref" not equals to zero!
   node = dd->mUniqueTable.lookup(node);
 }
 
@@ -214,17 +218,25 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
   // get all the variables in the current index
   auto table = dd->mUniqueTable.getTableColumnAndClear(pmtlvl);
 
-  // TODO: After each step of dynamic reordering, the permutation "initialLayout"
-  // should stores the new permutation.
-  // NOTE: TODO: the final permutation after dynamic reordering
-  // should be stored in the "qc->outputPermuation"
+  // TODO: After each step of dynamic reordering, the permutation "initialLayout" should stores the new permutation.
+  // NOTE: TODO: the final permutation after dynamic reordering should be stored in the "qc->outputPermuation"
 
   for(auto bucket = 0; bucket < table.size(); ++bucket) {
     auto *node = table[bucket];
     while(node != nullptr) {
       auto *next = node->next;
-      if(node->ref != 0) {
+      // RESEARCH: Throughout the period of building the DD, nodes will be "returned" to the corresponding memoryManager when its "ref == 0".
+      // However, this node may have already been pushed into the "UniqueTable", then, its field "v" may be changed the next time when we get a
+      // new node from the "UniqueTable".
+      if(node->ref != 0 && node->v == pmtlvl) {
         __lvl_sifting(node, dd, pmtlvl, &qc->initialLayout);
+        if (node != nullptr) {
+          for (auto& e : node->e) {
+            if (!e.isTerminal()) {
+              e.p->parents[node->id] = node;
+            }
+          }
+        }
       }
       // TODO: Need to check whether *node should be reduced?
       node = next;

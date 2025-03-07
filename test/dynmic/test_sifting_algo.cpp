@@ -32,12 +32,43 @@ bool siftingalgoTest(const char *file) {
   auto dd = dd::buildFunctionality(&qc, *ddpackPtr);
 
   auto initialSize = dd.size();
+  auto total = qc.getNqubits();
   auto half = qc.getNqubits() / 2;
 
   dd::sifting(half, ddpackPtr.get(), &qc);
   auto oncesiftingSize = dd.size();
 
   debug_info_printf("Initial dd's size:%d; After one sifting: %d", initialSize, oncesiftingSize);
+
+  dd::sifting((((int)half-1 >= 0)?half-1:1), ddpackPtr.get(), &qc);
+  debug_info_printf("Twice dd's size:%d", dd.size());
+
+  for(int i=total-1;i>=0;--i) {
+    auto nodes = ddpackPtr->mUniqueTable.getTableColumn(i);  // 获取每层的dd节点
+    for(auto &node : nodes) {
+      if(node != nullptr && node->ref != 0 && node->v == i) {
+        auto parId = node->id;
+        auto es = node->e;
+        for(size_t i=0;i<dd::NEDGE;++i) {
+          if(!es[i].isTerminal() && es[i].p->ref!=0) {
+            if(es[i].p->parents.find(parId) == es[i].p->parents.end()) {
+              debug_error_printf("CURRENT LEVEL:%d", i);
+              debug_error_printf("Wrong parents field!");
+              debug_error_printf("Suppose parent's id:%d, v%d", parId, node->v);
+              auto ptr = es[i].p;
+              debug_error_printf("Current node:{ id:%d; v:%d; ref:%d }", ptr->id, ptr->v, ptr->ref);
+              debug_error_printf("Its parents:");
+              for(auto &par : ptr->parents) {
+                auto *p = par.second;
+                debug_error_printf("{id:%d, v:%d, ref:%d}", p->id, p->v, p->ref);
+              }
+              return false;
+            }
+          }
+        }
+      }
+    }
+  }
 
   return true;
 }
