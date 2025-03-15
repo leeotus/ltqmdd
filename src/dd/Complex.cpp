@@ -9,6 +9,7 @@
 #include <string>
 
 namespace dd {
+static inline fp dt = std::numeric_limits<dd::fp>::epsilon() * 1024;
 
 bool Complex::approximatelyEquals(const Complex& c) const noexcept {
   return RealNumber::approximatelyEquals(r, c.r) &&
@@ -66,5 +67,16 @@ ComplexValue operator/(const Complex& c1, const Complex& c2) {
 }
 ComplexValue operator/(const Complex& c1, const fp real) {
   return static_cast<ComplexValue>(c1) / real;
+}
+bool operator<(const Complex& c1, const Complex& c2) {
+  auto val1 = static_cast<ComplexValue>(c1);
+  auto val2 = static_cast<ComplexValue>(c2);
+  return val1.r - val2.r < dt;
+}
+
+bool operator>(const Complex& c1, const Complex& c2) {
+  auto val1 = static_cast<ComplexValue>(c1);
+  auto val2 = static_cast<ComplexValue>(c2);
+  return val1.r - val2.r > dt;
 }
 } // namespace dd

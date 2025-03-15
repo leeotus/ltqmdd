@@ -23,6 +23,23 @@
 #include "dd/DDDebug.hpp"
 #include "gtest/gtest.h"
 
+bool checkEdgesWeightCorrect(dd::mNode *node) {
+  if(node == nullptr) {
+    return true;
+  }
+  auto &es = node->e;
+  for(int i=0;i<dd::NEDGE;++i) {
+    if(es[i].w.approximatelyZero() || es[i].w.approximatelyEquals(dd::Complex::one())) {
+      continue;
+    }
+    if(es[i].w > dd::Complex::one()) {
+      return false;
+    }
+  }
+  return es[0].p != es[3].p || !es[0].w.exactlyOne() || !es[3].w.exactlyOne() ||
+      !es[1].w.exactlyZero() || !es[2].w.exactlyZero();
+}
+
 bool siftingalgoTest(const char *file) {
   if(strlen(file) == 0) {
     return false;
@@ -30,23 +47,21 @@ bool siftingalgoTest(const char *file) {
   qc::QuantumComputation qc(file);
   auto ddpackPtr = std::make_unique<dd::Package<>>();
   auto dd = dd::buildFunctionality(&qc, *ddpackPtr);
-
-  auto initialSize = dd.size();
   auto total = qc.getNqubits();
-  auto half = qc.getNqubits() / 2;
 
-  dd::sifting(half, ddpackPtr.get(), &qc);
-  auto oncesiftingSize = dd.size();
+  for(int i=total-1;i>=1;--i) {
+    dd::sifting(i, ddpackPtr.get(), &qc);
+    debug_info_printf("current dd's size = %d", dd.size());
 
-  debug_info_printf("Initial dd's size:%d; After one sifting: %d", initialSize, oncesiftingSize);
-
-  dd::sifting((((int)half-1 >= 0)?half-1:1), ddpackPtr.get(), &qc);
-  debug_info_printf("Twice dd's size:%d", dd.size());
-
-  for(int i=total-1;i>=0;--i) {
     auto nodes = ddpackPtr->mUniqueTable.getTableColumn(i);  // 获取每层的dd节点
     for(auto &node : nodes) {
       if(node != nullptr && node->ref != 0 && node->v == i) {
+        // Firstly, check the weights of the outgoing edges:
+        // if(!checkEdgesWeightCorrect(node)) {
+        //   debug_error_printf("Wrong weights!");
+        //   return false;
+        // }
+
         auto parId = node->id;
         auto es = node->e;
         for(size_t i=0;i<dd::NEDGE;++i) {

@@ -230,13 +230,6 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
       // new node from the "UniqueTable".
       if(node->ref != 0 && node->v == pmtlvl) {
         __lvl_sifting(node, dd, pmtlvl, &qc->initialLayout);
-        if (node != nullptr) {
-          for (auto& e : node->e) {
-            if (!e.isTerminal()) {
-              e.p->parents[node->id] = node;
-            }
-          }
-        }
       }
       // TODO: Need to check whether *node should be reduced?
       node = next;
@@ -245,7 +238,7 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
 
   if(pmtlvl != qc->getNqubits()-1) {
     int adjlvl = pmtlvl - 1;
-    __checkpar_and_sifting(dd, adjlvl, qc->initialLayout); // FIXME: Bad function
+    __checkpar_and_sifting(dd, adjlvl, qc->initialLayout);
   }
 
   if(ori) {
