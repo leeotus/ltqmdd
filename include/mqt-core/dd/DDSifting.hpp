@@ -31,8 +31,20 @@ namespace dd {
  * @param qc Contains information of QMDD, for example number of qubits
  * the initial and output permuation of variables.
  * @param ori decide the orientation of "Sifing" algorithm
+ * @deprecated Use "reducedSifting" function instead.
  */
 void sifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori=false);
+
+/**
+ * @brief 自己提出来的更简洁的sifting算法的一种可能实现方式，用于替换上述的sifting函数
+ * @param qbIndex qubit index, defined in "qregs"
+ * @param dd Package<>* pointer, manager of DD nodes and etc.
+ * @param qc Contains information of QMDD, for example number of qubits
+ * the initial and output permuation of variables.
+ * @param ori decide the orientation of "Sifing" algorithm
+ * @note 目前还在测试当中
+ */
+void reducedSifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori=false);
 
 /**
  * @brief Upper sifting algorithm

@@ -50,7 +50,8 @@ bool siftingalgoTest(const char *file) {
   auto total = qc.getNqubits();
 
   for(int i=total-1;i>=1;--i) {
-    dd::sifting(i, ddpackPtr.get(), &qc);
+    // RESEARCH: 修改为reducedSifting函数，检测
+    dd::reducedSifting(i, ddpackPtr.get(), &qc);
     debug_info_printf("current dd's size = %d", dd.size());
 
     auto nodes = ddpackPtr->mUniqueTable.getTableColumn(i);  // 获取每层的dd节点

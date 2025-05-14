@@ -2,5 +2,11 @@
     "files.associations": {
         "**/.demo/*.json": "jsonc",
         "tuple": "cpp"
+    },
+    "workbench.colorCustomizations": {
+        "statusBar.foreground": "#ffffff",
+        "statusBar.debuggingForeground": "#ffffff",
+        "minimap.background": "#00000088",
+        "scrollbar.shadow": "#00000088"
     }
 }

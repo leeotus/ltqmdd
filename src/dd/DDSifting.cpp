@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 #include "dd/DDSifting.hpp"
 #include "dd/DDDebug.hpp"
 #include "dd/DDLinear.hpp"
@@ -108,6 +109,102 @@ static void __checkpar_and_sifting(Package<>* dd, int adjPmtlvl, const Permutati
 }
 
 /**
+ * @brief 化简之后的单步sifting算法
+ * @note 类似"__lvl_sifting"函数,在其基础上做修改
+ * @todo 采用了此种方法之后不再需要引入parent字段，之后需要将该字段去除
+ */
+static void reduced_single_sifting(mNode *node, Package<> *dd, int curPmtIndex, const Permutation *pmt) {
+  if(curPmtIndex == 0) {
+    return;
+  }
+  // 检测该点的四条出边是不是都是skipped类型的
+  auto const check = [curPmtIndex](const Edge<mNode> &e) {
+    return e.isTerminal() || e.p->v != curPmtIndex-1;
+  };
+  if(std::all_of(std::begin(node->e), std::end(node->e), check)) {
+    return;
+  }
+  std::array<std::array<Edge<mNode>, NEDGE>, NEDGE> rarEdges{};   // 保存需要重新分配的边
+  // 保存需要重新分配的边
+  for(size_t i=0;i<NEDGE;++i) {
+    auto eiw = node->e[i].w;
+    if(node->e[i].isTerminal()) {
+      for(size_t j=0;j<NEDGE;++j) {
+        rarEdges[i][j] =
+            (j == 0 || j == 3) ? (Edge<mNode>::one()) : (Edge<mNode>::zero());
+      }
+    } else if (node->e[i].p->v != curPmtIndex - 1) {
+      for(size_t j = 0; j < NEDGE; ++j) {
+        if(j == 0 || j == 3) {
+          rarEdges[i][j].w = Complex::one();
+          rarEdges[i][j].p = node->e[i].p;
+        } else {
+          rarEdges[i][j] = Edge<mNode>::zero();
+        }
+        rarEdges[i][j].w = dd->cn.lookup(rarEdges[i][j].w * eiw);
+      }
+    } else {
+      for (size_t j = 0; j < NEDGE; ++j) {
+        rarEdges[i][j] = node->e[i].p->e[j];
+        rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
+      }
+    }
+    node->e[i].w = (!node->e[i].w.exactlyZero()) ? dd->cn.lookup(Complex::one())
+                                               : dd->cn.lookup(Complex::zero());
+    }
+
+    // 重新分配边:
+    for (size_t i = 0; i < NEDGE; ++i) {
+      auto* nodeptr = dd->mMemoryManager.get();
+      assert(nodeptr->ref == 0);
+      nodeptr->v = static_cast<Qubit>(curPmtIndex - 1);
+      nodeptr->flags = 0;
+
+      for (size_t j = 0; j < NEDGE; ++j) {
+        nodeptr->e[j] = rarEdges[j][i];
+        if (!nodeptr->e[j].isTerminal()) {
+          nodeptr->e[j].p->parents[nodeptr->id] = nodeptr;
+        }
+      }
+
+      auto eptr = Edge<mNode>::normalize(nodeptr, nodeptr->e,
+                                         dd->mMemoryManager, dd->cn);
+      // NOTE: May need to apply reduction rules on this edge
+      // if (!eptr.isTerminal()) {
+      //   const auto& es = eptr.p->e;
+      //   if ((es[0].p == es[3].p) &&
+      //       (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
+      //        es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
+      //     auto* ptr = es[0].p;
+      //     dd->mMemoryManager.returnEntry(eptr.p);
+      //     node->e[i].p = ptr;
+      //     node->e[i].w = eptr.w;
+      //     if (ptr != nullptr) {
+      //       ptr->parents[node->id] = node;
+      //     }
+      //     continue;
+      //   }
+      // }
+      eptr.p = dd->mUniqueTable.lookup(eptr.p);
+
+      if (node->e[i].isTerminal()) {
+        node->e[i] = eptr;
+      } else {
+        auto tmp = node->e[i];
+        node->e[i] = eptr;
+        dd->decRef(tmp);
+      }
+
+      if (!node->e[i].isTerminal()) {
+        node->e[i].p->parents[node->id] = node;
+        dd->incRef(node->e[i]);
+      }
+    }
+
+    node = dd->mUniqueTable.lookup(node);
+  }
+
+/**
  * @brief sifing with the lower variables
  * @param node selected nodes
  * @param dd dd manager
@@ -201,6 +298,42 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
   }
 
   node = dd->mUniqueTable.lookup(node);
+}
+
+void reducedSifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori) {
+  auto pmtlvl = qc->initialLayout.findPmtIndex(qbIndex);
+  assert(pmtlvl >= 0 && pmtlvl < qc->getNqubits());
+  if(ori) {
+    pmtlvl = pmtlvl + 1;
+  }
+
+  if((pmtlvl == qc->getNqubits() && ori) || (pmtlvl == 0 && !ori))
+  {
+    return;
+  }
+
+  auto table = dd->mUniqueTable.getTableColumnAndClear(pmtlvl);
+  for(auto bucket = 0; bucket < table.size(); ++bucket) {
+    // todo: 原本的sifting算法有问题，现在尝试采用化简版本的sifting算法，并探讨其是否可以运用到linear sifting算法中去
+    auto *node = table[bucket];
+    while(node != nullptr) {
+      auto *next = node->next;
+      if(node->ref != 0 && node->v == pmtlvl) {
+        reduced_single_sifting(node, dd, pmtlvl, &qc->initialLayout);
+      }
+      node = next;
+    }
+  }
+
+  if(ori) {
+    auto tmp = qc->initialLayout.at(pmtlvl);
+    qc->initialLayout.at(pmtlvl) = qbIndex;
+    qc->initialLayout.at(pmtlvl-1) = tmp;
+  } else {
+    auto tmp = qc->initialLayout.at(pmtlvl-1);
+    qc->initialLayout.at(pmtlvl-1) = qbIndex;
+    qc->initialLayout.at(pmtlvl) = tmp;
+  }
 }
 
 void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori)
