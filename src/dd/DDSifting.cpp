@@ -6,35 +6,35 @@
 
 namespace dd {
 
-std::queue<Edge<mNode>> __is_parent(mNode* par, mNode *child) {
-  std::queue<Edge<mNode>> res{};
-  if(par == nullptr || par->ref == 0 || par->v <= child->v) {
-    return res;
-  }
-  const auto &es = par->e;
-  for(int i=0;i<NEDGE;++i) {
-    if(es[i].p == child) {
-      res.push(es[i]);
-    }
-  }
-  return res;
-}
+// std::queue<Edge<mNode>> __is_parent(mNode* par, mNode *child) {
+//   std::queue<Edge<mNode>> res{};
+//   if(par == nullptr || par->ref == 0 || par->v <= child->v) {
+//     return res;
+//   }
+//   const auto &es = par->e;
+//   for(int i=0;i<NEDGE;++i) {
+//     if(es[i].p == child) {
+//       res.push(es[i]);
+//     }
+//   }
+//   return res;
+// }
 
-static void __reduce_from_parents(mNode* nodeptr) {
-  auto& es = nodeptr->e;
-  while ((es[0].p == es[3].p) && (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
-                               es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
-    // TODO: Find out the parents of this node, then reduce this node
-    for (auto parptr : nodeptr->parents) {
-      auto res = __is_parent(parptr.second, nodeptr);
-      if(res.empty()) {
-        continue;
-      }
+// static void __reduce_from_parents(mNode* nodeptr) {
+//   auto& es = nodeptr->e;
+//   while ((es[0].p == es[3].p) && (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
+//                                es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
+//     // TODO: Find out the parents of this node, then reduce this node
+//     for (auto parptr : nodeptr->parents) {
+//       auto res = __is_parent(parptr.second, nodeptr);
+//       if(res.empty()) {
+//         continue;
+//       }
 
-      __reduce_from_parents(parptr.second);
-    }
-  }
-}
+//       __reduce_from_parents(parptr.second);
+//     }
+//   }
+// }
 
 static mNode* __single_skipped_sifting(Package<> *dd, const std::array<Edge<mNode>, NEDGE> es, int index) {
   auto *__node = dd->mMemoryManager.get();
@@ -52,61 +52,61 @@ static mNode* __single_skipped_sifting(Package<> *dd, const std::array<Edge<mNod
  * FIXME: TODO: For those reduced nodes, it's necessary to find out thier "parents" and do the sifting algo on them.
  * @param pmtlvl The subsequent permutation level of the adjacent variables.
  */
-static void __checkpar_and_sifting(Package<>* dd, int adjPmtlvl, const Permutation& pmt) {
-  // Take out all of the nodes from UniqueTable:
-  auto nodes = dd->mUniqueTable.getTableColumn(adjPmtlvl);
-  for(auto* node : nodes) {
-    if((node != nullptr) && node->ref != 0) {
-      for(auto &par : node->parents) {
-        auto res = __is_parent(par.second, node);
-        while(!res.empty()) {    // Successfully find out the parents which point to a reduced node
-          // RESEARCH: Do the sifting algo.
-          auto r = res.front();
+// static void __checkpar_and_sifting(Package<>* dd, int adjPmtlvl, const Permutation& pmt) {
+//   // Take out all of the nodes from UniqueTable:
+//   auto nodes = dd->mUniqueTable.getTableColumn(adjPmtlvl);
+//   for(auto* node : nodes) {
+//     if((node != nullptr) && node->ref != 0) {
+//       for(auto &par : node->parents) {
+//         auto res = __is_parent(par.second, node);
+//         while(!res.empty()) {    // Successfully find out the parents which point to a reduced node
+//           // RESEARCH: Do the sifting algo.
+//           auto r = res.front();
 
-          std::array<Edge<mNode>, NEDGE> es{};
-          for(int i=0;i<NEDGE;++i) {
-            es[i] = Edge<mNode>();
-          }
-          for(int j=0;j<NEDGE;++j) {
-            if(node->e[j].w.exactlyOne()) {
-              // Directly reassign es[j].p to the child node.
-              es[j].p = node->e[j].p;
-              es[j].w = Complex::one();
-            } else {
-              // Allocate a new node first
-              auto *newNode = dd->mMemoryManager.get();
-              assert(newNode->ref == 0);
-              newNode->v = adjPmtlvl;
-              for(int k=0;k<NEDGE;++k) {
-                if(k == 0 || k == 3) {
-                  newNode->e[k].p = node->e[j].p;
-                  newNode->e[k].w = node->e[j].w;
-                } else {
-                  newNode->e[k].p = nullptr;
-                  newNode->e[k].w = Complex::zero();
-                }
-              }
-              es[j] = Edge<mNode>::normalize(newNode, newNode->e, dd->mMemoryManager, dd->cn);
-              es[j].p = dd->mUniqueTable.lookup(es[j].p);
-            }
-          }
-          auto *newpar = dd->mMemoryManager.get();
-          assert(newpar->ref == 0);
-          newpar->v = adjPmtlvl + 1;
-          for(int i=0;i<NEDGE;++i) {
-            newpar->e[i] = es[i];
-            if(es[i].p != nullptr) {
-              es[i].p->parents[newpar->id] = newpar;
-            }
-          }
-          r.p = newpar;
+//           std::array<Edge<mNode>, NEDGE> es{};
+//           for(int i=0;i<NEDGE;++i) {
+//             es[i] = Edge<mNode>();
+//           }
+//           for(int j=0;j<NEDGE;++j) {
+//             if(node->e[j].w.exactlyOne()) {
+//               // Directly reassign es[j].p to the child node.
+//               es[j].p = node->e[j].p;
+//               es[j].w = Complex::one();
+//             } else {
+//               // Allocate a new node first
+//               auto *newNode = dd->mMemoryManager.get();
+//               assert(newNode->ref == 0);
+//               newNode->v = adjPmtlvl;
+//               for(int k=0;k<NEDGE;++k) {
+//                 if(k == 0 || k == 3) {
+//                   newNode->e[k].p = node->e[j].p;
+//                   newNode->e[k].w = node->e[j].w;
+//                 } else {
+//                   newNode->e[k].p = nullptr;
+//                   newNode->e[k].w = Complex::zero();
+//                 }
+//               }
+//               es[j] = Edge<mNode>::normalize(newNode, newNode->e, dd->mMemoryManager, dd->cn);
+//               es[j].p = dd->mUniqueTable.lookup(es[j].p);
+//             }
+//           }
+//           auto *newpar = dd->mMemoryManager.get();
+//           assert(newpar->ref == 0);
+//           newpar->v = adjPmtlvl + 1;
+//           for(int i=0;i<NEDGE;++i) {
+//             newpar->e[i] = es[i];
+//             if(es[i].p != nullptr) {
+//               es[i].p->parents[newpar->id] = newpar;
+//             }
+//           }
+//           r.p = newpar;
 
-          res.pop();
-        }
-      }
-    }
-  }
-}
+//           res.pop();
+//         }
+//       }
+//     }
+//   }
+// }
 
 /**
  * @brief 化简之后的单步sifting算法
@@ -149,8 +149,9 @@ static void reduced_single_sifting(mNode *node, Package<> *dd, int curPmtIndex, 
         rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
       }
     }
-    node->e[i].w = (!node->e[i].w.exactlyZero()) ? dd->cn.lookup(Complex::one())
-                                               : dd->cn.lookup(Complex::zero());
+    node->e[i].w = (!node->e[i].w.exactlyZero())
+                       ? dd->cn.lookup(Complex::one())
+                       : dd->cn.lookup(Complex::zero());
     }
 
     // 重新分配边:
@@ -162,30 +163,27 @@ static void reduced_single_sifting(mNode *node, Package<> *dd, int curPmtIndex, 
 
       for (size_t j = 0; j < NEDGE; ++j) {
         nodeptr->e[j] = rarEdges[j][i];
-        if (!nodeptr->e[j].isTerminal()) {
-          nodeptr->e[j].p->parents[nodeptr->id] = nodeptr;
-        }
       }
 
       auto eptr = Edge<mNode>::normalize(nodeptr, nodeptr->e,
                                          dd->mMemoryManager, dd->cn);
-      // NOTE: May need to apply reduction rules on this edge
-      // if (!eptr.isTerminal()) {
-      //   const auto& es = eptr.p->e;
-      //   if ((es[0].p == es[3].p) &&
-      //       (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
-      //        es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
-      //     auto* ptr = es[0].p;
-      //     dd->mMemoryManager.returnEntry(eptr.p);
-      //     node->e[i].p = ptr;
-      //     node->e[i].w = eptr.w;
-      //     if (ptr != nullptr) {
-      //       ptr->parents[node->id] = node;
-      //     }
-      //     continue;
-      //   }
-      // }
+      if (!eptr.isTerminal()) {
+        const auto& es = eptr.p->e;
+        if ((es[0].p == es[3].p) &&
+            (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
+             es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
+          auto* ptr = es[0].p;
+          dd->mMemoryManager.returnEntry(eptr.p);
+          node->e[i].p = ptr;
+          node->e[i].w = eptr.w;
+          continue;
+        }
+      }
       eptr.p = dd->mUniqueTable.lookup(eptr.p);
+
+      if (!node->e[i].isTerminal()) {
+        dd->incRef(node->e[i]);
+      }
 
       if (node->e[i].isTerminal()) {
         node->e[i] = eptr;
@@ -193,11 +191,6 @@ static void reduced_single_sifting(mNode *node, Package<> *dd, int curPmtIndex, 
         auto tmp = node->e[i];
         node->e[i] = eptr;
         dd->decRef(tmp);
-      }
-
-      if (!node->e[i].isTerminal()) {
-        node->e[i].p->parents[node->id] = node;
-        dd->incRef(node->e[i]);
       }
     }
 
@@ -254,9 +247,6 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
 
     for(size_t j=0; j < NEDGE; ++j) {
       nodeptr->e[j] = rarEdges[j][i];
-      if(!nodeptr->e[j].isTerminal()) {
-        nodeptr->e[j].p->parents[nodeptr->id] = nodeptr;
-      }
     }
 
     auto eptr = Edge<mNode>::normalize(nodeptr, nodeptr->e, dd->mMemoryManager, dd->cn);
@@ -270,9 +260,6 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
         dd->mMemoryManager.returnEntry(eptr.p);
         node->e[i].p = ptr;
         node->e[i].w = eptr.w;
-        if(ptr != nullptr) {
-          ptr->parents[node->id] = node;
-        }
         continue;
       }
     }
@@ -292,7 +279,6 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
     // }
 
     if(!node->e[i].isTerminal()) {
-      node->e[i].p->parents[node->id] = node;
       dd->incRef(node->e[i]);
     }
   }
@@ -371,7 +357,7 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
 
   if(pmtlvl != qc->getNqubits()-1) {
     int adjlvl = pmtlvl - 1;
-    __checkpar_and_sifting(dd, adjlvl, qc->initialLayout);
+    // __checkpar_and_sifting(dd, adjlvl, qc->initialLayout);
   }
 
   if(ori) {
@@ -387,9 +373,117 @@ void sifting(Qubit qubitIndex, Package<> *dd, qc::QuantumComputation *qc, bool o
 
 
 // TODO: upper linear sifting algorithm
-void upper(Qubit index, Package<> *dd, qc::QuantumComputation *qc, bool ori)
+void reducedUpper(Qubit index, Package<> *dd, qc::QuantumComputation *qc, bool ori)
 {
 
+}
+
+void DDSiftingAux(Edge<mNode> root, Package<> *dd, QuantumComputation *qc) {
+  VarOrder vo(root, qc);
+  size_t n = qc->getNqubits() - 1;
+  std::vector<bool> freeLevel(n+1, true);
+  Qubit level{0};
+
+  OptimalState optimalState{};  // 记录最优位置和采用的方案
+  optimalState.scheme = SCHEME_NONE;
+  for(size_t i=0; i<n; ++i) {
+    auto minSize = root.size();
+    uint64_t maxActiveLevel{0};
+
+    for(size_t j=0;j<n;++j) {
+      auto var = qc->initialLayout[j];
+      if(freeLevel.at(var) && dd->active.at(var) > maxActiveLevel) {
+        maxActiveLevel = dd->active.at(var);
+        level = j;
+      }
+    }
+    freeLevel.at(qc->initialLayout[level]) = false;
+    optimalState.optimalLevel = level;
+
+    if(level * 2 < n) {
+      auto startPos = level;    // 记录开始的位置
+      while(level > 0) {
+        // 向下筛选
+        reducedSifting(level, dd, qc);
+        auto ddSize = root.size();
+
+        recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+        if(ddSize < minSize) {
+          minSize = ddSize;
+          optimalState.optimalLevel = level - 1;
+        }
+        level -= 1;
+      }
+
+      while(level < n) {
+        reducedSifting(level, dd, qc, true);
+        if(level < startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+          if(ddSize < minSize) {
+            minSize = ddSize;
+            optimalState.optimalLevel = level + 1;
+          }
+        }
+        level += 1;
+      }
+
+      while(level > optimalState.optimalLevel) {
+        reducedSifting(level, dd, qc);
+        if(level > startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+        }
+        level -= 1;
+      }
+    } else {
+      auto startPos = level;
+      while(level < n) {
+        reducedSifting(level, dd, qc, true);
+        auto ddSize = root.size();
+
+        recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+        if(ddSize < minSize) {
+          minSize = ddSize;
+          optimalState.optimalLevel = level + 1;
+        }
+        level += 1;
+      }
+
+      while(level > 0) {
+        reducedSifting(level, dd, qc);
+
+        if(level > startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+          if(ddSize < minSize) {
+            minSize = ddSize;
+            optimalState.optimalLevel = level - 1;
+          }
+        }
+        level -= 1;
+      }
+
+      while(level < optimalState.optimalLevel) {
+        reducedSifting(level, dd, qc, true);
+
+        if(level < startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+        }
+
+        level += 1;
+      }
+    }
+  }
 }
 
 } // namespace dd

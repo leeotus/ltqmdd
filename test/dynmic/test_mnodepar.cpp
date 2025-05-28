@@ -36,13 +36,10 @@ bool checkNodeParents(const char *fileName) {
     auto nodes = ddpackPtr->mUniqueTable.getTableColumn(i);  // 获取每层的dd节点
     for(auto &node : nodes) {
       if(node != nullptr && node->ref != 0) {
-        auto parId = node->id;
         auto es = node->e;
         for(size_t i=0;i<dd::NEDGE;++i) {
           if(!es[i].isTerminal() && es[i].p->ref!=0) {
-            if(es[i].p->parents.find(parId) == es[i].p->parents.end()) {
-              return false;
-            }
+
           }
         }
       }

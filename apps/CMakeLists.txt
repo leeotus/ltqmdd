@@ -3,6 +3,7 @@ set(MIXED_ALGO_NAME "mixed")
 set(UPPER_ALGO_NAME "upper")
 set(LOWER_ALGO_NAME "lower")
 set(MAIN_NAME "main")
+set(HASH_MAIN "hash-main")
 
 set(LTQMDDV1_TEST_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/inc")
 
@@ -11,6 +12,7 @@ add_executable("${ORIGI_ALGO_NAME}" orgnl-main.cpp)
 add_executable("${MIXED_ALGO_NAME}" mixed-main.cpp)
 add_executable("${UPPER_ALGO_NAME}" upper-main.cpp)
 add_executable("${LOWER_ALGO_NAME}" lower-main.cpp)
+add_executable("${HASH_MAIN}" hash.cpp)
 
 target_link_libraries(
   ${MAIN_NAME}  MQT::CoreDD MQT::CoreAlgorithms MQT::CoreCircuitOptimizer
@@ -28,5 +30,9 @@ target_link_libraries(
 target_link_libraries(
   ${LOWER_ALGO_NAME}  MQT::CoreDD MQT::CoreAlgorithms MQT::CoreCircuitOptimizer
                            MQT::ProjectOptions MQT::ProjectWarnings)
+target_link_libraries(
+  ${HASH_MAIN}  MQT::CoreDD MQT::CoreAlgorithms MQT::CoreCircuitOptimizer
+                           MQT::ProjectOptions MQT::ProjectWarnings)
 
 include_directories(src)
+

@@ -11,6 +11,7 @@
 #include "dd/Edge.hpp"
 #include "dd/Package.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "dd/DDReorder.hpp"
 
 namespace dd {
 
@@ -49,6 +50,17 @@ void reducedSifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bo
 /**
  * @brief Upper sifting algorithm
  */
-void upper(Qubit index, Package<> *dd, qc::QuantumComputation *qc, bool ori=false);
+void reducedUpper(Qubit index, Package<> *dd, qc::QuantumComputation *qc, bool ori=false);
+
+/**
+ * @brief 完整的sifting算法的入口函数
+ * @param edge 要做sifting算法的指向根节点的边
+ * @param dd 管理decision diagram的数据包
+ * @param qc
+ * @todo 修改存放变量序的结构
+ */
+void DDSiftingAux(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
+// void DDSiftingUp(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
+// void DDSiftingDown(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
 
 } // namespace dd

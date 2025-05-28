@@ -865,18 +865,6 @@ public:
     auto& uniqueTable = getUniqueTable<Node>();
     auto* l = uniqueTable.lookup(e.p);
 
-    if constexpr (std::is_same_v<Node, mNode>) {
-      if(l != nullptr) {
-        auto childEdges = l->e;
-        for (size_t i = 0; i < NEDGE; ++i) {
-          // if(!childEdges[i].isTerminal() && childEdges[i].p->parents.find(l->id) == childEdges[i].p->parents.end()) {
-          if(!childEdges[i].isTerminal()) {
-            childEdges[i].p->parents[l->id] = l;
-          }
-        }
-      }
-    }
-
     return EdgeType<Node>{l, e.w};
   }
 

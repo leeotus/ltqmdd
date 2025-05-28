@@ -21,8 +21,9 @@
         "program": "${workspaceFolder}/build/apps/main",
         "args": [
           // "${workspaceFolder}/circuits/demo_cnot.real"
-          "${workspaceFolder}/circuits/demo2.real"
-          // "${workspaceFolder}/circuits/revLib/apex4_202.real"
+          // "${workspaceFolder}/circuits/demo2.real"
+          // "${workspaceFolder}/circuits/revLib/apex4_202.real",
+          "${workspaceFolder}/circuits/revLib/urf1_278.real"
         ],
         "cwd": "${workspaceFolder}"
       },

@@ -36,9 +36,6 @@ using vCachedEdge = CachedEdge<vNode>;
  * @details Data Layout |24|24|24|24|8|4|2|1| = 111B (space for one more byte)
  */
 struct mNode {                        // NOLINT(readability-identifier-naming)
-  std::map<size_t, mNode*> parents;   // parents of this node
-  size_t id;                          // id of this node
-
   std::array<Edge<mNode>, NEDGE> e{}; // edges out of this node
   mNode* next{};                      // used to link nodes in unique table
   RefCount ref{};                     // reference count
@@ -50,11 +47,6 @@ struct mNode {                        // NOLINT(readability-identifier-naming)
   // 4 = marks a dm (tmp flag),
   // 2 = mark first path edge (tmp flag),
   // 1 = mark path is conjugated (tmp flag)
-
-  mNode() : id(id_cnt) {
-    ++id_cnt;
-    parents.clear();
-  }
 
   [[nodiscard]] static constexpr bool isTerminal(const mNode* p) noexcept {
     return p == nullptr;

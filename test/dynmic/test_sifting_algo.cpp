@@ -40,52 +40,13 @@ bool checkEdgesWeightCorrect(dd::mNode *node) {
       !es[1].w.exactlyZero() || !es[2].w.exactlyZero();
 }
 
-bool siftingalgoTest(const char *file) {
-  if(strlen(file) == 0) {
-    return false;
-  }
-  qc::QuantumComputation qc(file);
+bool siftingalgoTest(const char *fileName) {
+  qc::QuantumComputation qc(fileName);
   auto ddpackPtr = std::make_unique<dd::Package<>>();
-  auto dd = dd::buildFunctionality(&qc, *ddpackPtr);
-  auto total = qc.getNqubits();
-
-  for(int i=total-1;i>=1;--i) {
-    // RESEARCH: 修改为reducedSifting函数，检测
-    dd::reducedSifting(i, ddpackPtr.get(), &qc);
-    debug_info_printf("current dd's size = %d", dd.size());
-
-    auto nodes = ddpackPtr->mUniqueTable.getTableColumn(i);  // 获取每层的dd节点
-    for(auto &node : nodes) {
-      if(node != nullptr && node->ref != 0 && node->v == i) {
-        // Firstly, check the weights of the outgoing edges:
-        // if(!checkEdgesWeightCorrect(node)) {
-        //   debug_error_printf("Wrong weights!");
-        //   return false;
-        // }
-
-        auto parId = node->id;
-        auto es = node->e;
-        for(size_t i=0;i<dd::NEDGE;++i) {
-          if(!es[i].isTerminal() && es[i].p->ref!=0) {
-            if(es[i].p->parents.find(parId) == es[i].p->parents.end()) {
-              debug_error_printf("CURRENT LEVEL:%d", i);
-              debug_error_printf("Wrong parents field!");
-              debug_error_printf("Suppose parent's id:%d, v%d", parId, node->v);
-              auto ptr = es[i].p;
-              debug_error_printf("Current node:{ id:%d; v:%d; ref:%d }", ptr->id, ptr->v, ptr->ref);
-              debug_error_printf("Its parents:");
-              for(auto &par : ptr->parents) {
-                auto *p = par.second;
-                debug_error_printf("{id:%d, v:%d, ref:%d}", p->id, p->v, p->ref);
-              }
-              return false;
-            }
-          }
-        }
-      }
-    }
-  }
-
+  auto root = dd::buildFunctionality(&qc, *ddpackPtr);
+  std::cout << "Initial size: " << root.size() << "\r\n";
+  dd::DDSiftingAux(root, ddpackPtr.get(), &qc);
+  std::cout << "Current size: " << root.size() << "\r\n";
   return true;
 }
 
