@@ -22,7 +22,7 @@ template <typename T> T* MemoryManager<T>::get() {
 
 template <typename T> void MemoryManager<T>::returnEntry(T* entry) noexcept {
   assert(entry != nullptr);
-  assert(entry->ref == 0);
+  assert(entry->ref == 0);		// 必须保证Ref值为0才可以回收
   entry->next = available;
   available = entry;
   // if constexpr (std::is_same_v<T, mNode>) {

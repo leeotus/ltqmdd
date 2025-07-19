@@ -18,11 +18,11 @@
 namespace qc {
 class Operation {
 protected:
-  Controls controls;
-  Targets targets;
+  Controls controls;	// 控制位qubit
+  Targets targets;		// 目标位(即,被控制位qubit)
   std::vector<fp> parameter;
 
-  OpType type = None;
+  OpType type = None;	// OpType即各种量子门操作
   std::string name;
 
   static bool isWholeQubitRegister(const RegisterNames& reg, std::size_t start,

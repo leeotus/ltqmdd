@@ -117,7 +117,13 @@ static void reduced_single_sifting(mNode *node, Package<> *dd, int curPmtIndex, 
   if(curPmtIndex == 0) {
     return;
   }
-  // 检测该点的四条出边是不是都是skipped类型的
+
+  // for debug:
+  for(auto &es : node->e) {
+    assert(es.isTerminal() || es.p->ref != 0);
+  }
+
+  // 检测该点的四条出边是不是都是skipped
   auto const check = [curPmtIndex](const Edge<mNode> &e) {
     return e.isTerminal() || e.p->v != curPmtIndex-1;
   };
@@ -129,9 +135,15 @@ static void reduced_single_sifting(mNode *node, Package<> *dd, int curPmtIndex, 
   for(size_t i=0;i<NEDGE;++i) {
     auto eiw = node->e[i].w;
     if(node->e[i].isTerminal()) {
-      for(size_t j=0;j<NEDGE;++j) {
-        rarEdges[i][j] =
-            (j == 0 || j == 3) ? (Edge<mNode>::one()) : (Edge<mNode>::zero());
+      if (node->e[i].isOneTerminal()) {
+        for (size_t j = 0; j < NEDGE; ++j) {
+          rarEdges[i][j] =
+              (j == 0 || j == 3) ? (Edge<mNode>::one()) : (Edge<mNode>::zero());
+        }
+      } else if (node->e[i].isZeroTerminal()) {
+        for (size_t j = 0; j < NEDGE; ++j) {
+          rarEdges[i][j] = Edge<mNode>::zero();
+        }
       }
     } else if (node->e[i].p->v != curPmtIndex - 1) {
       for(size_t j = 0; j < NEDGE; ++j) {
@@ -173,28 +185,37 @@ static void reduced_single_sifting(mNode *node, Package<> *dd, int curPmtIndex, 
             (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
              es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
           auto* ptr = es[0].p;
+
+          // FIXME: 经过实际测试，，在去掉下面的decRef函数之后可以正常运行(不考虑ref值正确与否)
+          // if(!es[0].isTerminal()) {
+          //   dd->decRef(es[0]);   // 需要判断是否是空指针
+          // }
           dd->mMemoryManager.returnEntry(eptr.p);
           node->e[i].p = ptr;
           node->e[i].w = eptr.w;
           continue;
         }
       }
-      eptr.p = dd->mUniqueTable.lookup(eptr.p);
 
-      if (!node->e[i].isTerminal()) {
-        dd->incRef(node->e[i]);
+      if(eptr.p) {
+        auto res = dd->mUniqueTable.searchUp(eptr.p);
+        // eptr.p = dd->mUniqueTable.lookup(eptr.p);
+        dd->incRef(eptr);
       }
 
       if (node->e[i].isTerminal()) {
         node->e[i] = eptr;
       } else {
-        auto tmp = node->e[i];
+        dd->decRef(node->e[i]);
         node->e[i] = eptr;
-        dd->decRef(tmp);
       }
     }
-
     node = dd->mUniqueTable.lookup(node);
+
+    // for debug:
+    for (auto& es : node->e) {
+      assert(es.isTerminal() || es.p->ref != 0);
+    }
   }
 
 /**
@@ -287,14 +308,13 @@ static void __lvl_sifting(mNode *node, Package<>* dd, int curPmtIndex, const Per
 }
 
 void reducedSifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori) {
-  auto pmtlvl = qc->initialLayout.findPmtIndex(qbIndex);
+  auto pmtlvl = qbIndex;
   assert(pmtlvl >= 0 && pmtlvl < qc->getNqubits());
-  if(ori) {
+  if (ori) {
     pmtlvl = pmtlvl + 1;
   }
 
-  if((pmtlvl == qc->getNqubits() && ori) || (pmtlvl == 0 && !ori))
-  {
+  if ((pmtlvl == qc->getNqubits() && ori) || (pmtlvl == 0 && !ori)) {
     return;
   }
 

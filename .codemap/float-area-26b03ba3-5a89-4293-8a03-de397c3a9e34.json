@@ -1,0 +1,344 @@
+{
+    "type": "float-area",
+    "_widgets": [
+        [
+            {
+                "widget": {
+                    "constructionOptions": {
+                        "factoryId": "code-editor-opener",
+                        "options": {
+                            "kind": "navigatable",
+                            "uri": "src\\dd\\FunctionalityConstruction.cpp",
+                            "floatAreaId": "26b03ba3-5a89-4293-8a03-de397c3a9e34"
+                        }
+                    },
+                    "innerWidgetState": {
+                        "cursorState": [
+                            {
+                                "inSelectionMode": false,
+                                "selectionStart": {
+                                    "lineNumber": 18,
+                                    "column": 30
+                                },
+                                "position": {
+                                    "lineNumber": 18,
+                                    "column": 30
+                                }
+                            }
+                        ],
+                        "viewState": {
+                            "scrollLeft": 0,
+                            "firstPosition": {
+                                "lineNumber": 6,
+                                "column": 1
+                            },
+                            "firstPositionDeltaTop": -5
+                        },
+                        "contributionsState": {
+                            "editor.contrib.folding": {
+                                "lineCount": 148,
+                                "provider": "syntax",
+                                "foldedImports": false
+                            },
+                            "editor.contrib.wordHighlighter": false
+                        }
+                    }
+                },
+                "width": 647.5,
+                "height": 675.5,
+                "spacing": 0
+            }
+        ],
+        [
+            {
+                "widget": {
+                    "constructionOptions": {
+                        "factoryId": "code-editor-opener",
+                        "options": {
+                            "kind": "navigatable",
+                            "uri": "include\\mqt-core\\dd\\FunctionalityConstruction.hpp",
+                            "floatAreaId": "26b03ba3-5a89-4293-8a03-de397c3a9e34"
+                        }
+                    }
+                },
+                "width": 250,
+                "height": 450,
+                "spacing": 0
+            },
+            {
+                "widget": {
+                    "constructionOptions": {
+                        "factoryId": "code-editor-opener",
+                        "options": {
+                            "kind": "navigatable",
+                            "uri": "include\\mqt-core\\ir\\QuantumComputation.hpp",
+                            "floatAreaId": "26b03ba3-5a89-4293-8a03-de397c3a9e34"
+                        }
+                    },
+                    "innerWidgetState": {
+                        "cursorState": [
+                            {
+                                "inSelectionMode": true,
+                                "selectionStart": {
+                                    "lineNumber": 318,
+                                    "column": 29
+                                },
+                                "position": {
+                                    "lineNumber": 318,
+                                    "column": 39
+                                }
+                            }
+                        ],
+                        "viewState": {
+                            "scrollLeft": 0,
+                            "firstPosition": {
+                                "lineNumber": 334,
+                                "column": 1
+                            },
+                            "firstPositionDeltaTop": -12
+                        },
+                        "contributionsState": {
+                            "editor.contrib.folding": {
+                                "lineCount": 980,
+                                "provider": "syntax",
+                                "foldedImports": false
+                            },
+                            "editor.contrib.wordHighlighter": false
+                        }
+                    }
+                },
+                "width": 250,
+                "height": 450,
+                "spacing": 0
+            }
+        ],
+        [
+            {
+                "widget": {
+                    "constructionOptions": {
+                        "factoryId": "code-editor-opener",
+                        "options": {
+                            "kind": "navigatable",
+                            "uri": "include\\mqt-core\\ir\\Permutation.hpp",
+                            "floatAreaId": "26b03ba3-5a89-4293-8a03-de397c3a9e34"
+                        }
+                    }
+                },
+                "width": 600,
+                "height": 450,
+                "spacing": 0
+            }
+        ]
+    ],
+    "_widths": [
+        647.5,
+        250,
+        600
+    ],
+    "_modelData": {
+        "connections": [
+            {
+                "startWord": {
+                    "uri": "src\\dd\\FunctionalityConstruction.cpp",
+                    "lineNumber": 13,
+                    "startColumn": 23,
+                    "endLineNumber": 13,
+                    "endColumn": 33,
+                    "word": "getNqubits",
+                    "x": 259,
+                    "y": 191,
+                    "hide": false,
+                    "height": 19,
+                    "width": 75
+                },
+                "endWord": {
+                    "uri": "include\\mqt-core\\ir\\QuantumComputation.hpp",
+                    "lineNumber": 318,
+                    "startColumn": 29,
+                    "endLineNumber": 318,
+                    "endColumn": 39,
+                    "word": "",
+                    "x": 797.5,
+                    "y": 569,
+                    "hide": true,
+                    "height": 1,
+                    "width": 1
+                },
+                "id": "c8b065f5-b5f8-496b-bfea-07e9f069a00e",
+                "startAnchor": {
+                    "x": 309.41124661246613,
+                    "y": 210
+                },
+                "endAnchor": {
+                    "x": 797.5,
+                    "y": 569.1321036889332
+                },
+                "startControl": {
+                    "x": 309.41124661246613,
+                    "y": 228.9648332416637
+                },
+                "endControl": {
+                    "x": 762.0597890997161,
+                    "y": 569.1321036889332
+                },
+                "arrow": {
+                    "angle": 0,
+                    "x": 785.5,
+                    "y": 569.1321036889332
+                }
+            },
+            {
+                "startWord": {
+                    "uri": "src\\dd\\FunctionalityConstruction.cpp",
+                    "lineNumber": 12,
+                    "startColumn": 10,
+                    "endLineNumber": 12,
+                    "endColumn": 28,
+                    "word": "buildFunctionality",
+                    "x": 162,
+                    "y": 172,
+                    "hide": false,
+                    "height": 19,
+                    "width": 135
+                },
+                "endWord": {
+                    "uri": "include\\mqt-core\\dd\\FunctionalityConstruction.hpp",
+                    "lineNumber": 19,
+                    "startColumn": 10,
+                    "endLineNumber": 19,
+                    "endColumn": 28,
+                    "word": "",
+                    "x": 865.5,
+                    "y": 253,
+                    "hide": true,
+                    "height": 19,
+                    "width": 118
+                },
+                "id": "cdb2de0f-6001-403d-b0c0-4823b223cd22",
+                "startAnchor": {
+                    "x": 297,
+                    "y": 189.36690647482015
+                },
+                "endAnchor": {
+                    "x": 865.5,
+                    "y": 255.62374100719424
+                },
+                "startControl": {
+                    "x": 328.7848588900448,
+                    "y": 189.36690647482015
+                },
+                "endControl": {
+                    "x": 821.7958190261884,
+                    "y": 255.62374100719424
+                },
+                "arrow": {
+                    "angle": 0,
+                    "x": 853.5,
+                    "y": 255.62374100719424
+                }
+            },
+            {
+                "startWord": {
+                    "uri": "src\\dd\\FunctionalityConstruction.cpp",
+                    "lineNumber": 18,
+                    "startColumn": 26,
+                    "endLineNumber": 18,
+                    "endColumn": 39,
+                    "word": "initialLayout",
+                    "x": 282,
+                    "y": 286,
+                    "hide": false,
+                    "height": 19,
+                    "width": 97
+                },
+                "endWord": {
+                    "uri": "include\\mqt-core\\ir\\QuantumComputation.hpp",
+                    "lineNumber": 342,
+                    "startColumn": 15,
+                    "endLineNumber": 342,
+                    "endColumn": 28,
+                    "word": "",
+                    "x": 902.5,
+                    "y": 709,
+                    "hide": true,
+                    "height": 19,
+                    "width": 81
+                },
+                "id": "b6221389-b265-472f-8139-eb0177a98a2e",
+                "startAnchor": {
+                    "x": 344.25591016548464,
+                    "y": 305
+                },
+                "endAnchor": {
+                    "x": 929.2440898345154,
+                    "y": 709
+                },
+                "startControl": {
+                    "x": 344.25591016548464,
+                    "y": 323.18452876053146
+                },
+                "endControl": {
+                    "x": 929.2440898345154,
+                    "y": 683.9962729542692
+                },
+                "arrow": {
+                    "angle": 1.5707963267948966,
+                    "x": 929.2440898345154,
+                    "y": 697
+                }
+            },
+            {
+                "startWord": {
+                    "uri": "include\\mqt-core\\ir\\QuantumComputation.hpp",
+                    "lineNumber": 342,
+                    "startColumn": 3,
+                    "endLineNumber": 342,
+                    "endColumn": 14,
+                    "word": "Permutation",
+                    "x": 812.5,
+                    "y": 709,
+                    "hide": false,
+                    "height": 19,
+                    "width": 83
+                },
+                "endWord": {
+                    "uri": "include\\mqt-core\\ir\\Permutation.hpp",
+                    "lineNumber": 25,
+                    "startColumn": 7,
+                    "endLineNumber": 25,
+                    "endColumn": 18,
+                    "word": "",
+                    "x": 1148.5,
+                    "y": 253,
+                    "hide": false,
+                    "height": 19,
+                    "width": 83
+                },
+                "id": "22b32c3b-f879-4714-850f-3162000bf29e",
+                "startAnchor": {
+                    "x": 861,
+                    "y": 709
+                },
+                "endAnchor": {
+                    "x": 1183,
+                    "y": 272
+                },
+                "startControl": {
+                    "x": 861,
+                    "y": 683.2382132046922
+                },
+                "endControl": {
+                    "x": 1183,
+                    "y": 307.42245684354816
+                },
+                "arrow": {
+                    "angle": -1.5707963267948966,
+                    "x": 1183,
+                    "y": 284
+                }
+            }
+        ],
+        "annotations": [],
+        "highlights": []
+    }
+}

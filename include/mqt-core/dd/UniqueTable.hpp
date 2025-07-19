@@ -198,6 +198,33 @@ public:
     return p;
   }
 
+  bool searchUp(Node* &p) {
+    const auto key = hash(p);
+    const auto v = p->v;
+
+    trackLookups(v);
+
+    auto *hashedNode = searchTable(p, key);
+    if(!Node::isTerminal(hashedNode)) {
+      p = hashedNode;
+      return true;
+    }
+
+    p->next = tables[v][key];
+    tables[v][key] = p;
+    trackInsert(v);
+
+    return false;
+  }
+
+  void trackLookups(Qubit v) {
+    ++stats[v].lookups;
+  }
+
+  void trackInsert(Qubit v) {
+    stats[v].trackInsert();
+  }
+
   /**
    * @brief Increment the reference count of a node.
    * @details This is a pass-through function that calls the increment function
@@ -369,6 +396,10 @@ private:
         // Match found
         // ! 如果可以找到相同的节点(复用节点),那么这个被分配出来的p节点就应该返还给memoryManager.
         if (p != bucket) {
+          // for debug:
+          if(p->ref != 0) {
+            std::cout << "p's ref: " << p->ref << "\r\n";
+          }
           // 将节点的出边都清空
           // memset(&(p->e), 0, sizeof(p->e));
           // put node pointed to by p on available chain

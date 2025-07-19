@@ -1281,6 +1281,7 @@ public:
       return *r;
     }
 
+	//---------------------------------------------------------------------
     constexpr std::size_t n = std::tuple_size_v<decltype(x.p->e)>;
     std::array<CachedEdge<Node>, n> edge{};
     for (std::size_t i = 0U; i < n; i++) {
@@ -1343,6 +1344,8 @@ public:
         edge[i] = add2(e1, e2, var - 1);
       }
     }
+	//---------------------------------------------------------------------
+
     auto r = makeDDNode(var, edge);
     computeTable.insert(x, y, r);
     return r;

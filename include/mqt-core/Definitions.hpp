@@ -14,7 +14,7 @@
 
 namespace qc {
 class QFRException : public std::invalid_argument {
-  std::string msg;
+  std::string msg;		// private
 
 public:
   explicit QFRException(std::string m)

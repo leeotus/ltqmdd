@@ -62,14 +62,14 @@ public:
 
   void insert(const LeftOperandType& leftOperand,
               const RightOperandType& rightOperand, const ResultType& result) {
-    const auto key = hash(leftOperand, rightOperand);
+    const auto key = hash(leftOperand, rightOperand);	// 计算输入两值的hash值
     if (valid[key]) {
       ++stats.collisions;
     } else {
       stats.trackInsert();
       valid.set(key);
     }
-    table[key] = {leftOperand, rightOperand, result};
+    table[key] = {leftOperand, rightOperand, result};	// 向计算表插入两值和其对应的结果值,以便之后不用再重复计算
   }
 
   ResultType* lookup(const LeftOperandType& leftOperand,
@@ -89,6 +89,7 @@ public:
     if (entry.rightOperand != rightOperand) {
       return result;
     }
+	// if(entry.leftOperand != leftOperand || entry.rightOperand != rightOerpand) { return result; }
 
     if constexpr (std::is_same_v<RightOperandType, dNode*> ||
                   std::is_same_v<RightOperandType, dCachedEdge>) {
@@ -102,7 +103,7 @@ public:
       }
     }
     ++stats.hits;
-    return &entry.result;
+    return &entry.result;		// &(entry.result)
   }
 
   void clear() {

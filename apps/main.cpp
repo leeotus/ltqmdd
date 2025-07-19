@@ -2,6 +2,7 @@
  * @file main.cpp
  * @author leeotus (leeotus@163.com)
  * @brief Tests for new dynamic reordering algorithms (defined in "dd/DDSifting.cpp")
+ * @note 代码研究使用
  */
 
 #include "dd/FunctionalityConstruction.hpp"
