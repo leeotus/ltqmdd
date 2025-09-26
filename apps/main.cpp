@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 
   start = clock();
   // 进行sifting算法:
-  dd::DDSiftingAux(functionality, ddpackPtr.get(), &qc);
+  dd::DDSiftingAux<dd::DDPackageConfig>(functionality, ddpackPtr.get(), &qc);
 
   finish = clock();
 

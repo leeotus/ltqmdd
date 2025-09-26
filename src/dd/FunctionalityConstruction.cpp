@@ -17,6 +17,7 @@ MatrixDD buildFunctionality(const QuantumComputation* qc, Package<Config>& dd) {
 
   auto permutation = qc->initialLayout;
   auto e = dd.createInitialMatrix(qc->ancillary);
+  static long int sth = 1000;
 
   for (const auto& op : *qc) {
     // TODO: 经过dynamic reordering之后op指向的targets和controls内的数值需要修改
@@ -25,6 +26,11 @@ MatrixDD buildFunctionality(const QuantumComputation* qc, Package<Config>& dd) {
     dd.incRef(tmp);
     dd.decRef(e);
     e = tmp;
+
+    if(e.size() > sth) {
+      std::cout << "超过阈值\r\n";
+      sth *= 2;
+    }
 
     dd.garbageCollect();
   }

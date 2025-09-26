@@ -12,6 +12,8 @@
 #include "dd/Package.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "dd/DDReorder.hpp"
+#include "dd/DDLinear.hpp"
+#include "dd/DDDebug.hpp"
 
 namespace dd {
 
@@ -59,8 +61,117 @@ void reducedUpper(Qubit index, Package<> *dd, qc::QuantumComputation *qc, bool o
  * @param qc
  * @todo 修改存放变量序的结构
  */
-void DDSiftingAux(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
+template<typename Config=dd::DDPackageConfig>
+// void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation *qc);
 // void DDSiftingUp(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
 // void DDSiftingDown(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
+// template<typename Config=dd::DDPackageConfig>
+void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc) {
+  VarOrder vo(root, qc);
+  size_t n = qc->getNqubits() - 1;
+  std::vector<bool> freeLevel(n + 1, true);
+  Qubit level{0};
+
+  OptimalState optimalState{}; // 记录最优位置和采用的方案
+  optimalState.scheme = SCHEME_NONE;
+  for (size_t i = 0; i < n; ++i) {
+    auto minSize = root.size();
+    uint64_t maxActiveLevel{0};
+
+    for (size_t j = 0; j < n; ++j) {
+      auto var = qc->initialLayout[j];
+      if (freeLevel.at(var) && dd->active.at(var) > maxActiveLevel) {
+        maxActiveLevel = dd->active.at(var);
+        level = j;
+      }
+    }
+    freeLevel.at(qc->initialLayout[level]) = false;
+    optimalState.optimalLevel = level;
+
+    if (level * 2 < n) {
+      auto startPos = level; // 记录开始的位置
+      while (level > 0) {
+        // 向下筛选
+        reducedSifting(level, dd, qc);
+        auto ddSize = root.size();
+
+        recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+        if (ddSize < minSize) {
+          minSize = ddSize;
+          optimalState.optimalLevel = level - 1;
+        }
+        level -= 1;
+      }
+
+      while (level < n) {
+        reducedSifting(level, dd, qc, true);
+        if (level < startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+          if (ddSize < minSize) {
+            minSize = ddSize;
+            optimalState.optimalLevel = level + 1;
+          }
+        }
+        level += 1;
+      }
+
+      while (level > optimalState.optimalLevel) {
+        reducedSifting(level, dd, qc);
+        if (level > startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+        }
+        level -= 1;
+      }
+    } else {
+      auto startPos = level;
+      while (level < n) {
+        reducedSifting(level, dd, qc, true);
+        auto ddSize = root.size();
+
+        recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+        if (ddSize < minSize) {
+          minSize = ddSize;
+          optimalState.optimalLevel = level + 1;
+        }
+        level += 1;
+      }
+
+      while (level > 0) {
+        reducedSifting(level, dd, qc);
+
+        if (level > startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+          if (ddSize < minSize) {
+            minSize = ddSize;
+            optimalState.optimalLevel = level - 1;
+          }
+        }
+        level -= 1;
+      }
+
+      while (level < optimalState.optimalLevel) {
+        reducedSifting(level, dd, qc, true);
+
+        if (level < startPos) {
+          cancelRecord(&vo);
+        } else {
+          auto ddSize = root.size();
+          recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+        }
+
+        level += 1;
+      }
+    }
+  }
+}
 
 } // namespace dd
