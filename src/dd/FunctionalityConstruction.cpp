@@ -9,7 +9,7 @@
 
 namespace dd {
 template <class Config>
-MatrixDD buildFunctionality(const QuantumComputation* qc, Package<Config>& dd) {
+MatrixDD buildFunctionality(QuantumComputation* qc, Package<Config>& dd) {
   const auto nq = qc->getNqubits();
   if (nq == 0U) {
     return MatrixDD::one();
@@ -43,7 +43,7 @@ MatrixDD buildFunctionality(const QuantumComputation* qc, Package<Config>& dd) {
 }
 
 template <class Config>
-MatrixDD buildFunctionalityRecursive(const QuantumComputation* qc,
+MatrixDD buildFunctionalityRecursive(QuantumComputation* qc,
                                      Package<Config>& dd) {
   if (qc->getNqubits() == 0U) {
     return MatrixDD::one();
@@ -72,7 +72,7 @@ MatrixDD buildFunctionalityRecursive(const QuantumComputation* qc,
 }
 
 template <class Config>
-bool buildFunctionalityRecursive(const QuantumComputation* qc,
+bool buildFunctionalityRecursive(QuantumComputation* qc,
                                  std::size_t depth, std::size_t opIdx,
                                  std::stack<MatrixDD>& s,
                                  Permutation& permutation,
@@ -122,29 +122,29 @@ bool buildFunctionalityRecursive(const QuantumComputation* qc,
   return success;
 }
 
-template MatrixDD buildFunctionality(const qc::QuantumComputation* qc,
+template MatrixDD buildFunctionality(qc::QuantumComputation* qc,
                                      Package<DDPackageConfig>& dd);
 template MatrixDD
-buildFunctionality(const qc::QuantumComputation* qc,
+buildFunctionality(qc::QuantumComputation* qc,
                    Package<dd::DensityMatrixSimulatorDDPackageConfig>& dd);
 template MatrixDD
-buildFunctionality(const qc::QuantumComputation* qc,
+buildFunctionality(qc::QuantumComputation* qc,
                    Package<dd::StochasticNoiseSimulatorDDPackageConfig>& dd);
 
-template MatrixDD buildFunctionality(const qc::QuantumComputation* qc,
+template MatrixDD buildFunctionality(qc::QuantumComputation* qc,
                                      UnitarySimulatorDDPackage& dd);
 
-template MatrixDD buildFunctionalityRecursive(const qc::QuantumComputation* qc,
+template MatrixDD buildFunctionalityRecursive(qc::QuantumComputation* qc,
                                               Package<DDPackageConfig>& dd);
-template bool buildFunctionalityRecursive(const qc::QuantumComputation* qc,
+template bool buildFunctionalityRecursive(qc::QuantumComputation* qc,
                                           const std::size_t depth,
                                           const std::size_t opIdx,
                                           std::stack<MatrixDD>& s,
                                           qc::Permutation& permutation,
                                           Package<DDPackageConfig>& dd);
-template MatrixDD buildFunctionalityRecursive(const qc::QuantumComputation* qc,
+template MatrixDD buildFunctionalityRecursive(qc::QuantumComputation* qc,
                                               UnitarySimulatorDDPackage& dd);
-template bool buildFunctionalityRecursive(const qc::QuantumComputation* qc,
+template bool buildFunctionalityRecursive(qc::QuantumComputation* qc,
                                           const std::size_t depth,
                                           const std::size_t opIdx,
                                           std::stack<MatrixDD>& s,
