@@ -2,6 +2,7 @@
 
 #include "dd/Operations.hpp"
 #include "dd/Package_fwd.hpp"
+#include "dd/DDSifting.hpp"
 #include "ir/Permutation.hpp"
 #include "ir/QuantumComputation.hpp"
 #include "ir/operations/OpType.hpp"

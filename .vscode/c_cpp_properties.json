@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include/mqt-core/**",
+                "${workspaceFolder}/include/mqt-core/dd/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

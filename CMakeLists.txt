@@ -4,7 +4,8 @@ cmake_minimum_required(VERSION 3.19...3.30)
 project(
   mqt-core
   LANGUAGES CXX
-  DESCRIPTION "MQT Core - The Backbone of the Munich Quantum Toolkit")
+  DESCRIPTION "MQT Core - The Backbone of the Munich Quantum Toolkit"
+  )
 
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

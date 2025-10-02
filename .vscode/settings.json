@@ -1,7 +1,26 @@
 {
     "files.associations": {
         "**/.demo/*.json": "jsonc",
-        "tuple": "cpp"
+        "*.ui": "D:/tools/msys2/ucrt64/bin/designer-qt6.exe",
+        "tuple": "cpp",
+        "string": "cpp",
+        "ctime": "cpp",
+        "memory": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "complex": "cpp",
+        "vector": "cpp",
+        "exception": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "initializer_list": "cpp",
+        "iosfwd": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
     },
     "workbench.colorCustomizations": {
         "statusBar.foreground": "#ffffff",

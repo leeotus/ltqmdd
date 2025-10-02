@@ -26,6 +26,11 @@ MatrixDD buildFunctionality(const QuantumComputation* qc, Package<Config>& dd) {
     dd.decRef(e);
     e = tmp;
 
+    // RESEARCH: 尝试引入dynamic reordering
+    if(tmp.size() > 1000) {
+      DDSiftingAux(tmp, dd, qc);
+    }
+
     dd.garbageCollect();
   }
   // correct permutation if necessary
