@@ -38,6 +38,133 @@ namespace dd {
  */
 void sifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori=false);
 
+template <typename Config>
+void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
+                            const Permutation* pmt) {
+  if (curPmtIndex == 0) {
+    return;
+  }
+
+  // for debug:
+  for (auto& es : node->e) {
+    assert(es.isTerminal() || es.p->ref != 0);
+  }
+
+  // 检测该点的四条出边是不是都是skipped
+  auto const check = [curPmtIndex](const Edge<mNode>& e) {
+    return e.isTerminal() || e.p->v != curPmtIndex - 1;
+  };
+  if (std::all_of(std::begin(node->e), std::end(node->e), check)) {
+    node = dd->mUniqueTable.lookup(node);
+    return;
+  }
+  std::array<std::array<Edge<mNode>, NEDGE>, NEDGE>
+      rarEdges{}; // 保存需要重新分配的边
+  // 保存需要重新分配的边
+  for (size_t i = 0; i < NEDGE; ++i) {
+    auto eiw = node->e[i].w;
+    if (node->e[i].isTerminal()) {
+      if (node->e[i].isOneTerminal()) {
+        for (size_t j = 0; j < NEDGE; ++j) {
+          rarEdges[i][j] =
+              (j == 0 || j == 3) ? (Edge<mNode>::one()) : (Edge<mNode>::zero());
+        }
+      } else if (node->e[i].isZeroTerminal()) {
+        for (size_t j = 0; j < NEDGE; ++j) {
+          rarEdges[i][j] = Edge<mNode>::zero();
+        }
+      }
+    } else if (node->e[i].p->v != curPmtIndex - 1) {
+      for (size_t j = 0; j < NEDGE; ++j) {
+        if (j == 0 || j == 3) {
+          // RESEARCH: 分配新的内存放入到rarEdges数组,而不是单纯的复制
+          // rarEdges[i][j].w = Complex::one();
+          // auto *nodeptr = dd->mMemoryManager.get();
+          // assert(nodeptr->ref == 0);
+          // nodeptr->e = node->e;
+          // rarEdges[i][j].p = nodeptr;
+
+          // RESEARCH: 直接复制进去是否可行?
+          rarEdges[i][j] = node->e[i];
+
+          // NOTE: 暂时去掉下面这行
+          // rarEdges[i][j].p = node->e[i].p;
+        } else {
+          rarEdges[i][j] = Edge<mNode>::zero();
+        }
+        rarEdges[i][j].w = dd->cn.lookup(rarEdges[i][j].w * eiw);
+      }
+    } else {
+      for (size_t j = 0; j < NEDGE; ++j) {
+        rarEdges[i][j] = node->e[i].p->e[j];
+        rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
+      }
+    }
+    node->e[i].w = (!node->e[i].w.exactlyZero())
+                       ? dd->cn.lookup(Complex::one())
+                       : dd->cn.lookup(Complex::zero());
+  }
+
+  // 重新分配边:
+  for (size_t i = 0; i < NEDGE; ++i) {
+    auto* nodeptr = dd->mMemoryManager.get();
+    assert(nodeptr->ref == 0);
+    nodeptr->v = static_cast<Qubit>(curPmtIndex - 1);
+    nodeptr->flags = 0;
+
+    for (size_t j = 0; j < NEDGE; ++j) {
+      nodeptr->e[j] = rarEdges[j][i];
+    }
+
+    auto eptr =
+        Edge<mNode>::normalize(nodeptr, nodeptr->e, dd->mMemoryManager, dd->cn);
+    if (!eptr.isTerminal()) {
+      const auto& es = eptr.p->e;
+      if ((es[0].p == es[3].p) &&
+          (es[0].w.exactlyOne() && es[1].w.exactlyZero() &&
+           es[2].w.exactlyZero() && es[3].w.exactlyOne())) {
+        auto* ptr = es[0].p;
+
+        if (!node->e[i].isTerminal()) {
+          dd->decRef(node->e[i]);
+        }
+        dd->mMemoryManager.returnEntry(eptr.p);
+        node->e[i].p = ptr;
+        if (!node->e[i].isTerminal()) {
+          dd->incRef(node->e[i]);
+        }
+        node->e[i].w = eptr.w;
+        if (i == NEDGE - 1) {
+          // 需要lookup:
+          goto lookupNode;
+        }
+        continue;
+      }
+    }
+
+    if (eptr.p) {
+      auto res = dd->mUniqueTable.searchUp(eptr.p);
+      // eptr.p = dd->mUniqueTable.lookup(eptr.p);
+      dd->incRef(eptr);
+    }
+
+    if (node->e[i].isTerminal()) {
+      node->e[i] = eptr;
+    } else {
+      dd->decRef(node->e[i]);
+      node->e[i] = eptr;
+    }
+  }
+
+lookupNode:
+  node = dd->mUniqueTable.lookup(node);
+
+  // for debug:
+  for (auto& es : node->e) {
+    assert(es.isTerminal() || es.p->ref != 0);
+  }
+}
+
 /**
  * @brief 自己提出来的更简洁的sifting算法的一种可能实现方式，用于替换上述的sifting函数
  * @param qbIndex qubit index, defined in "qregs"
@@ -47,7 +174,41 @@ void sifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori=
  * @param ori decide the orientation of "Sifing" algorithm
  * @note 目前还在测试当中
  */
-void reducedSifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori=false);
+template <typename Config>
+void reducedSifting(Qubit qbIndex, Package<Config> *dd, qc::QuantumComputation *qc, bool ori=false)
+{
+  auto pmtlvl = qbIndex;
+  assert(pmtlvl >= 0 && pmtlvl < qc->getNqubits());
+  if (ori) {
+    pmtlvl = pmtlvl + 1;
+  }
+
+  if ((pmtlvl == qc->getNqubits() && ori) || (pmtlvl == 0 && !ori)) {
+    return;
+  }
+
+  auto table = dd->mUniqueTable.getTableColumnAndClear(pmtlvl);
+  for (auto bucket = 0; bucket < table.size(); ++bucket) {
+    auto* node = table[bucket];
+    while (node != nullptr) {
+      auto* next = node->next;
+      if (node->ref != 0 && node->v == pmtlvl) {
+        reduced_single_sifting(node, dd, pmtlvl, &qc->initialLayout);
+      }
+      node = next;
+    }
+  }
+
+  if (ori) {
+    auto tmp = qc->initialLayout.at(pmtlvl);
+    qc->initialLayout.at(pmtlvl) = qc->initialLayout.at(pmtlvl - 1);
+    qc->initialLayout.at(pmtlvl - 1) = tmp;
+  } else {
+    auto tmp = qc->initialLayout.at(pmtlvl - 1);
+    qc->initialLayout.at(pmtlvl - 1) = qc->initialLayout.at(pmtlvl);
+    qc->initialLayout.at(pmtlvl) = tmp;
+  }
+}
 
 /**
  * @brief Upper sifting algorithm
@@ -61,13 +222,15 @@ void reducedUpper(Qubit index, Package<> *dd, qc::QuantumComputation *qc, bool o
  * @param qc
  * @todo 修改存放变量序的结构
  */
-template<typename Config=dd::DDPackageConfig>
+// template<typename Config=dd::DDPackageConfig>
+template <typename Config=dd::UnitarySimulatorDDPackageConfig>
 // void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation *qc);
 // void DDSiftingUp(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
 // void DDSiftingDown(Edge<mNode> root, Package<>* dd, QuantumComputation *qc);
 // template<typename Config=dd::DDPackageConfig>
-void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc) {
-  VarOrder vo(root, qc);
+void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc, VarOrder *vo) {
+  // VarOrder *vo = new VarOrder(qc);
+  assert(vo != nullptr);
   size_t n = qc->getNqubits() - 1;
   std::vector<bool> freeLevel(n + 1, true);
   Qubit level{0};
@@ -95,7 +258,7 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc)
         reducedSifting(level, dd, qc);
         auto ddSize = root.size();
 
-        recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+        recordStep(level, SCHEME_SIFTING, ddSize, false, vo);
         if (ddSize < minSize) {
           minSize = ddSize;
           optimalState.optimalLevel = level - 1;
@@ -106,10 +269,10 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc)
       while (level < n) {
         reducedSifting(level, dd, qc, true);
         if (level < startPos) {
-          cancelRecord(&vo);
+          cancelRecord(vo);
         } else {
           auto ddSize = root.size();
-          recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+          recordStep(level, SCHEME_SIFTING, ddSize, true, vo);
           if (ddSize < minSize) {
             minSize = ddSize;
             optimalState.optimalLevel = level + 1;
@@ -121,10 +284,10 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc)
       while (level > optimalState.optimalLevel) {
         reducedSifting(level, dd, qc);
         if (level > startPos) {
-          cancelRecord(&vo);
+          cancelRecord(vo);
         } else {
           auto ddSize = root.size();
-          recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+          recordStep(level, SCHEME_SIFTING, ddSize, false, vo);
         }
         level -= 1;
       }
@@ -134,7 +297,7 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc)
         reducedSifting(level, dd, qc, true);
         auto ddSize = root.size();
 
-        recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+        recordStep(level, SCHEME_SIFTING, ddSize, true, vo);
         if (ddSize < minSize) {
           minSize = ddSize;
           optimalState.optimalLevel = level + 1;
@@ -146,10 +309,10 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc)
         reducedSifting(level, dd, qc);
 
         if (level > startPos) {
-          cancelRecord(&vo);
+          cancelRecord(vo);
         } else {
           auto ddSize = root.size();
-          recordStep(level, SCHEME_SIFTING, ddSize, false, &vo);
+          recordStep(level, SCHEME_SIFTING, ddSize, false, vo);
           if (ddSize < minSize) {
             minSize = ddSize;
             optimalState.optimalLevel = level - 1;
@@ -162,10 +325,10 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc)
         reducedSifting(level, dd, qc, true);
 
         if (level < startPos) {
-          cancelRecord(&vo);
+          cancelRecord(vo);
         } else {
           auto ddSize = root.size();
-          recordStep(level, SCHEME_SIFTING, ddSize, true, &vo);
+          recordStep(level, SCHEME_SIFTING, ddSize, true, vo);
         }
 
         level += 1;

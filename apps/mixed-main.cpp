@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
   auto afterDDsize = functionality.size();
 //   std::cout << "initial dd size :" << afterDDsize << "\r\n";
 
-  auto *vo = new dd::VarOrder(functionality, &qc);
+  auto *vo = new dd::VarOrder(&qc);
 
   // 计算时间:
   clock_t start, finish;
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
   // 第一次筛选后的dd大小:
   auto curddSize = functionality.size();
   size_t cycleddSize{};
-  int cnt = 10;   
+  int cnt = 10;
   std::cout << "Mixed Algorithm: \t";
   for(int i=0,j=0;i<100;++i)
   {

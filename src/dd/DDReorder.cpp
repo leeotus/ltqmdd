@@ -100,17 +100,11 @@ void VarOrder::printOrder(const std::string &qubitName) const
     std::cout << "\r\n";
 }
 
-void VarOrder::dump2graph(std::string &filename)
-{
-    dd::export2Dot(mdd, filename);
-}
-
 void VarOrder::clear()
 {
-    while(!isRecordEmpty())
-    {
-        popRecord();
-    }
+  while (!isRecordEmpty()) {
+    popRecord();
+  }
 }
 
 

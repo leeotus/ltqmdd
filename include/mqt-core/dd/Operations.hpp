@@ -185,6 +185,7 @@ qc::MatrixDD getDD(const qc::Operation* op, Package<Config>& dd,
     const auto target0 = targets[0U];
     const auto target1 = targets[1U];
     // update permutation
+    // RESEARCH: 修改permutation是否需要改变先前的整个DD?
     std::swap(permutation.at(target0), permutation.at(target1));
     return dd.makeIdent();
   }

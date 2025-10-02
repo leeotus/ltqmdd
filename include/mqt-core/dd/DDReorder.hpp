@@ -118,14 +118,12 @@ private:
  */
 class VarOrder {
 public:
-  explicit VarOrder(MatrixDD mdd, qc::QuantumComputation* qc)
-      : nqubits(qc->getNqubits()), mdd(mdd), qtc(qc),
+  explicit VarOrder(qc::QuantumComputation* qc)
+      : nqubits(qc->getNqubits()), qtc(qc),
         manager(new ReorderStepManager()) {}
 
   ~VarOrder() {
     qtc = nullptr;
-    mdd.p = nullptr;
-    mdd.w = Complex::zero();
   }
 
   // TODO:
@@ -206,7 +204,6 @@ public:
 
 private:
   size_t nqubits; // 记录qubit数量
-  MatrixDD mdd;   // 保存指向decision diagram根节点的指针
   qc::QuantumComputation* qtc;
   std::vector<ReorderStep*>
       reorderSteps; // 记录每一步进行的哪种变换,以及对应的交换层和交换方式

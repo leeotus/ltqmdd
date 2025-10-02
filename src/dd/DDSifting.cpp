@@ -137,101 +137,101 @@ lookupNode:
 
 // RESEARCH: 目前不知道要怎么处理upper和lower算法
 // ERROR!
-static void upper_single_sifting(mNode *node, Package<>*dd, int curPmtIndex, const Permutation *pmt) {
-  if(curPmtIndex == 0) {
-    return;
-  }
+// static void upper_single_sifting(mNode *node, Package<>*dd, int curPmtIndex, const Permutation *pmt) {
+//   if(curPmtIndex == 0) {
+//     return;
+//   }
 
-  // DEBUG:
-  for (auto &es : node->e) {
-    assert(es.isTerminal() || es.p->ref != 0);
-  }
+//   // DEBUG:
+//   for (auto &es : node->e) {
+//     assert(es.isTerminal() || es.p->ref != 0);
+//   }
 
-  std::array<std::array<Edge<mNode>, NEDGE>, NEDGE> rarEdges{};
+//   std::array<std::array<Edge<mNode>, NEDGE>, NEDGE> rarEdges{};
 
-  size_t row = 0;
-  for (size_t i = 0; i < NEDGE; ++i) {
-    auto eiw = node->e[i].w;
-    for (size_t j = 0; j < NEDGE; ++j) {
-      // 先判断这条应该要放在矩阵的哪个位置:
-      row = j ^ i;
+//   size_t row = 0;
+//   for (size_t i = 0; i < NEDGE; ++i) {
+//     auto eiw = node->e[i].w;
+//     for (size_t j = 0; j < NEDGE; ++j) {
+//       // 先判断这条应该要放在矩阵的哪个位置:
+//       row = j ^ i;
 
-      if (node->e[i].isTerminal()) {
-        rarEdges[row][j] = node->e[i];
-      } else {
-        auto eijw = node->e[i].p->e[j].w;
+//       if (node->e[i].isTerminal()) {
+//         rarEdges[row][j] = node->e[i];
+//       } else {
+//         auto eijw = node->e[i].p->e[j].w;
 
-        rarEdges[row][j] = node->e[i].p->e[j];
-        if (!eiw.exactlyOne()) {
-          rarEdges[row][j].w = dd->cn.lookup(eiw * eijw);
-        }
-      }
-    }
-    node->e[i].w = dd->cn.lookup(Complex::one());
-  }
+//         rarEdges[row][j] = node->e[i].p->e[j];
+//         if (!eiw.exactlyOne()) {
+//           rarEdges[row][j].w = dd->cn.lookup(eiw * eijw);
+//         }
+//       }
+//     }
+//     node->e[i].w = dd->cn.lookup(Complex::one());
+//   }
 
-  for (size_t i = 0; i < NEDGE; ++i) {
-    auto* newNode = dd->mMemoryManager.get();
-    assert(newNode->ref == 0);
-    newNode->v = node->v - 1;
-    newNode->flags = 0;
+//   for (size_t i = 0; i < NEDGE; ++i) {
+//     auto* newNode = dd->mMemoryManager.get();
+//     assert(newNode->ref == 0);
+//     newNode->v = node->v - 1;
+//     newNode->flags = 0;
 
-    for (size_t j = 0; j < NEDGE; ++j) {
-      newNode->e[j] = rarEdges[i][j];
-    }
+//     for (size_t j = 0; j < NEDGE; ++j) {
+//       newNode->e[j] = rarEdges[i][j];
+//     }
 
-    auto newEdge =
-        Edge<mNode>::normalize(newNode, newNode->e, dd->mMemoryManager, dd->cn);
-    newEdge.p = dd->mUniqueTable.lookup(newEdge.p);
+//     auto newEdge =
+//         Edge<mNode>::normalize(newNode, newNode->e, dd->mMemoryManager, dd->cn);
+//     newEdge.p = dd->mUniqueTable.lookup(newEdge.p);
 
-    if (node->e[i].isTerminal()) {
-      node->e[i] = newEdge;
-    } else {
-      dd->decRef(node->e[i]);
-      node->e[i] = newEdge;
-    }
+//     if (node->e[i].isTerminal()) {
+//       node->e[i] = newEdge;
+//     } else {
+//       dd->decRef(node->e[i]);
+//       node->e[i] = newEdge;
+//     }
 
-    if (!node->e[i].isTerminal()) {
-      dd->incRef(node->e[i]);
-    }
-  }
-  node = dd->mUniqueTable.lookup(node);
-}
+//     if (!node->e[i].isTerminal()) {
+//       dd->incRef(node->e[i]);
+//     }
+//   }
+//   node = dd->mUniqueTable.lookup(node);
+// }
 
-void reducedSifting(Qubit qbIndex, Package<>* dd, qc::QuantumComputation* qc,
-                    bool ori) {
-  auto pmtlvl = qbIndex;
-  assert(pmtlvl >= 0 && pmtlvl < qc->getNqubits());
-  if (ori) {
-    pmtlvl = pmtlvl + 1;
-  }
+// void reducedSifting(Qubit qbIndex, Package<>* dd, qc::QuantumComputation* qc,
+//                     bool ori) {
+//   auto pmtlvl = qbIndex;
+//   assert(pmtlvl >= 0 && pmtlvl < qc->getNqubits());
+//   if (ori) {
+//     pmtlvl = pmtlvl + 1;
+//   }
 
-  if ((pmtlvl == qc->getNqubits() && ori) || (pmtlvl == 0 && !ori)) {
-    return;
-  }
+//   if ((pmtlvl == qc->getNqubits() && ori) || (pmtlvl == 0 && !ori)) {
+//     return;
+//   }
 
-  auto table = dd->mUniqueTable.getTableColumnAndClear(pmtlvl);
-  for (auto bucket = 0; bucket < table.size(); ++bucket) {
-    auto* node = table[bucket];
-    while (node != nullptr) {
-      auto* next = node->next;
-      if (node->ref != 0 && node->v == pmtlvl) {
-        reduced_single_sifting(node, dd, pmtlvl, &qc->initialLayout);
-      }
-      node = next;
-    }
-  }
+//   auto table = dd->mUniqueTable.getTableColumnAndClear(pmtlvl);
+//   for (auto bucket = 0; bucket < table.size(); ++bucket) {
+//     auto* node = table[bucket];
+//     while (node != nullptr) {
+//       auto* next = node->next;
+//       if (node->ref != 0 && node->v == pmtlvl) {
+//         reduced_single_sifting(node, dd, pmtlvl, &qc->initialLayout);
+//       }
+//       node = next;
+//     }
+//   }
 
-  if (ori) {
-    auto tmp = qc->initialLayout.at(pmtlvl);
-    qc->initialLayout.at(pmtlvl) = qbIndex;
-    qc->initialLayout.at(pmtlvl - 1) = tmp;
-  } else {
-    auto tmp = qc->initialLayout.at(pmtlvl - 1);
-    qc->initialLayout.at(pmtlvl - 1) = qbIndex;
-    qc->initialLayout.at(pmtlvl) = tmp;
-  }
-}
+//   if (ori) {
+//     auto tmp = qc->initialLayout.at(pmtlvl);
+//     qc->initialLayout.at(pmtlvl) = qbIndex;
+//     qc->initialLayout.at(pmtlvl - 1) = tmp;
+//   } else {
+//     auto tmp = qc->initialLayout.at(pmtlvl - 1);
+//     qc->initialLayout.at(pmtlvl - 1) = qbIndex;
+//     qc->initialLayout.at(pmtlvl) = tmp;
+//   }
+// }
 
 // TODO: upper linear sifting algorithm
 void reducedUpper(Qubit qbIndex, Package<>* dd, qc::QuantumComputation* qc,

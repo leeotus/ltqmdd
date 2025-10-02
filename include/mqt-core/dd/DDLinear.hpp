@@ -862,8 +862,8 @@ void DDLinearTransUpper(MatrixDD mdd, Package<Config>* dd,
         optimalState{}; // 记录当前选中的层(level)最优筛选位置在哪以及所采用的是何种变换算法
     uint64_t maxActiveLevel = 0;
 
-    VarOrder voDown(mdd, qtc); // 记录向下筛选过程中的变换步骤
-    VarOrder voUp(mdd, qtc);   // 记录向上筛选过程中的变换步骤
+    VarOrder voDown(qtc); // 记录向下筛选过程中的变换步骤
+    VarOrder voUp(qtc);   // 记录向上筛选过程中的变换步骤
 
     for (int j = 0; j < n; ++j) {
       auto var = qtc->outputPermutation[j];
@@ -1091,8 +1091,8 @@ void DDLinearTransLower(MatrixDD mdd, Package<Config>* dd,
 
     uint64_t maxActiveLevel = 0;
 
-    VarOrder voDown(mdd, qtc);
-    VarOrder voUp(mdd, qtc);
+    VarOrder voDown(qtc);
+    VarOrder voUp(qtc);
 
     for (int j = 0; j < n; ++j) {
       auto var = qtc->outputPermutation[j];
@@ -1309,8 +1309,8 @@ void DDLinearTransMixed(MatrixDD mdd, Package<Config>* dd,
 
   Qubit level{0};
 
-  VarOrder voDown(mdd, qtc);
-  VarOrder voUp(mdd, qtc);
+  VarOrder voDown(qtc);
+  VarOrder voUp(qtc);
 
   for (size_t i = 0; i < n; ++i) {
     OptimalState optimalState{};

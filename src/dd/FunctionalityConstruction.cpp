@@ -2,6 +2,8 @@
 
 #include "dd/Package.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "dd/DDSifting.hpp"
+#include "dd/DDReorder.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -15,21 +17,30 @@ MatrixDD buildFunctionality(QuantumComputation* qc, Package<Config>& dd) {
     return MatrixDD::one();
   }
 
-  auto permutation = qc->initialLayout;
+  qc::Permutation permutation;
   auto e = dd.createInitialMatrix(qc->ancillary);
   static long int sth = 1000;
 
+  VarOrder *vo = new VarOrder(qc);
   for (const auto& op : *qc) {
-    // TODO: 经过dynamic reordering之后op指向的targets和controls内的数值需要修改
-    auto tmp = dd.multiply(getDD(op.get(), dd, permutation), e);
+    permutation = qc->initialLayout;
+    // RESEARCH: 经过dynamic reordering之后op指向的targets和controls内的数值可能需要修改
+    auto dd1 = getDD(op.get(), dd, permutation);
+    auto tmp = dd.multiply(dd1, e);
 
     dd.incRef(tmp);
     dd.decRef(e);
     e = tmp;
 
     if(e.size() > sth) {
+      vo->clear();
+      // for debug:
+      std::cout << "当前的DD大小:" << e.size() << " ";
       std::cout << "超过阈值\r\n";
+      DDSiftingAux(e, &dd, qc, vo);
       sth *= 2;
+      std::cout << "阈值提升，现在阈值:" << sth << ", ";
+      std::cout << "dynamic reordering后的DD大小:" << e.size() << "\r\n";
     }
 
     dd.garbageCollect();

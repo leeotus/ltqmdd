@@ -8,6 +8,7 @@
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Package.hpp"
 #include "ir/QuantumComputation.hpp"
+#include "dd/DDReorder.hpp"
 
 #include <math.h>
 
@@ -42,9 +43,11 @@ int main(int argc, char** argv) {
 
   start = clock();
   // 进行sifting算法:
-  dd::DDSiftingAux<dd::DDPackageConfig>(functionality, ddpackPtr.get(), &qc);
+  auto *vo = new dd::VarOrder(&qc);
+  dd::DDSiftingAux<>(functionality, ddpackPtr.get(), &qc, vo);
 
   finish = clock();
+  delete vo;
 
   auto finalSize = functionality.size();
   totalTime = (double)(finish-start) / CLOCKS_PER_SEC;

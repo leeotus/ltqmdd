@@ -37,8 +37,8 @@
         "args": [
           // "${workspaceFolder}/circuits/demo_cnot.real"
           // "${workspaceFolder}/circuits/revLib/apex4_202.real"
-          // "${workspaceFolder}/circuits/revLib/alu4_201.real"
-          "${workspaceFolder}/circuits/demo3.real"
+          "${workspaceFolder}/circuits/revLib/alu4_201.real"
+          // "${workspaceFolder}/circuits/demo3.real"
         ],
         "stopAtEntry": true,
         "cwd": "${workspaceFolder}",
