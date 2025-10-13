@@ -22,7 +22,7 @@
         "args": [
           // "${workspaceFolder}/circuits/demo_cnot.real"
           // "${workspaceFolder}/circuits/demo2.real"
-          "${workspaceFolder}/circuits/demo3.real"
+          "${workspaceFolder}/circuits/demo4.real"
           // "${workspaceFolder}/circuits/revLib/apex4_202.real",
           // "${workspaceFolder}/circuits/revLib/alu4_201.real"
           // "${workspaceFolder}/circuits/revLib/urf1_278.real"
@@ -37,10 +37,11 @@
         "args": [
           // "${workspaceFolder}/circuits/demo_cnot.real"
           // "${workspaceFolder}/circuits/revLib/apex4_202.real"
-          "${workspaceFolder}/circuits/revLib/alu4_201.real"
+          // "${workspaceFolder}/circuits/revLib/alu4_201.real"
           // "${workspaceFolder}/circuits/demo3.real"
+          "${workspaceFolder}/circuits/demo4.real"
         ],
-        "stopAtEntry": true,
+        "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],
         "MIMode": "gdb",
