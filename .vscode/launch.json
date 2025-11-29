@@ -22,9 +22,9 @@
         "args": [
           // "${workspaceFolder}/circuits/demo_cnot.real"
           // "${workspaceFolder}/circuits/demo2.real"
-          "${workspaceFolder}/circuits/demo4.real"
+          // "${workspaceFolder}/circuits/demo4.real"
           // "${workspaceFolder}/circuits/revLib/apex4_202.real",
-          // "${workspaceFolder}/circuits/revLib/alu4_201.real"
+          "${workspaceFolder}/circuits/revLib/alu4_201.real"
           // "${workspaceFolder}/circuits/revLib/urf1_278.real"
         ],
         "cwd": "${workspaceFolder}"
@@ -39,7 +39,8 @@
           // "${workspaceFolder}/circuits/revLib/apex4_202.real"
           // "${workspaceFolder}/circuits/revLib/alu4_201.real"
           // "${workspaceFolder}/circuits/demo3.real"
-          "${workspaceFolder}/circuits/demo4.real"
+          // "${workspaceFolder}/circuits/demo4.real"
+          "${workspaceFolder}/circuits/benchmark/QASMBenchFilter/seca_n11.qasm"
         ],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

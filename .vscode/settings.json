@@ -1,10 +1,10 @@
 {
     "files.associations": {
-        "*.dbclient-js": "javascript",
         "**/.demo/*.json": "jsonc",
+        "*.ui": "D:/tools/msys2/ucrt64/bin/designer-qt6.exe",
+        "*.dbclient-js": "javascript",
         "**/.demo/*.yaml": "yaml",
         "**/.demo/*.yml": "yaml",
-        "*.ui": "D:/tools/msys2/ucrt64/bin/designer-qt6.exe",
         "tuple": "cpp",
         "cctype": "cpp",
         "clocale": "cpp",
@@ -79,12 +79,14 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "format": "cpp"
     },
     "workbench.colorCustomizations": {
         "statusBar.foreground": "#ffffff",
         "statusBar.debuggingForeground": "#ffffff",
         "minimap.background": "#00000088",
         "scrollbar.shadow": "#00000088"
-    }
+    },
+    "cmake.cmakePath": "cmake"
 }

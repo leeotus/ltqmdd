@@ -21,6 +21,8 @@
 #include <ctime>
 
 #include "dd/DDSifting.hpp"
+#include "dd/DDCommons.hpp"
+
 
 int main(int argc, char** argv) {
   if(argc != 2)
@@ -32,6 +34,21 @@ int main(int argc, char** argv) {
   qc::QuantumComputation qc(fileName);
   auto ddpackPtr = std::make_unique<dd::Package<>>();
   auto functionality = dd::buildFunctionality(&qc, *ddpackPtr);
+
+  // for seca_n11.qasm
+  if(functionality.p->e[2].w.approximatelyZero()) {
+    std::cout << "true\r\n";
+  } else {
+    std::cout << "false\r\n";
+  }
+
+  // TODO: 检测是否有dd的边出现错误
+  auto res = dd::check_weights(functionality);
+  if(res) {
+    std::cout << "weights ok!\r\n";
+  } else {
+    std::cout << "weights error!\r\n";
+  }
 
   auto initailDDsize = functionality.size();
   std::cout << "initial dd's size:" << initailDDsize   << "\r\n";
@@ -45,6 +62,13 @@ int main(int argc, char** argv) {
   // 进行sifting算法:
   auto *vo = new dd::VarOrder(&qc);
   dd::DDSiftingAux<>(functionality, ddpackPtr.get(), &qc, vo);
+  res = dd::check_weights(functionality);
+  if(res) {
+    std::cout << "weights ok!\r\n";
+  } else {
+    std::cout << "weights error!\r\n";
+  }
+
 
   finish = clock();
   delete vo;

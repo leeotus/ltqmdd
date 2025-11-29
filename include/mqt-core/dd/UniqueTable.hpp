@@ -2,6 +2,8 @@
 
 #include "Definitions.hpp"
 #include "dd/Edge.hpp"
+#include "dd/Complex.hpp"
+#include "dd/ComplexValue.hpp"
 #include "dd/MemoryManager.hpp"
 #include "dd/Node.hpp"
 #include "dd/statistics/UniqueTableStatistics.hpp"
@@ -164,9 +166,17 @@ public:
 
   static bool nodesAreEqual(const Node* p, const Node* q) {
     if constexpr (std::is_same_v<Node, dNode>) {
+      // TODO: 待修改
       return (p->e == q->e && (p->flags == q->flags));
     } else {
       return p->e == q->e;
+      // RESEARCH:
+      // for(int i=0; i<NEDGE; ++i) {
+      //   if(p->e[i].p != q->e[i].p || p->e[i].w.approximatelyEquals(q->e[i].w)) {
+      //     return false;
+      //   }
+      // }
+      // return true;
     }
   }
 
@@ -398,7 +408,7 @@ private:
         if (p != bucket) {
           // for debug:
           if(p->ref != 0) {
-            std::cout << "p's ref: " << p->ref << "\r\n";
+            std::cout << "error: p's ref: " << p->ref << "\r\n";
           }
           // 将节点的出边都清空
           // memset(&(p->e), 0, sizeof(p->e));

@@ -70,7 +70,7 @@ void VarOrder::printOrder(const std::string &qubitName) const
     // TODO: 由于目前只有original sifting算法,所以可以直接打印出来,之后需要修改:
     for(auto &q: ordering)
     {
-        std::cout << q << " ";
+        ::std::cout << q << " ";
     }
     std::cout<< "\r\n";
     // just for test:
@@ -95,9 +95,9 @@ void VarOrder::printOrder(const std::string &qubitName) const
     }
     for(auto i=0;i<nqubits;++i)
     {
-        std::cout << qubitName << permutation[i] << " ";
+        ::std::cout << qubitName << permutation[i] << " ";
     }
-    std::cout << "\r\n";
+    ::std::cout << "\r\n";
 }
 
 void VarOrder::clear()

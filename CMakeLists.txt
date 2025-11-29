@@ -7,6 +7,8 @@ project(
   DESCRIPTION "MQT Core - The Backbone of the Munich Quantum Toolkit")
 
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Add path for custom modules

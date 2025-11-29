@@ -24,6 +24,7 @@ template <typename T> void MemoryManager<T>::returnEntry(T* entry) noexcept {
   assert(entry != nullptr);
   assert(entry->ref == 0);		// 必须保证Ref值为0才可以回收
   entry->next = available;
+  assert(available == nullptr || available->ref == 0);
   available = entry;
   // if constexpr (std::is_same_v<T, mNode>) {
   //   size_t parId = entry->id;

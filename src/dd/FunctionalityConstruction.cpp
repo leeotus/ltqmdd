@@ -4,6 +4,7 @@
 #include "ir/QuantumComputation.hpp"
 #include "dd/DDSifting.hpp"
 #include "dd/DDReorder.hpp"
+#include "dd/DDCommons.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -38,7 +39,8 @@ MatrixDD buildFunctionality(QuantumComputation* qc, Package<Config>& dd) {
     //   std::cout << "当前的DD大小:" << e.size() << " ";
     //   std::cout << "超过阈值\r\n";
     //   DDSiftingAux(e, &dd, qc, vo);
-    //   sth *= 2;
+    //   check_weights(e);
+    //   sth *= 1.5;
     //   std::cout << "阈值提升，现在阈值:" << sth << ", ";
     //   std::cout << "dynamic reordering后的DD大小:" << e.size() << "\r\n";
     // }
@@ -47,7 +49,7 @@ MatrixDD buildFunctionality(QuantumComputation* qc, Package<Config>& dd) {
   }
   // delete vo;
   // correct permutation if necessary
-  changePermutation(e, permutation, qc->outputPermutation, dd);
+  // changePermutation(e, permutation, qc->outputPermutation, dd);
   e = dd.reduceAncillae(e, qc->ancillary);
   e = dd.reduceGarbage(e, qc->garbage);
 
