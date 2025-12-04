@@ -39,16 +39,12 @@ namespace dd {
  */
 void sifting(Qubit qbIndex, Package<> *dd, qc::QuantumComputation *qc, bool ori=false);
 
+// TODO: 修改weight检测, 需要引入负数权重(负数权重会使用内存对齐)
 template <typename Config>
 void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
                             const Permutation* pmt) {
   if (curPmtIndex == 0) {
     return;
-  }
-
-  // for debug:
-  for (auto& es : node->e) {
-    assert(es.isTerminal() || es.p->ref != 0);
   }
 
   // 检测该点的四条出边是不是都是skipped
@@ -63,7 +59,7 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
       rarEdges{}; // 保存需要重新分配的边
   // 保存需要重新分配的边
   for (size_t i = 0; i < NEDGE; ++i) {
-    dd::Complex eiw = node->e[i].w;
+    auto eiw = node->e[i].w;
     if (node->e[i].isTerminal()) {
       if (node->e[i].isOneTerminal()) {
         for (size_t j = 0; j < NEDGE; ++j) {
@@ -78,7 +74,6 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
     } else if (node->e[i].p->v < curPmtIndex - 1) {
       for (size_t j = 0; j < NEDGE; ++j) {
         if (j == 0 || j == 3) {
-          // RESEARCH: 分配新的内存放入到rarEdges数组,而不是单纯的复制
           // rarEdges[i][j].w = Complex::one();
           // auto *nodeptr = dd->mMemoryManager.get();
           // assert(nodeptr->ref == 0);
@@ -95,7 +90,6 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
         } else {
           rarEdges[i][j] = Edge<mNode>::zero();
         }
-        rarEdges[i][j].w = rarEdges[i][j].w.approximatelyZero() ? Complex::zero() : dd->cn.lookup(rarEdges[i][j].w * eiw);
       }
     } else if(node->e[i].p->v == curPmtIndex - 1) {
       for (size_t j = 0; j < NEDGE; ++j) {
@@ -106,15 +100,9 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
       // 正常不可能运行到此处
       std::cerr << "equals to current permutation index!\r\n";
     }
-    node->e[i].w =
-        (!node->e[i].w.exactlyZero()) ? Complex::one() : Complex::zero();
+    // node->e[i].w =
+    //     (!node->e[i].w.exactlyZero()) ? Complex::one() : Complex::zero();
   }
-
-  auto res = dd::check_weights(node);
-  if(!res) {
-    std::cout << "weights error!\r\n";
-  }
-
 
   // 重新分配边:
   for (size_t i = 0; i < NEDGE; ++i) {
@@ -175,11 +163,6 @@ lookupNode:
     // NOTE: 测试环境加入了ref值大小的检测
     assert(es.isTerminal() || es.p->ref != 0);
   }
-  res = dd::check_weights(node);
-  if(!res) {
-    std::cout << "weights error!\r\n";
-  }
-
 }
 
 /**
@@ -211,10 +194,6 @@ void reducedSifting(Qubit qbIndex, Package<Config> *dd, qc::QuantumComputation *
       auto* next = node->next;
       if (node->ref != 0 && node->v == pmtlvl) {
         reduced_single_sifting(node, dd, pmtlvl, &qc->initialLayout);
-          auto res = dd::check_weights(node);
-          if (!res) {
-            std::cout << "weights error!\r\n";
-          }
       }
       node = next;
     }
@@ -257,7 +236,6 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc,
   Qubit level{0};
 
   OptimalState optimalState{}; // 记录最优位置和采用的方案
-  bool res;
   optimalState.scheme = SCHEME_NONE;
   for (size_t i = 0; i < n; ++i) {
     auto minSize = root.size();
@@ -278,10 +256,6 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc,
       while (level > 0) {
         // 向下筛选
         reducedSifting(level, dd, qc);
-        res = check_weights(root);
-        if(!res) {
-          std::cout << "weight error!\r\n";
-        }
         auto ddSize = root.size();
 
         recordStep(level, SCHEME_SIFTING, ddSize, false, vo);
@@ -294,10 +268,6 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc,
 
       while (level < n) {
         reducedSifting(level, dd, qc, true);
-        res = check_weights(root);
-        if(!res) {
-          std::cout << "weight error!\r\n";
-        }
 
         if (level < startPos) {
           cancelRecord(vo);
@@ -314,10 +284,7 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc,
 
       while (level > optimalState.optimalLevel) {
         reducedSifting(level, dd, qc);
-        res = check_weights(root);
-        if(!res) {
-          std::cout << "weight error!\r\n";
-        }
+
         if (level > startPos) {
           cancelRecord(vo);
         } else {
@@ -330,10 +297,7 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc,
       auto startPos = level;
       while (level < n) {
         reducedSifting(level, dd, qc, true);
-        res = check_weights(root);
-        if(!res) {
-          std::cout << "weight error!\r\n";
-        }
+
         auto ddSize = root.size();
 
         recordStep(level, SCHEME_SIFTING, ddSize, true, vo);
@@ -346,10 +310,6 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc,
 
       while (level > 0) {
         reducedSifting(level, dd, qc);
-        res = check_weights(root);
-        if(!res) {
-          std::cout << "weight error!\r\n";
-        }
 
         if (level > startPos) {
           cancelRecord(vo);
@@ -366,10 +326,6 @@ void DDSiftingAux(Edge<mNode> root, Package<Config>* dd, QuantumComputation* qc,
 
       while (level < optimalState.optimalLevel) {
         reducedSifting(level, dd, qc, true);
-        res = check_weights(root);
-        if(!res) {
-          std::cout << "weight error!\r\n";
-        }
 
         if (level < startPos) {
           cancelRecord(vo);
