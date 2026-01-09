@@ -91,14 +91,18 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
         } else {
           rarEdges[i][j] = Edge<mNode>::zero();
         }
+        node->e[i].w = dd->cn.lookup(Complex::one());
       }
     } else if (node->e[i].p->v == curPmtIndex - 1) {
       for (size_t j = 0; j < NEDGE; ++j) {
         rarEdges[i][j] = node->e[i].p->e[j];
-        rarEdges[i][j].w = node->e[i].p->e[j].w.approximatelyZero()
-                               ? Complex::zero()
-                               : dd->cn.lookup(node->e[i].p->e[j].w * eiw);
+        if(node->e[i].w.approximatelyZero()) {
+          rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
+        } else {
+          rarEdges[i][j].w = dd->cn.lookup(rarEdges[i][j].w * eiw);
+        }
       }
+      node->e[i].w = dd->cn.lookup(Complex::one());
     } else if (node->e[i].p->v >= curPmtIndex) {
       // 正常不可能运行到此处
       std::cerr << "equals to current permutation index!\r\n";
