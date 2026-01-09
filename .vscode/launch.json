@@ -40,9 +40,10 @@
           // "${workspaceFolder}/circuits/revLib/alu4_201.real"
           // "${workspaceFolder}/circuits/demo3.real"
           // "${workspaceFolder}/circuits/demo4.real"
-          "${workspaceFolder}/circuits/benchmark/QASMBenchFilter/seca_n11.qasm"
+          // "${workspaceFolder}/circuits/benchmark/QASMBenchFilter/seca_n11.qasm"
+          "${workspaceFolder}/mqt_bench/algo/01AE/ae_alg_7.qasm"
         ],
-        "stopAtEntry": false,
+        "stopAtEntry": true,
         "cwd": "${workspaceFolder}",
         "environment": [],
         "MIMode": "gdb",

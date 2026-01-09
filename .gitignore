@@ -179,3 +179,5 @@ wheelhouse/
 /test/myTest
 /.vscode/settings.json
 *.udb
+/*bench
+/logs
