@@ -64,45 +64,41 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
     if (node->e[i].isTerminal()) {
       if (node->e[i].isOneTerminal()) {
         for (size_t j = 0; j < NEDGE; ++j) {
-          rarEdges[i][j] =
-              (j == 0 || j == 3) ? (Edge<mNode>::one()) : (Edge<mNode>::zero());
+          if(j == 0 || j == 3) {
+            rarEdges[i][j] = Edge<mNode>::one();
+            rarEdges[i][j].w = (dd->cn.lookup(eiw));
+          } else {
+            rarEdges[i][j] = Edge<mNode>::zero();
+            rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
+          }
         }
-      } else if (node->e[i].p == nullptr && node->e[i].w.approximatelyZero()) {
+      } else if (node->e[i].isZeroTerminal()) {
         for (size_t j = 0; j < NEDGE; ++j) {
           rarEdges[i][j] = Edge<mNode>::zero();
+          rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
         }
       }
     } else if (node->e[i].p->v < curPmtIndex - 1) {
       for (size_t j = 0; j < NEDGE; ++j) {
         if (j == 0 || j == 3) {
-          // rarEdges[i][j].w = Complex::one();
-          // auto *nodeptr = dd->mMemoryManager.get();
-          // assert(nodeptr->ref == 0);
-          // nodeptr->e = node->e;
-          // rarEdges[i][j].p = nodeptr;
-
-          // RESEARCH: 直接复制进去是否可行?
-          rarEdges[i][j] = node->e[i];
-          rarEdges[i][j].w = node->e[i].w;
-          // dd->incRef(rarEdges[i][j]);
-
-          // NOTE: 暂时去掉下面这行
-          // rarEdges[i][j].p = node->e[i].p;
+          rarEdges[i][j].p = node->e[i].p;
+          rarEdges[i][j].w = dd->cn.lookup(eiw);
         } else {
           rarEdges[i][j] = Edge<mNode>::zero();
+          rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
         }
-        node->e[i].w = dd->cn.lookup(Complex::one());
+        // node->e[i].w = dd->cn.lookup(Complex::one());
       }
     } else if (node->e[i].p->v == curPmtIndex - 1) {
       for (size_t j = 0; j < NEDGE; ++j) {
-        rarEdges[i][j] = node->e[i].p->e[j];
+        rarEdges[i][j].p = node->e[i].p->e[j].p;
         if(node->e[i].w.approximatelyZero()) {
           rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
         } else {
-          rarEdges[i][j].w = dd->cn.lookup(rarEdges[i][j].w * eiw);
+          rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
         }
       }
-      node->e[i].w = dd->cn.lookup(Complex::one());
+      // node->e[i].w = dd->cn.lookup(Complex::one());
     } else if (node->e[i].p->v >= curPmtIndex) {
       // 正常不可能运行到此处
       std::cerr << "equals to current permutation index!\r\n";
@@ -155,7 +151,7 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
     }
 
     if (eptr.p != nullptr) {
-      bool res = dd->mUniqueTable.searchUp(eptr.p);
+      bool res = dd->mUniqueTable.searchUp(&(eptr.p));
       // eptr.p = dd->mUniqueTable.lookup(eptr.p);
       if (res) {
         dd->incRef(eptr);
@@ -166,10 +162,12 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
     }
 
     if (node->e[i].isTerminal()) {
-      node->e[i] = eptr;
+      node->e[i].p = eptr.p;
+      node->e[i].w = eptr.w;
     } else {
       dd->decRef(node->e[i]);
-      node->e[i] = eptr;
+      node->e[i].p = eptr.p;
+      node->e[i].w = eptr.w;
     }
   }
 

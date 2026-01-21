@@ -208,20 +208,20 @@ public:
     return p;
   }
 
-  bool searchUp(Node* &p) {
-    const auto key = hash(p);
-    const auto v = p->v;
+  bool searchUp(Node** p) {
+    const auto key = hash(*p);
+    const auto v = (*p)->v;
 
     trackLookups(v);
 
-    auto *hashedNode = searchTable(p, key);
+    auto *hashedNode = searchTable(*p, key);
     if(!Node::isTerminal(hashedNode)) {
-      p = hashedNode;
+      *p = hashedNode;
       return true;
     }
 
-    p->next = tables[v][key];
-    tables[v][key] = p;
+    (*p)->next = tables[v][key];
+    tables[v][key] = *p;
     trackInsert(v);
 
     return false;

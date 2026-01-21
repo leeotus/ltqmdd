@@ -113,7 +113,7 @@ static void reduced_single_sifting(mNode* node, Package<>* dd, int curPmtIndex,
     }
 
     if (eptr.p) {
-      auto res = dd->mUniqueTable.searchUp(eptr.p);
+      auto res = dd->mUniqueTable.searchUp(&(eptr.p));
       // eptr.p = dd->mUniqueTable.lookup(eptr.p);
       dd->incRef(eptr);
     }
