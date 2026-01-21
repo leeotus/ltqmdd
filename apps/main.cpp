@@ -1,57 +1,39 @@
 /**
  * @file main.cpp
  * @author leeotus (leeotus@163.com)
- * @brief Tests for new dynamic reordering algorithms (defined in "dd/DDSifting.cpp")
+ * @brief Tests for new dynamic reordering algorithms (defined in
+ * "dd/DDSifting.cpp")
  * @note 代码研究使用
  */
 
+#include "dd/DDCommons.hpp"
+#include "dd/DDReorder.hpp"
+#include "dd/DDSifting.hpp"
 #include "dd/FunctionalityConstruction.hpp"
 #include "dd/Package.hpp"
 #include "ir/QuantumComputation.hpp"
-#include "dd/DDReorder.hpp"
-
-#include <math.h>
 
 #include <cmath>
+#include <ctime>
 #include <iostream>
+#include <math.h>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
 
-#include <ctime>
-
-#include "dd/DDSifting.hpp"
-#include "dd/DDCommons.hpp"
-
-
 int main(int argc, char** argv) {
-  if(argc != 2)
-  {
-    std::cout << "Usage: " << static_cast<std::string>(argv[0]) << " <filename>\r\n";
+  if (argc != 2) {
+    std::cout << "Usage: " << static_cast<std::string>(argv[0])
+              << " <filename>\r\n";
     return 0;
   }
   std::string fileName = argv[1];
   qc::QuantumComputation qc(fileName);
   auto ddpackPtr = std::make_unique<dd::Package<>>();
-  auto functionality = dd::buildFunctionality(&qc, *ddpackPtr);
+  auto diagram = dd::buildFunctionality(&qc, *ddpackPtr);
 
-  // for seca_n11.qasm
-  if(functionality.p->e[2].w.approximatelyZero()) {
-    std::cout << "true\r\n";
-  } else {
-    std::cout << "false\r\n";
-  }
-
-  // TODO: 检测是否有dd的边出现错误
-  auto res = dd::check_weights(functionality);
-  if(res) {
-    std::cout << "weights ok!\r\n";
-  } else {
-    std::cout << "weights error!\r\n";
-  }
-
-  auto initailDDsize = functionality.size();
-  std::cout << "initial dd's size:" << initailDDsize   << "\r\n";
+  auto initailDDsize = diagram.size();
+  std::cout << "initial dd's size:" << initailDDsize << "\r\n";
 
   // 计算时间:
   clock_t start = 0;
@@ -60,21 +42,14 @@ int main(int argc, char** argv) {
 
   start = clock();
   // 进行sifting算法:
-  auto *vo = new dd::VarOrder(&qc);
-  dd::DDSiftingAux<>(functionality, ddpackPtr.get(), &qc, vo);
-  res = dd::check_weights(functionality);
-  if(res) {
-    std::cout << "weights ok!\r\n";
-  } else {
-    std::cout << "weights error!\r\n";
-  }
-
+  auto* vo = new dd::VarOrder(&qc);
+  dd::DDSiftingAux<>(diagram, ddpackPtr.get(), &qc, vo);
 
   finish = clock();
   delete vo;
 
-  auto finalSize = functionality.size();
-  totalTime = (double)(finish-start) / CLOCKS_PER_SEC;
+  auto finalSize = diagram.size();
+  totalTime = (double)(finish - start) / CLOCKS_PER_SEC;
 
   std::cout << "total time: " << totalTime << "s, \t";
   std::cout << "final dd's size:" << finalSize << "\r\n";
