@@ -181,3 +181,8 @@ wheelhouse/
 *.udb
 /*bench
 /logs
+
+# qasmbench: https://github.com/pnnl/QASMBench.git
+/qasmbench
+/release_build
+/testBuild

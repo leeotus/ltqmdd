@@ -22,6 +22,11 @@
 #include <string>
 
 int main(int argc, char** argv) {
+  // 计算时间:
+  clock_t start = 0;
+  clock_t finish = 0;
+  double totalTime{0};
+
   if (argc != 2) {
     std::cout << "Usage: " << static_cast<std::string>(argv[0])
               << " <filename>\r\n";
@@ -30,7 +35,12 @@ int main(int argc, char** argv) {
   std::string fileName = argv[1];
   qc::QuantumComputation qc(fileName);
   auto ddpackPtr = std::make_unique<dd::Package<>>();
+
+  start = clock();
   auto diagram = dd::buildFunctionality(&qc, *ddpackPtr);
+  finish = clock();
+  totalTime = (double)(finish - start) / CLOCKS_PER_SEC;
+  std::cout << "building dd, time:" << totalTime << "\r\n";
 
   // // for seca_n11.qasm
   // if(functionality.p->e[2].w.approximatelyZero()) {
@@ -49,11 +59,6 @@ int main(int argc, char** argv) {
 
   auto initailDDsize = diagram.size();
   std::cout << "initial dd's size:" << initailDDsize   << "\r\n";
-
-  // 计算时间:
-  clock_t start = 0;
-  clock_t finish = 0;
-  double totalTime{0};
 
   start = clock();
   // 进行sifting算法:

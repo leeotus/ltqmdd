@@ -42,9 +42,11 @@
           // "${workspaceFolder}/circuits/demo3.real"
           // "${workspaceFolder}/circuits/demo4.real"
           // "${workspaceFolder}/circuits/benchmark/QASMBenchFilter/seca_n11.qasm"
-          "${workspaceFolder}/mqt_bench/algo/01AE/ae_alg_7.qasm"
+          // "${workspaceFolder}/mqt_bench/algo/01AE/ae_alg_7.qasm"
+          "${workspaceFolder}/circuits/revLive/0410184_170.real"
+          // "${workspaceFolder}/qasmbench/medium/sat_n11/sat_n11.qasm"
         ],
-        "stopAtEntry": true,
+        "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],
         "MIMode": "gdb",

@@ -22,7 +22,7 @@ static void reduced_single_sifting(mNode* node, Package<>* dd, int curPmtIndex,
 
   // 检测该点的四条出边是不是都是skipped
   auto const check = [curPmtIndex](const Edge<mNode>& e) {
-    return e.isTerminal() || e.p->v != curPmtIndex - 1;
+    return e.isTerminal() || e.p->v < curPmtIndex - 1;
   };
   if (std::all_of(std::begin(node->e), std::end(node->e), check)) {
     node = dd->mUniqueTable.lookup(node);
@@ -370,5 +370,11 @@ void reducedUpper(Qubit qbIndex, Package<>* dd, qc::QuantumComputation* qc,
 //     }
 //   }
 // }
+
+void dumpWeight(dd::Complex w) {
+  double r = RealNumber::val(w.r);
+  double i = RealNumber::val(w.i);
+  std::cout << "weight:" << r << "+" << i << "i\r\n";
+}
 
 } // namespace dd

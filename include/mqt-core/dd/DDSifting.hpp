@@ -13,6 +13,7 @@
 #include "dd/Edge.hpp"
 #include "dd/Node.hpp"
 #include "dd/Package.hpp"
+#include "dd/RealNumber.hpp"
 #include "ir/QuantumComputation.hpp"
 
 namespace dd {
@@ -27,6 +28,8 @@ namespace dd {
  * dd的过程中的变量的index, NOTE: 由于需要改变变量的序列,所以targets, controls
  * 里面的值也应该随之进行修改)
  *------------------------------------------------------------------------**/
+
+void dumpWeight(dd::Complex w);
 
 /**
  * @brief Sifting algorithm: exchange the adjacent variable in QMDD
@@ -48,6 +51,7 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
     return;
   }
 
+  // @RESEARCH 是否有其他的特殊情况?
   // 检测该点的四条出边是不是都是skipped
   auto const check = [curPmtIndex](const Edge<mNode>& e) {
     return e.isTerminal() || e.p->v != curPmtIndex - 1;
@@ -77,6 +81,17 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
           rarEdges[i][j] = Edge<mNode>::zero();
           rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
         }
+      } else {
+        // 更加通用的写法:
+        for(size_t j = 0; j < NEDGE; ++j) {
+          if(j == 0 || j == 3) {
+            rarEdges[i][j] = Edge<mNode>::one();
+            rarEdges[i][j].w = dd->cn.lookup(eiw);
+          } else {
+            rarEdges[i][j] = Edge<mNode>::zero();
+            rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
+          }
+        }
       }
     } else if (node->e[i].p->v < curPmtIndex - 1) {
       for (size_t j = 0; j < NEDGE; ++j) {
@@ -92,11 +107,11 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
     } else if (node->e[i].p->v == curPmtIndex - 1) {
       for (size_t j = 0; j < NEDGE; ++j) {
         rarEdges[i][j].p = node->e[i].p->e[j].p;
-        if(node->e[i].w.approximatelyZero()) {
-          rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
-        } else {
-          rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
-        }
+        // if(node->e[i].w.approximatelyZero()) {
+        //   rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
+        // } else {
+        rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
+        // }
       }
       // node->e[i].w = dd->cn.lookup(Complex::one());
     } else if (node->e[i].p->v >= curPmtIndex) {
@@ -144,7 +159,8 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
         node->e[i].w = dd->cn.lookup(eptr.w);
         if (i == NEDGE - 1) {
           // 需要lookup:
-          goto lookupNode;
+          node = dd->mUniqueTable.lookup(node);
+          return;
         }
         continue;
       }
@@ -163,11 +179,11 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
 
     if (node->e[i].isTerminal()) {
       node->e[i].p = eptr.p;
-      node->e[i].w = eptr.w;
+      node->e[i].w = dd->cn.lookup(eptr.w);
     } else {
       dd->decRef(node->e[i]);
       node->e[i].p = eptr.p;
-      node->e[i].w = eptr.w;
+      node->e[i].w = dd->cn.lookup(eptr.w);
     }
   }
 
