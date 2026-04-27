@@ -22,32 +22,34 @@ MatrixDD buildFunctionality(QuantumComputation* qc, Package<Config>& dd) {
   auto e = dd.createInitialMatrix(qc->ancillary);
   static long int sth = 1000;
 
-  // VarOrder *vo = new VarOrder(qc);
+  VarOrder *vo = new VarOrder(qc);
   for (const auto& op : *qc) {
-    permutation = qc->initialLayout;
+    // permutation = qc->initialLayout;
     // RESEARCH: 经过dynamic reordering之后op指向的targets和controls内的数值可能需要修改
-    auto dd1 = getDD(op.get(), dd, permutation);
+    auto dd1 = getDD(op.get(), dd, qc->initialLayout);
     auto tmp = dd.multiply(dd1, e);
 
     dd.incRef(tmp);
     dd.decRef(e);
     e = tmp;
 
-    // if(e.size() > sth) {
-    //   vo->clear();
-    //   // for debug:
-    //   std::cout << "当前的DD大小:" << e.size() << " ";
-    //   std::cout << "超过阈值\r\n";
-    //   DDSiftingAux(e, &dd, qc, vo);
-    //   check_weights(e);
-    //   sth *= 1.5;
-    //   std::cout << "阈值提升，现在阈值:" << sth << ", ";
-    //   std::cout << "dynamic reordering后的DD大小:" << e.size() << "\r\n";
-    // }
+    if(e.size() > sth) {
+      dd.garbageCollect();
+      vo->clear();
+      // for debug:
+      std::cout << "当前的DD大小:" << e.size() << " ";
+      std::cout << "超过阈值\r\n";
+      DDSiftingAux(e, &dd, qc, vo);
+    // //   check_weights(e);
+      sth *= 1.5;
+      std::cout << "阈值提升，现在阈值:" << sth << ", ";
+      std::cout << "dynamic reordering后的DD大小:" << e.size() << "\r\n";
+      e = dd.reduceAncillae(e, qc->ancillary);
+    }
 
     dd.garbageCollect();
   }
-  // delete vo;
+  delete vo;
   // correct permutation if necessary
   // changePermutation(e, permutation, qc->outputPermutation, dd);
   e = dd.reduceAncillae(e, qc->ancillary);

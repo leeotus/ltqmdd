@@ -43,6 +43,73 @@ void dumpWeight(dd::Complex w);
 void sifting(Qubit qbIndex, Package<>* dd, qc::QuantumComputation* qc,
              bool ori = false);
 
+template <typename Config>
+void reduced_single_sifting_v2(mNode *node, Package<Config> *dd, int curPmtIndex, const Permutation *pmt) {
+  if(curPmtIndex == 0) {
+    return;
+  }
+
+  auto const check = [&curPmtIndex](const Edge<mNode> &e) {
+    return e.isTerminal() || e.p->v != curPmtIndex - 1;
+  };
+
+  std::array<std::array<Edge<mNode>, NEDGE>, NEDGE> rarEdges{};
+
+  for(size_t i = 0; i < NEDGE; ++i) {
+    auto eiw = node->e[i].w;
+    if(node->e[i].isTerminal()) {
+      if(node->e[i].isOneTerminal()) {
+        for(size_t j = 0; j < NEDGE; ++j) {
+          if (j == 0 || j == 3) {
+            rarEdges[i][j] = Edge<mNode>::one();
+            // RESEARCH:
+            if(eiw != Complex::one() && eiw != Complex::zero()) {
+              dd->cn.incRef(eiw);
+            }
+            rarEdges[i][j].w = (dd->cn.lookup(eiw));
+          } else {
+            rarEdges[i][j] = Edge<mNode>::zero();
+          }
+        }
+      } else if(node->e[i].isZeroTerminal()) {
+        for(size_t j = 0; j < NEDGE; ++j) {
+          rarEdges[i][j] = Edge<mNode>::zero();
+        }
+      } else {
+        for(size_t j = 0; j < NEDGE; ++j) {
+          if(j == 0 || j == 3) {
+            rarEdges[i][j] = Edge<mNode>::one();
+            rarEdges[i][j].w = dd->cn.lookup(eiw * node->e[i].w);
+            if(rarEdges[i][j].w != Complex::one() && rarEdges[i][j].w != Complex::zero()) {
+              dd->cn.incRef(rarEdges[i][j].w);
+            }
+          } else {
+            rarEdges[i][j] = Edge<mNode>::zero();
+          }
+        }
+      }
+    } else if(node->e[i].p->v < curPmtIndex - 1) {
+      for(size_t j = 0; j < NEDGE; ++j) {
+        if(j == 0 || j == 3) {
+          auto* node = dd->mMemoryManager.get();
+          assert(node != nullptr && node->ref == 0);
+          // TODO:
+          node->v = curPmtIndex - 1;
+        }
+      }
+    } else if(node->e[i].p->v == curPmtIndex - 1) {
+      for(size_t j = 0; j < NEDGE; ++j) {
+        rarEdges[i][j] = node->e[i].p->e[j];
+        rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
+        if (rarEdges[i][j].w != Complex::one() &&
+            rarEdges[i][j].w != Complex::zero()) {
+          dd->cn.incRef(rarEdges[i][j].w);
+        }
+      }
+    }
+  }
+}
+
 // TODO: 这是目前非线性筛选算法的主要流程函数 !need to be improved -- 29/12/2025
 template <typename Config>
 void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
@@ -54,10 +121,10 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
   // @RESEARCH 是否有其他的特殊情况?
   // 检测该点的四条出边是不是都是skipped
   auto const check = [curPmtIndex](const Edge<mNode>& e) {
-    return e.isTerminal() || e.p->v != curPmtIndex - 1;
+    return e.isTerminal() || e.p->v < curPmtIndex - 1;
   };
   if (std::all_of(std::begin(node->e), std::end(node->e), check)) {
-    node = dd->mUniqueTable.lookup(node);
+    dd->mUniqueTable.lookup(node);
     return;
   }
   std::array<std::array<Edge<mNode>, NEDGE>, NEDGE>
@@ -70,26 +137,29 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
         for (size_t j = 0; j < NEDGE; ++j) {
           if(j == 0 || j == 3) {
             rarEdges[i][j] = Edge<mNode>::one();
+            if(eiw != Complex::one() && eiw != Complex::zero()) {
+              dd->cn.incRef(eiw);
+            }
             rarEdges[i][j].w = (dd->cn.lookup(eiw));
           } else {
             rarEdges[i][j] = Edge<mNode>::zero();
-            rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
           }
         }
       } else if (node->e[i].isZeroTerminal()) {
         for (size_t j = 0; j < NEDGE; ++j) {
           rarEdges[i][j] = Edge<mNode>::zero();
-          rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
         }
       } else {
         // 更加通用的写法:
         for(size_t j = 0; j < NEDGE; ++j) {
           if(j == 0 || j == 3) {
             rarEdges[i][j] = Edge<mNode>::one();
-            rarEdges[i][j].w = dd->cn.lookup(eiw);
+            rarEdges[i][j].w = dd->cn.lookup(eiw * node->e[i].w);
+            if (rarEdges[i][j].w != Complex::one() && rarEdges[i][j].w != Complex::zero()) {
+              dd->cn.incRef(rarEdges[i][j].w);
+            }
           } else {
             rarEdges[i][j] = Edge<mNode>::zero();
-            rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
           }
         }
       }
@@ -97,10 +167,12 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
       for (size_t j = 0; j < NEDGE; ++j) {
         if (j == 0 || j == 3) {
           rarEdges[i][j].p = node->e[i].p;
+          if (eiw != Complex::one() && eiw != Complex::zero()) {
+            dd->cn.incRef(eiw);
+          }
           rarEdges[i][j].w = dd->cn.lookup(eiw);
         } else {
           rarEdges[i][j] = Edge<mNode>::zero();
-          rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
         }
         // node->e[i].w = dd->cn.lookup(Complex::one());
       }
@@ -111,15 +183,12 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
         //   rarEdges[i][j].w = dd->cn.lookup(Complex::zero());
         // } else {
         rarEdges[i][j].w = dd->cn.lookup(node->e[i].p->e[j].w * eiw);
-        // }
+        if (rarEdges[i][j].w != Complex::one() &&
+            rarEdges[i][j].w != Complex::zero()) {
+          dd->cn.incRef(rarEdges[i][j].w);
+        }
       }
-      // node->e[i].w = dd->cn.lookup(Complex::one());
-    } else if (node->e[i].p->v >= curPmtIndex) {
-      // 正常不可能运行到此处
-      std::cerr << "equals to current permutation index!\r\n";
     }
-    // node->e[i].w =
-    //     (!node->e[i].w.exactlyZero()) ? Complex::one() : Complex::zero();
   }
 
   // 重新分配边:
@@ -147,6 +216,9 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
           dd->incRef(es[0]);
         }
         if (!node->e[i].isTerminal()) {
+          if(node->e[i].w != Complex::zero() || node->e[i].w != Complex::one()) {
+            dd->cn.decRef(node->e[i].w);
+          }
           dd->decRef(node->e[i]);
         }
         dd->mMemoryManager.returnEntry(eptr.p);
@@ -157,6 +229,9 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
         //   dd->incRef(node->e[i]);
         // }
         node->e[i].w = dd->cn.lookup(eptr.w);
+        if(node->e[i].w != Complex::zero() && node->e[i].w != Complex::one()) {
+          dd->cn.incRef(node->e[i].w);
+        }
         if (i == NEDGE - 1) {
           // 需要lookup:
           node = dd->mUniqueTable.lookup(node);
@@ -184,6 +259,10 @@ void reduced_single_sifting(mNode* node, Package<Config>* dd, int curPmtIndex,
       dd->decRef(node->e[i]);
       node->e[i].p = eptr.p;
       node->e[i].w = dd->cn.lookup(eptr.w);
+    }
+
+    if (node->e[i].w != Complex::zero() && node->e[i].w != Complex::one()) {
+      dd->cn.incRef(node->e[i].w);
     }
   }
 
@@ -221,6 +300,7 @@ void reducedSifting(Qubit qbIndex, Package<Config>* dd,
       auto* next = node->next;
       if (node->ref != 0 && node->v == pmtlvl) {
         reduced_single_sifting(node, dd, pmtlvl, &qc->initialLayout);
+        // dd->garbageCollect();
       }
       node = next;
     }

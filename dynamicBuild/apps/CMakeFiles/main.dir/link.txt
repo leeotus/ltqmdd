@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/main.dir/main.cpp.o -o main  ../src/dd/libmqt-core-dd.a ../src/algorithms/libmqt-core-algorithms.a ../src/circuit_optimizer/libmqt-core-circuit-optimizer.a ../src/ir/libmqt-core-ir.a 

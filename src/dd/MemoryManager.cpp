@@ -26,17 +26,6 @@ template <typename T> void MemoryManager<T>::returnEntry(T* entry) noexcept {
   entry->next = available;
   assert(available == nullptr || available->ref == 0);
   available = entry;
-  // if constexpr (std::is_same_v<T, mNode>) {
-  //   size_t parId = entry->id;
-  //   for(size_t i=0;i<NEDGE;++i) {
-  //     auto edge = entry->e[i];
-  //     if(!edge.isTerminal())
-  //     {
-  //       assert(edge.p->parents.find(parId) != edge.p->parents.end());
-  //       edge.p->parents[parId] = nullptr;
-  //     }
-  //   }
-  // }
   stats.trackReturnedEntry();
 }
 

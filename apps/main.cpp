@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
   // }
 
   auto initailDDsize = diagram.size();
-  std::cout << "initial dd's size:" << initailDDsize   << "\r\n";
+  std::cout << "initial dd's size:" << initailDDsize << "\r\n";
 
   start = clock();
   // 进行sifting算法:

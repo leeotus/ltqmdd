@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/CMakeFiles/boost_mp-populate"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/CMakeFiles/boost_mp-populate.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/CMakeFiles/boost_mp-populate-complete.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-build.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-configure.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-download.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-install.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-patch.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-test.rule"
+		},
+		{
+			"file" : "/home/planner/workshop_ljx/ltqmdd/dynamicBuild/_deps/boost_mp-subbuild/boost_mp-populate-prefix/src/boost_mp-populate-stamp/boost_mp-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"boost_mp-populate"
+		],
+		"name" : "boost_mp-populate"
+	}
+}

@@ -30,6 +30,19 @@ void Complex::writeBinary(std::ostream& os) const {
   RealNumber::writeBinary(i, os);
 }
 
+bool operator==(const Complex& c1, const Complex& c2) {
+  fp v1r = RealNumber::val(c1.r);
+  fp v1i = RealNumber::val(c1.i);
+  fp v2r = RealNumber::val(c2.r);
+  fp v2i = RealNumber::val(c2.i);
+  return RealNumber::approximatelyEquals(v1r, v2r) &&
+         RealNumber::approximatelyEquals(v1i, v2i);
+}
+
+bool operator!=(const Complex &c1, const Complex &c2) {
+  return !(c1 == c2);
+}
+
 Complex::operator std::complex<fp>() const noexcept {
   return {RealNumber::val(r), RealNumber::val(i)};
 }

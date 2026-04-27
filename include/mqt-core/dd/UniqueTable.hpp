@@ -209,6 +209,9 @@ public:
   }
 
   bool searchUp(Node** p) {
+    if (Node::isTerminal(*p)) {
+      return false;
+    }
     const auto key = hash(*p);
     const auto v = (*p)->v;
 
@@ -216,6 +219,11 @@ public:
 
     auto *hashedNode = searchTable(*p, key);
     if(!Node::isTerminal(hashedNode)) {
+      // if(hashedNode->ref == 0) {
+      //   tables[v][key] = nullptr;
+      //   return false;
+      // }
+      assert(hashedNode->ref != 0);
       *p = hashedNode;
       return true;
     }

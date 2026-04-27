@@ -5,6 +5,38 @@
     "version": "0.2.0",
     "configurations": [
       {
+        "name": "dynamic算法调试",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/dynamicBuild/apps/main",
+        "args": [
+          // "${workspaceFolder}/circuits/demo_cnot.real"
+          // "${workspaceFolder}/circuits/demo2.real"
+          // "${workspaceFolder}/circuits/demo4.real"
+          // "${workspaceFolder}/circuits/revLib/apex4_202.real",
+          "${workspaceFolder}/circuits/revLib/alu4_201.real"
+          // "${workspaceFolder}/circuits/revLib/urf1_278.real"
+          // "${workspaceFolder}/mqt_bench/algo/12QW/qwalk_alg_12.qasm"
+        ],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+      },
+      {
         "type": "lldb",
         "request": "launch",
         "name": "(lldb)demo_cnot",
@@ -24,8 +56,9 @@
           // "${workspaceFolder}/circuits/demo2.real"
           // "${workspaceFolder}/circuits/demo4.real"
           // "${workspaceFolder}/circuits/revLib/apex4_202.real",
-          "${workspaceFolder}/circuits/revLib/alu4_201.real"
+          // "${workspaceFolder}/circuits/revLib/alu4_201.real"
           // "${workspaceFolder}/circuits/revLib/urf1_278.real"
+          "${workspaceFolder}/mqt_bench/algo/12QW/qwalk_alg_12.qasm"
         ],
         "cwd": "${workspaceFolder}"
       },
@@ -43,7 +76,8 @@
           // "${workspaceFolder}/circuits/demo4.real"
           // "${workspaceFolder}/circuits/benchmark/QASMBenchFilter/seca_n11.qasm"
           // "${workspaceFolder}/mqt_bench/algo/01AE/ae_alg_7.qasm"
-          "${workspaceFolder}/circuits/revLive/0410184_170.real"
+          // "${workspaceFolder}/circuits/revLive/0410184_170.real"
+          "${workspaceFolder}/mqt_bench/algo/12QW/qwalk_alg_12.qasm"
           // "${workspaceFolder}/qasmbench/medium/sat_n11/sat_n11.qasm"
         ],
         "stopAtEntry": false,
